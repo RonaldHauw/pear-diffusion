@@ -70,6 +70,10 @@ namespace pear {
             y = grid_coordinates_(2*i+1);
         }
 
+        int length(){
+            return N_;
+        }
+
     private:
         std::string file_name_;
         std::vector<d_type> grid_coordinates_; //  length 2N_: x1 y1 x2 y2 x3 y3 for sequantial mem access

@@ -18,7 +18,7 @@ namespace pear {
     class respiration_o2{
     public:
 
-        respiration_o2(pear::component o2, pear::component co2, pear::grid<d_type> & grid,
+        respiration_o2(pear::component<d_type> & o2, pear::component<d_type> & co2, pear::grid<d_type> & grid,
                 d_type p1,
                 d_type p2,
                 d_type p3
@@ -34,8 +34,8 @@ namespace pear {
         }
 
     private:
-        pear::component o2_;
-        pear::component co2_;
+        pear::component<d_type> & o2_;
+        pear::component<d_type> & co2_;
         pear::grid<d_type> & grid_;
         d_type p1_, p2_, p3_;
 
@@ -45,7 +45,7 @@ namespace pear {
     class respiration_co2{
     public:
 
-        respiration_co2(pear::component co2, pear::component o2, pear::grid<d_type> & grid,
+        respiration_co2(pear::component<d_type> & co2, pear::component<d_type> & o2, pear::grid<d_type> & grid,
                        d_type p1,
                        d_type p2,
                        d_type p3
@@ -61,8 +61,8 @@ namespace pear {
         }
 
     private:
-        pear::component o2_;
-        pear::component co2_;
+        pear::component<d_type> & o2_;
+        pear::component<d_type> & co2_;
         pear::grid<d_type> & grid_;
         d_type p1_, p2_, p3_;
 

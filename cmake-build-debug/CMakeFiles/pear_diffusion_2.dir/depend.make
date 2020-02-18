@@ -5,6 +5,7 @@ CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../component.hpp
 CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../diffusion.hpp
 CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../grid.hpp
 CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../main.cpp
+CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../nlsolver.hpp
 CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../rdc.hpp
 CMakeFiles/pear_diffusion_2.dir/main.cpp.o: ../reaction.hpp
 

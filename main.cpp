@@ -18,6 +18,7 @@
 #include "grid.hpp"
 #include "reaction.hpp"
 #include "rdc.hpp"
+#include "nlsolver.hpp"
 
 int main(int argc, char* argv[]){
 
@@ -26,8 +27,8 @@ int main(int argc, char* argv[]){
     std::cout<<"Ello fellas, com estas?"<<std::endl;
     const char* grid_name = "../conference_pear.txt";
     pear::grid<d_type> grid(grid_name);
-    pear::component co2("CO_2");
-    pear::component o2("O_2");
+    pear::component<d_type> co2("CO_2", grid);
+    pear::component<d_type> o2("O_2", grid);
     pear::diffusion<d_type> diff_co2(co2, grid, 0.4);
     pear::diffusion<d_type> diff_o2(o2, grid, 1.0);
     pear::respiration_o2<d_type> react_o2(o2, co2, grid, 0.0, 0.0, 0.0);
@@ -37,14 +38,12 @@ int main(int argc, char* argv[]){
 
     pear::rdc<d_type> equation(o2, co2, diff_o2, diff_co2, react_o2, react_co2);
 
-    // equation.add_component(o2)
-    // equation.add_component(co2)
-    // equation.add_diffusion(co2, diff_co2)
-    // equation.add_diffusion(o2, diff_o2)
-    // equation.add_reaction(o2, co2, reaction_o2)
-    // equation.add_reaction(co2, o2, reaction_co2)
-    // equation.solve(method="BFGS")
-    // export_solution(equation.sol)
+    pear::nlsolver<d_type, pear::rdc<d_type>> nlsolve(equation);
+
+
+    // nlsolve.solve(lasolver="cg", linesearch="wolfe");
+
+    // export_solution(co2.concentration, o2.concentration)
 
 
 

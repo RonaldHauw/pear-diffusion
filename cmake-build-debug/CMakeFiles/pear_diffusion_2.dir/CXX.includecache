@@ -23,6 +23,8 @@ chrono
 -
 iterator
 -
+grid.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/grid.hpp
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/diffusion.hpp
 cassert
@@ -79,6 +81,36 @@ grid.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/grid.hpp
 reaction.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/reaction.hpp
+rdc.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/rdc.hpp
+nlsolver.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/nlsolver.hpp
+
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/nlsolver.hpp
+cassert
+-
+iostream
+-
+cmath
+-
+typeinfo
+-
+algorithm
+-
+random
+-
+chrono
+-
+iterator
+-
+grid.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/grid.hpp
+diffusion.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/diffusion.hpp
+reaction.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/reaction.hpp
+component.hpp
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/component.hpp
 rdc.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/rdc.hpp
 

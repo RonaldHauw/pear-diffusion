@@ -9,17 +9,21 @@
 #include <random>
 #include <chrono>
 #include <iterator>
+#include "grid.hpp"
 
 
 namespace pear {
 
+    template <typename d_type>
     class component{
     public:
 
-        component(std::string name)
+        component(std::string name, pear::grid<d_type> grid)
                 : name_(name)
+                , concentration_(std::vector<d_type>(grid.length()))
         {
             std::cout<<"Initialised component: "<<name_<<std::endl;
+
         }
 
         std::string name(){
@@ -28,6 +32,7 @@ namespace pear {
 
     private:
         std::string name_;
+        std::vector<d_type> concentration_;
 
     };
 
