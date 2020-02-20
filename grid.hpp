@@ -65,14 +65,16 @@ namespace pear {
 
         }
 
-        void get_coords(d_type & x, d_type & y, int i){
+        void get_coords(d_type & x, d_type & y, int i) const {
             x = grid_coordinates_(2*i);
             y = grid_coordinates_(2*i+1);
         }
 
-        int length(){
+        int length() const {
             return N_;
         }
+
+
 
     private:
         std::string file_name_;

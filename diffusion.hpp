@@ -13,11 +13,11 @@
 
 namespace pear {
 
-    template <typename d_type>
+    template <typename d_type, typename vec_type>
      class diffusion{
      public:
 
-         diffusion(pear::component<d_type> & comp, pear::grid<d_type> & grid, d_type sigma)
+         diffusion(pear::component<d_type, vec_type> comp, pear::grid<d_type> & grid, d_type sigma)
          : comp_(comp)
          , sigma_(sigma)
          , grid_(grid)
@@ -35,7 +35,6 @@ namespace pear {
          void evaluate(std::vector<d_type> c, std::vector<d_type> d){
              std::cout<<"diffusion.evaluate is empty"<<std::endl;
          }
-
          /* d_matrix
           *
           * returns the diffusion matrix. Useful for debugging purposes.
@@ -45,7 +44,7 @@ namespace pear {
          }
 
      private:
-         pear::component<d_type> & comp_;
+         pear::component<d_type, vec_type> comp_;
          d_type sigma_;
          pear::grid<d_type> & grid_;
 
