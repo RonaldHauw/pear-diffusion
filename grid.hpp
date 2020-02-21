@@ -76,6 +76,26 @@ namespace pear {
 
             else {std::cout << "Unable to open file, check the executable folder";}
 
+            // ELEMENTS
+            std::ifstream myfile2(file_name_ + "_Elements.txt"); // read file
+            if (myfile2.is_open()){
+                int n1, n2, n3;
+                // count number of grid points
+                N = 0; while(myfile2>>n>>n1>>n2>>n3){N++;}; nb_elements_ = N;
+                elements_ = std::vector<d_type>(3*nb_elements_);
+                // reopen
+                myfile2.close();
+                std::ifstream myfile2(file_name_+"_Nodes.txt");
+                // save coordinates
+                while(myfile2>>n>>n1>>n2>>n3){
+                    elements_[3*n] = n1;
+                    elements_[3*n+1] = n2;
+                    elements_[3*n+2] = n3;
+                }
+                std::cout<<"Grid elements loaded from: "<<file_name_<<" length: "<<nb_elements_<<std::endl;
+            }
+
+            else {std::cout << "Unable to open file, check the executable folder";}
             // reorder grid points
 
         }
