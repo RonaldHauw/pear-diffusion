@@ -53,12 +53,12 @@ CMAKE_BINARY_DIR = /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-buil
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/pear_diffusion_2.dir/all
+all: CMakeFiles/pear_diffusion.dir/all
 
 .PHONY : all
 
 # The main recursive "clean" target.
-clean: CMakeFiles/pear_diffusion_2.dir/clean
+clean: CMakeFiles/pear_diffusion.dir/clean
 
 .PHONY : clean
 
@@ -68,9 +68,10 @@ preinstall:
 .PHONY : preinstall
 
 #=============================================================================
-# Target rules for target CMakeFiles/pear_diffusion_2.dir
+# Target rules for target CMakeFiles/pear_diffusion.dir
 
 # All Build rule for target.
+<<<<<<< Updated upstream
 CMakeFiles/pear_diffusion_2.dir/all:
 	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/depend
 	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/build
@@ -83,16 +84,30 @@ CMakeFiles/pear_diffusion_2.dir/rule: cmake_check_build_system
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/pear_diffusion_2.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/pear_diffusion_2.dir/rule
+=======
+CMakeFiles/pear_diffusion.dir/all:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/depend
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target pear_diffusion"
+.PHONY : CMakeFiles/pear_diffusion.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/pear_diffusion.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/pear_diffusion.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/pear_diffusion.dir/rule
+>>>>>>> Stashed changes
 
 # Convenience name for target.
-pear_diffusion_2: CMakeFiles/pear_diffusion_2.dir/rule
+pear_diffusion: CMakeFiles/pear_diffusion.dir/rule
 
-.PHONY : pear_diffusion_2
+.PHONY : pear_diffusion
 
 # clean rule for target.
-CMakeFiles/pear_diffusion_2.dir/clean:
-	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/clean
-.PHONY : CMakeFiles/pear_diffusion_2.dir/clean
+CMakeFiles/pear_diffusion.dir/clean:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/clean
+.PHONY : CMakeFiles/pear_diffusion.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

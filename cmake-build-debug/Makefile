@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named pear_diffusion_2
+# Target rules for targets named pear_diffusion
 
 # Build rule for target.
-pear_diffusion_2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pear_diffusion_2
-.PHONY : pear_diffusion_2
+pear_diffusion: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pear_diffusion
+.PHONY : pear_diffusion
 
 # fast build rule for target.
-pear_diffusion_2/fast:
-	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/build
-.PHONY : pear_diffusion_2/fast
+pear_diffusion/fast:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/build
+.PHONY : pear_diffusion/fast
 
 main.o: main.cpp.o
 
@@ -129,7 +129,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -138,7 +138,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -147,7 +147,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -158,7 +158,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... pear_diffusion_2"
+	@echo "... pear_diffusion"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

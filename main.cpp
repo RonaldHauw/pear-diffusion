@@ -1,17 +1,3 @@
-/* Main file for project mathematical engineering: reaction-diffusion model of a pear.
- *
- * Authors:
- *  - Octave Oliviers
- *  - Agathe van Lamsweerde
- *  - Ronald Hauwaerts
- *
- * How to compile:
- *  - Via the make file
- *      >> make pear
- *  - Via shell script
- *      >> ./compile.sh
- */
-
 #include <iostream>
 #include "component.hpp"
 #include "diffusion.hpp"
@@ -51,12 +37,47 @@ int main(int argc, char* argv[]){
     d_type T_ref = 293.15;
     d_type R_g = 8.314;
 
-    // Ambient conditions
+    // Ambient conditions: Default is Orchard
     d_type T = 298.15; // 25 degrees Celsius
-    d_type eta_u = 20.4e-2;
+    d_type eta_u = 20.8e-2;
     d_type eta_v = 0.04e-2;
 
-    for (int i = 1; i < argc; ++i) {
+    if (std::string(argv[1]) == "-ShelfLife") {
+        // Ambient conditions
+        d_type T = 293.15; // 25 degrees Celsius
+        d_type eta_u = 20.8e-2;
+        d_type eta_v = 0;
+    };
+
+    if (std::string(argv[1]) == "-Refrigerator") {
+        // Ambient conditions
+        d_type T = 280.15; // 25 degrees Celsius
+        d_type eta_u = 20.8e-2;
+        d_type eta_v = 0;
+    };
+
+    if (std::string(argv[1]) == "-Precooling") {
+        // Ambient conditions
+        d_type T = 272.15; // 25 degrees Celsius
+        d_type eta_u = 20.8e-2;
+        d_type eta_v = 0;
+    };
+
+    if (std::string(argv[1]) == "-DisorderInducing") {
+        // Ambient conditions
+        d_type T = 272.15; // 25 degrees Celsius
+        d_type eta_u = 2e-2;
+        d_type eta_v = 5e-2;
+    };
+
+    if (std::string(argv[1]) == "-OptimalCA") {
+        // Ambient conditions
+        d_type T = 272.15; // 25 degrees Celsius
+        d_type eta_u = 2e-2;
+        d_type eta_v = 0.7e-2;
+    };
+
+    for (int i = 2; i < argc; ++i) {
         if (i+1<argc){
             if (std::string(argv[i]) == "-sigma_u_r") {sigma_u_r = std::stod(std::string(argv[i+1]));i++;};
             if (std::string(argv[i]) == "-sigma_u_z") {sigma_u_z = std::stod(std::string(argv[i+1]));i++;};
@@ -110,6 +131,7 @@ int main(int argc, char* argv[]){
     // export_solution(co2.concentration, o2.concentration)
 
 
-
-
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
 }
