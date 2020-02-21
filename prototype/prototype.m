@@ -5,11 +5,11 @@
 
 % LOAD DOMAIN
 %
-load HalfCircleMesh.mat
-load HalfCircleMesh_Data.mat
+load mesh/HalfCircleMesh.mat
+load mesh/HalfCircleMesh_Data.mat
 %
-% load HCT_Mesh.mat
-% load HCT_Mesh_Data.mat
+% load mesh/HCT_Mesh.mat
+% load mesh/HCT_Mesh_Data.mat
 %
 coordinates = mesh.Nodes' ;
 r           = coordinates(:, 1) ;
