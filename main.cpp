@@ -30,8 +30,8 @@ int main(int argc, char* argv[]){
     d_type r_q = 0.97;
 
     // Boundary parameters
-    d_type varrho_u = 7e-7;
-    d_type varrho_v = 7.5e-7;
+    d_type r_u = 7e-7;
+    d_type r_v = 7.5e-7;
 
     d_type p_atm = 101300;
     d_type T_ref = 293.15;
@@ -44,61 +44,38 @@ int main(int argc, char* argv[]){
 
     if (std::string(argv[1]) == "-ShelfLife") {
         // Ambient conditions
-        d_type T = 293.15; // 25 degrees Celsius
+        d_type T = 293.15; // 20 degrees Celsius
         d_type eta_u = 20.8e-2;
         d_type eta_v = 0;
     };
 
     if (std::string(argv[1]) == "-Refrigerator") {
         // Ambient conditions
-        d_type T = 280.15; // 25 degrees Celsius
+        d_type T = 280.15; // 7 degrees Celsius
         d_type eta_u = 20.8e-2;
         d_type eta_v = 0;
     };
 
     if (std::string(argv[1]) == "-Precooling") {
         // Ambient conditions
-        d_type T = 272.15; // 25 degrees Celsius
+        d_type T = 272.15; // -1 degrees Celsius
         d_type eta_u = 20.8e-2;
         d_type eta_v = 0;
     };
 
     if (std::string(argv[1]) == "-DisorderInducing") {
         // Ambient conditions
-        d_type T = 272.15; // 25 degrees Celsius
+        d_type T = 272.15; // -1 degrees Celsius
         d_type eta_u = 2e-2;
         d_type eta_v = 5e-2;
     };
 
     if (std::string(argv[1]) == "-OptimalCA") {
         // Ambient conditions
-        d_type T = 272.15; // 25 degrees Celsius
+        d_type T = 272.15; // -1 degrees Celsius
         d_type eta_u = 2e-2;
         d_type eta_v = 0.7e-2;
     };
-
-    for (int i = 2; i < argc; ++i) {
-        if (i+1<argc){
-            if (std::string(argv[i]) == "-sigma_u_r") {sigma_u_r = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-sigma_u_z") {sigma_u_z = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-sigma_v_r"){sigma_v_r = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-sigma_v_z") {sigma_v_z = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-v_mu_ref") {v_mu_ref = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-e_a_vmu_ref") {e_a_vmu_ref = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-v_mfv_ref") {v_mfv_ref = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-e_a_vmfv_ref") {e_a_vmfv_ref =  std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-k_mu") {k_mu =  std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-k_mv") {k_mv = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-k_mfu") {k_mfu = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-r_q") {r_q = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-varrho_u") {varrho_u = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-varrho_v") {varrho_v = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-p_atm") {p_atm = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-T") {T = 273.15 + std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-eta_u") {varrho_v = std::stod(std::string(argv[i+1]));i++;};
-            if (std::string(argv[i]) == "-eta_v") {varrho_v = std::stod(std::string(argv[i+1]));i++;};
-        } // end if
-    } // end for
 
     // Respiration parameters
     d_type v_mu = v_mu_ref * exp(e_a_vmu_ref/R_g * (1/T_ref - 1/T) );
