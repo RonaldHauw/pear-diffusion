@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
 
     std::cout<<"Ello ello ello, com estas?"<<std::endl;
 
-    const char* grid_name = "../conference_pear.txt";
+    std::string grid_name = "../grid/HCTmesh";
     pear::grid<d_type> grid(grid_name);
 
     // allocate memory for the solution
