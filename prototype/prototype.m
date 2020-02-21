@@ -4,17 +4,12 @@
 
 
 % LOAD DOMAIN
-% Initialisation
-% load coordinates.dat; coordinates(:,1)=[];
-% load elements3.dat; elements3(:,1)=[];
-% eval('load neumann.dat; neumann(:,1) = [];','neumann=[];');
-% load dirichlet.dat; dirichlet(:,1) = [];
 %
-% load HalfCircleMesh.mat
-% load HalfCircleMesh_Data.mat
+load HalfCircleMesh.mat
+load HalfCircleMesh_Data.mat
 %
-load HCT_Mesh.mat
-load HCT_Mesh_Data.mat
+% load HCT_Mesh.mat
+% load HCT_Mesh_Data.mat
 %
 coordinates = mesh.Nodes' ;
 r           = coordinates(:, 1) ;
