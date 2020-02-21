@@ -2,14 +2,15 @@
 % finite element method for two-dimensional nonlinear equation
 % based on https://www.math.hu-berlin.de/~cc/cc_homepage/download/1999-AJ_CC_FS-50_Lines_of_Matlab.pdf
 
+clear all
 
 % LOAD DOMAIN
 %
-load HalfCircleMesh.mat
-load HalfCircleMesh_Data.mat
+% load mesh/HalfCircleMesh.mat
+% load mesh/HalfCircleMesh_Data.mat
 %
-% load HCT_Mesh.mat
-% load HCT_Mesh_Data.mat
+load mesh/HCT_Mesh.mat
+load mesh/HCT_Mesh_Data.mat
 %
 coordinates = mesh.Nodes' ;
 r           = coordinates(:, 1) ;
