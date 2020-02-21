@@ -17,12 +17,13 @@ namespace pear {
      class diffusion{
      public:
 
-         diffusion(pear::component<d_type> & comp, pear::grid<d_type> & grid, d_type sigma)
+         diffusion(pear::component<d_type> & comp, pear::grid<d_type> & grid, d_type sigma_r, d_type sigma_z)
          : comp_(comp)
-         , sigma_(sigma)
+         , sigma_r_(sigma_r)
+         , sigma_z_(sigma_z)
          , grid_(grid)
          {
-             std::cout<<"Component: "<<comp_.name()<<" will diffuse with sigma = "<<sigma_<<std::endl;
+             std::cout<<"Component: "<<comp_.name()<<" will diffuse with sigma_r = "<<sigma_r_<< " and sigma_z = " <<sigma_z_<< std::endl;
          }
 
          /* evaluate
@@ -46,7 +47,8 @@ namespace pear {
 
      private:
          pear::component<d_type> & comp_;
-         d_type sigma_;
+         d_type sigma_r_;
+         d_type sigma_z_;
          pear::grid<d_type> & grid_;
 
      };

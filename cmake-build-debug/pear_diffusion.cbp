@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6"/>
 	<Project>
-		<Option title="pear_diffusion_2"/>
+		<Option title="pear_diffusion"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
 		<Option virtualFolders="CMake Files\;"/>
@@ -37,8 +37,8 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="pear_diffusion_2">
-				<Option output="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/pear_diffusion_2" prefix_auto="0" extension_auto="0"/>
+			<Target title="pear_diffusion">
+				<Option output="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/pear_diffusion" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -54,14 +54,14 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion_2"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="pear_diffusion_2/fast">
-				<Option output="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/pear_diffusion_2" prefix_auto="0" extension_auto="0"/>
+			<Target title="pear_diffusion/fast">
+				<Option output="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/pear_diffusion" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -77,7 +77,7 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion_2/fast"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion/fast"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -85,7 +85,7 @@
 			</Target>
 		</Build>
 		<Unit filename="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/main.cpp">
-			<Option target="pear_diffusion_2"/>
+			<Option target="pear_diffusion"/>
 		</Unit>
 		<Unit filename="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
