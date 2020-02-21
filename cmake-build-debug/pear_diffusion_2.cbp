@@ -87,6 +87,9 @@
 		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/main.cpp">
 			<Option target="pear_diffusion_2"/>
 		</Unit>
+		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/vector.hpp">
+			<Option target="pear_diffusion_2"/>
+		</Unit>
 		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

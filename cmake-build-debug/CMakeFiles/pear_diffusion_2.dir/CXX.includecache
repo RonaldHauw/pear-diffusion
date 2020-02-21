@@ -1131,6 +1131,8 @@ reaction.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/reaction.hpp
 rdc.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/rdc.hpp
+random
+-
 nlsolver.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/nlsolver.hpp
 eigen-3.3.7/Eigen/Dense
