@@ -9,15 +9,15 @@
 #include "eigen-3.3.7/Eigen/Dense"
 
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
 
     typedef double d_type; // change data type here
     typedef Eigen::Matrix<d_type, Eigen::Dynamic, 1> vec_type; // define vec_type here
     typedef Eigen::Matrix<d_type, Eigen::Dynamic, Eigen::Dynamic> mat_type; // define mat_type here
 
-    std::cout<<"Ello ello ello, com estas?"<<std::endl;
+    std::cout << "Ello ello ello, com estas?" << std::endl;
 
-    std::string grid_name = "../grid/HCTmesh";
+    std::string grid_name = "grid/HCTmesh";
     pear::grid<d_type> grid(grid_name);
 
     // Diffusion parameters
@@ -51,65 +51,65 @@ int main(int argc, char* argv[]){
     d_type eta_u = 20.8e-2;
     d_type eta_v = 0.04e-2;
 
-    if (std::string(argv[1]) == "-ShelfLife") {
-        // Ambient conditions
-        d_type T = 293.15; // 20 degrees Celsius
-        d_type eta_u = 20.8e-2;
-        d_type eta_v = 0;
-    };
 
-    if (std::string(argv[1]) == "-Refrigerator") {
-        // Ambient conditions
-        d_type T = 280.15; // 7 degrees Celsius
-        d_type eta_u = 20.8e-2;
-        d_type eta_v = 0;
-    };
+    if (argc>1) {
+        if (std::string(argv[1]) == "-ShelfLife") {
+            // Ambient conditions
+            d_type T = 293.15; // 20 degrees Celsius
+            d_type eta_u = 20.8e-2;
+            d_type eta_v = 0;
+        };
 
-    if (std::string(argv[1]) == "-Precooling") {
-        // Ambient conditions
-        d_type T = 272.15; // -1 degrees Celsius
-        d_type eta_u = 20.8e-2;
-        d_type eta_v = 0;
-    };
+        if (std::string(argv[1]) == "-Refrigerator") {
+            // Ambient conditions
+            d_type T = 280.15; // 7 degrees Celsius
+            d_type eta_u = 20.8e-2;
+            d_type eta_v = 0;
+        };
 
-    if (std::string(argv[1]) == "-DisorderInducing") {
-        // Ambient conditions
-        d_type T = 272.15; // -1 degrees Celsius
-        d_type eta_u = 2e-2;
-        d_type eta_v = 5e-2;
-    };
+        if (std::string(argv[1]) == "-Precooling") {
+            // Ambient conditions
+            d_type T = 272.15; // -1 degrees Celsius
+            d_type eta_u = 20.8e-2;
+            d_type eta_v = 0;
+        };
 
-    if (std::string(argv[1]) == "-OptimalCA") {
-        // Ambient conditions
-        d_type T = 272.15; // -1 degrees Celsius
-        d_type eta_u = 2e-2;
-        d_type eta_v = 0.7e-2;
-    };
+        if (std::string(argv[1]) == "-DisorderInducing") {
+            // Ambient conditions
+            d_type T = 272.15; // -1 degrees Celsius
+            d_type eta_u = 2e-2;
+            d_type eta_v = 5e-2;
+        };
+
+        if (std::string(argv[1]) == "-OptimalCA") {
+            // Ambient conditions
+            d_type T = 272.15; // -1 degrees Celsius
+            d_type eta_u = 2e-2;
+            d_type eta_v = 0.7e-2;
+        };
+    }; // if argc>1
+
 
     // Respiration parameters
-    d_type v_mu = v_mu_ref * exp(e_a_vmu_ref/R_g * (1/T_ref - 1/T) );
-    d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref/R_g * (1/T_ref - 1/T) );
-    v_type respiration_param{v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
-
+    d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1 / T_ref - 1 / T));
+    d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1 / T_ref - 1 / T));
+    vec_type respiration_param;
+    respiration_param.resize(6);
+    respiration_param<<v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q;
     // Boundary parameters
-    d_type c_u_amb = p_atm * eta_u / (R_g*T);
-    d_type c_v_amb = p_atm * eta_v / (R_g*T);
+    d_type c_u_amb = p_atm * eta_u / (R_g * T);
+    d_type c_v_amb = p_atm * eta_v / (R_g * T);
 
     // allocate memory for the solution
     vec_type conc;
-    conc.resize(grid.length()+grid.length(), 1);
+    conc.resize(grid.length() + grid.length(), 1);
 
 
-    std::cout<<"Ola fellas, com estas?"<<std::endl;
-    const char* grid_name = "../conference_pear.txt";
-    pear::grid<d_type> grid(grid_name);
+    std::cout << "Ola fellas, com estas?" << std::endl;
     pear::component<d_type, vec_type> co2("CO_2", grid, conc, 0, grid.length(), 1);
-    pear::component<d_type, vec_type> o2("O_2", grid, conc, grid.length(), grid.length()*2, 1);
-    pear::diffusion<d_type> diff_co2(co2, grid, sigma_u_r, sigma_u_z);
-    pear::diffusion<d_type> diff_o2(o2, grid, sigma_v_r, sigma_v_z);
-
-
-
+    pear::component<d_type, vec_type> o2("O_2", grid, conc, grid.length(), grid.length() * 2, 1);
+    pear::diffusion<d_type, vec_type> diff_co2(co2, grid, sigma_u_r, sigma_u_z);
+    pear::diffusion<d_type, vec_type> diff_o2(o2, grid, sigma_v_r, sigma_v_z);
 
 
     pear::respiration<d_type, vec_type> resp_co2_o2(co2, o2, grid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -126,7 +126,4 @@ int main(int argc, char* argv[]){
     // export_solution(co2.concentration, o2.concentration)
 
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
-}
+};

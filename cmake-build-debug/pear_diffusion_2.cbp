@@ -87,14 +87,11 @@
 		<Unit filename="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/main.cpp">
 			<Option target="pear_diffusion_2"/>
 		</Unit>
-<<<<<<< HEAD
 		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/vector.hpp">
 			<Option target="pear_diffusion_2"/>
 		</Unit>
 		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeLists.txt">
-=======
-		<Unit filename="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeLists.txt">
->>>>>>> origin/parameters
+
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

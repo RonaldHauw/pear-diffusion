@@ -18,7 +18,7 @@ namespace pear {
      public:
 
 
-         diffusion(pear::component<d_type> & comp, pear::grid<d_type> & grid, d_type sigma_r, d_type sigma_z)
+         diffusion(pear::component<d_type, vec_type> & comp, pear::grid<d_type> & grid, d_type sigma_r, d_type sigma_z)
          : comp_(comp)
          , sigma_r_(sigma_r)
          , sigma_z_(sigma_z)
@@ -82,7 +82,7 @@ namespace pear {
 
      private:
 
-         pear::component<d_type> & comp_;
+         pear::component<d_type, vec_type> & comp_;
          d_type sigma_r_;
          d_type sigma_z_;
          pear::grid<d_type> & grid_;
