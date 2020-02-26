@@ -16,14 +16,14 @@
 
 namespace pear {
 
-    template <typename d_type>
+    template <typename d_type, typename v_type>
     class grid{
     public:
 
         /* Constructor for grid
          *
-         * loads coordinates from a text file in the following format:
-         * int grid_number d_type x_coordinate d_type y_coordinate
+         * Loads coordinates from a text file in the following format:
+         * (int) grid_number //space// (d_type) x_coordinate //space// (d_type) y_coordinate
          *
          * for example:
          * 1 0.0 0.0
@@ -114,9 +114,19 @@ namespace pear {
             else {std::cout << "Unable to open file, check the executable folder";}
         }
 
-        void get_coords(d_type & x, d_type & y, int i) const {
-            x = nodes_(2*i);
-            y = nodes_(2*i+1);
+        std::vector<d_type> node(int i) const {
+            std::vector<d_type> node_coord(2);
+            node_coord[0] = nodes_(2*i);
+            node_coord[1] = nodes_(2*i+1);
+            return node_coord;
+        }
+
+        std::vector<d_type> element(int i) const {
+            std::vector<d_type> elem_nodes(3);
+            elem_nodes[0] = elements_[3*i];
+            elem_nodes[1] = elements_[3*i+1];
+            elem_nodes[2] = elements_[3*i+2];
+            return elem_nodes;
         }
 
         int length() const {
