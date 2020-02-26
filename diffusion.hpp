@@ -28,26 +28,17 @@ namespace pear {
          }
 
 
-         void J(){
+         void J() const {
 
 
-             for (int t = 0; t<grid_.elements_length(); t++){
+             for (int t = 0; t<grid_.nb_elements(); t++){
                  std::vector<d_type> elem_nodes = grid_.element(t); // vector of length 3 [node_1_n, node_2_n, node_3_n]
-                 std::vector<d_type> elem_node_1_coords = grid_.node(elem_nodes(1)); // [node_1_x, node_1_y]
-                 std::vector<d_type> elem_node_2_coords = grid_.node(elem_nodes(2)); // [node_2_x, node_2_y]
-                 std::vector<d_type> elem_node_3_coords = grid_.node(elem_nodes(3)); //
 
-                d_type r1 = elem_node_1_coords(1);
-                d_type r2 = elem_node_2_coords(1);
-                d_type r3 = elem_node_3_coords(1);
+                d_type r1   = grid_.node(elem_nodes[0])[0];     d_type z1 = grid_.node(elem_nodes[0])[1];
+                d_type r2   = grid_.node(elem_nodes[1])[0];     d_type z2 = grid_.node(elem_nodes[1])[1];
+                d_type r3   = grid_.node(elem_nodes[2])[0];     d_type z3 = grid_.node(elem_nodes[2])[1];
 
-                d_type z1 = elem_node_1_coords(2);
-                d_type z2 = elem_node_2_coords(2);
-                d_type z3 = elem_node_3_coords(2);
 
-                std::cout<<r1<<" "<<z1<<std::endl;
-                std::cout<<r2<<" "<<z2<<std::endl;
-                std::cout<<r3<<" "<<z3<<std::endl;
 
 
                  //d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5;

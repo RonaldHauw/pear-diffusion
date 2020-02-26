@@ -16,7 +16,7 @@
 
 namespace pear {
 
-    template <typename d_type, typename v_type>
+    template <typename d_type>
     class grid{
     public:
 
@@ -48,10 +48,14 @@ namespace pear {
 
                 // Save coordinates
                 while(nodes_file>>n>>x>>y){
-                    nodes_[2*n] = x;
-                    nodes_[2*n+1] = y;
+                    nodes_[2*(n-1)] = x;
+                    nodes_[2*(n-1)+1] = y;
+
                 }
                 std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
+                for (auto it = nodes_.begin(); it!= nodes_.end(); it++){
+                    std::cout<< *it<<" ";
+                }
             }
             else {std::cout << "Unable to open file, check the executable folder";}
 
@@ -64,12 +68,13 @@ namespace pear {
                 elements_ = std::vector<d_type>(3*nb_elements_);
                 // Reopen
                 elements_file.close();
-                std::ifstream elements_file(file_name_+"_Nodes.txt");
+                std::ifstream elements_file(file_name_+"_Elements.txt");
+
                 // Save coordinates
                 while(elements_file>>n>>n1>>n2>>n3){
-                    elements_[3*n] = n1;
-                    elements_[3*n+1] = n2;
-                    elements_[3*n+2] = n3;
+                    elements_[3*(n-1)] = n1;
+                    elements_[3*(n-1)+1] = n2;
+                    elements_[3*(n-1)+2] = n3;
                 }
                 std::cout<<"Grid elements loaded from: "<<file_name_<<" length: "<<nb_elements_<<std::endl;
             }
@@ -87,8 +92,8 @@ namespace pear {
                 std::ifstream outer_file(file_name_+"_OuterEdges.txt");
                 // Save coordinates
                 while(outer_file>>n>>n1>>n2){
-                    outer_edges_[2*n] = n1;
-                    outer_edges_[2*n+1] = n2;
+                    outer_edges_[2*(n-1)] = n1;
+                    outer_edges_[2*(n-1)+1] = n2;
                 }
                 std::cout<<"Outer edges loaded from: "<<file_name_<<" length: "<<nb_outer_edges_<<std::endl;
             }
@@ -107,33 +112,36 @@ namespace pear {
                 std::ifstream inner_file(file_name_+"_OuterEdges.txt");
                 // Save coordinates
                 while(inner_file>>n>>n1>>n2){
-                    inner_edges_[2*n] = n1;
-                    inner_edges_[2*n+1] = n2;
+                    inner_edges_[2*(n-1)] = n1;
+                    inner_edges_[2*(n-1)+1] = n2;
                 }
                 std::cout<<"Inner edges loaded from: "<<file_name_<<" length: "<<nb_inner_edges_<<std::endl;
             }
-            else {std::cout << "Unable to open file, check the executable folder";}
+            else {std::cout << "Unable to open file, check the executable folder";};
         }
 
         std::vector<d_type> node(int i) const {
             std::vector<d_type> node_coord(2);
-            node_coord[0] = nodes_(2*i);
-            node_coord[1] = nodes_(2*i+1);
+            node_coord[0] = nodes_[2*(i-1)];
+            node_coord[1] = nodes_[2*(i-1)+1];
             return node_coord;
         }
 
         std::vector<d_type> element(int i) const {
             std::vector<d_type> elem_nodes(3);
-            elem_nodes[0] = elements_[3*i];
-            elem_nodes[1] = elements_[3*i+1];
-            elem_nodes[2] = elements_[3*i+2];
+            elem_nodes[0] = elements_[3*(i-1)];
+            elem_nodes[1] = elements_[3*(i-1)+1];
+            elem_nodes[2] = elements_[3*(i-1)+2];
             return elem_nodes;
         }
 
-        int length() const {
-            return nb_nodes_;
+        int nb_elements() const {
+            return nb_elements_;
         }
 
+        int nb_nodes() const {
+            return nb_nodes_;
+        }
 
 
     private:

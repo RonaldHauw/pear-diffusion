@@ -102,12 +102,12 @@ int main(int argc, char* argv[]) {
 
     // allocate memory for the solution
     vec_type conc;
-    conc.resize(grid.length() + grid.length(), 1);
+    conc.resize(grid.nb_nodes() + grid.nb_nodes(), 1);
 
 
     std::cout << "Ola fellas, com estas?" << std::endl;
-    pear::component<d_type, vec_type> co2("CO_2", grid, conc, 0, grid.length(), 1);
-    pear::component<d_type, vec_type> o2("O_2", grid, conc, grid.length(), grid.length() * 2, 1);
+    pear::component<d_type, vec_type> co2("CO_2", grid, conc, 0, grid.nb_nodes(), 1);
+    pear::component<d_type, vec_type> o2("O_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
     pear::diffusion<d_type, vec_type> diff_co2(co2, grid, sigma_u_r, sigma_u_z);
     pear::diffusion<d_type, vec_type> diff_o2(o2, grid, sigma_v_r, sigma_v_z);
 
@@ -116,6 +116,7 @@ int main(int argc, char* argv[]) {
 
     pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, resp_co2_o2);
 
+    diff_co2.J();
 
     //pear::nlsolver<d_type, pear::rdc<d_type, vec_type>> nlsolve(equation);
     //nlsolve.solve();
