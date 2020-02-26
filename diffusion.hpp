@@ -18,10 +18,12 @@ namespace pear {
      public:
 
 
-         diffusion(pear::component<d_type, vec_type> & comp, pear::grid<d_type> & grid, d_type sigma_r, d_type sigma_z)
+         diffusion(pear::component<d_type, vec_type> & comp, pear::grid<d_type> & grid, std::vector<d_type> param)
          : comp_(comp)
-         , sigma_r_(sigma_r)
-         , sigma_z_(sigma_z)
+         , sigma_r_(param[0])
+         , sigma_z_(param[1])
+         , r_(param[2])
+         , C_amb_(param[3])
          , grid_(grid)
          {
              std::cout<<"Component: "<<comp_.name()<<" will diffuse with sigma_r = "<<sigma_r_<< " and sigma_z = " <<sigma_z_<< std::endl;
@@ -41,7 +43,7 @@ namespace pear {
 
 
 
-                 //d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5;
+                //d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5;
 
                 //d_type sum_r = r1+r2+r3;
 
@@ -60,9 +62,25 @@ namespace pear {
 
          };
 
-         void f(){};
+         void f(vec_type f_vector) const{
 
-         void r(){};
+             for (int t = 0; t<grid_.nb_outer_edges_(); t++) {
+                 std::vector<d_type> edge_nodes = grid_.outer_edge(t);
+
+                 d_type r1   = grid_.node(edge_nodes[0])[0];     d_type z1 = grid_.node(edge_nodes[0])[1];
+                 d_type r2   = grid_.node(edge_nodes[1])[0];     d_type z2 = grid_.node(edge_nodes[1])[1];
+                 d_type length = sqrt((r1-r2)*(r1-r2) + (z1-z2)*(z1-z2));
+
+                 f_vector( r1 )   = f_vector( r1 )   + r_ * C_amb_ * (2*r1+r2) * length / 6. ;
+                 f_vector( r2 )   = f_vector( r2 )   + r_ * C_amb_ * (r1+2*r2) * length / 6. ;
+
+             };
+
+             // In case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
+
+         };
+
+         void r(vec_type r_vector) const{};
 
 
          vec_type & get_cons(){
@@ -80,6 +98,8 @@ namespace pear {
          pear::component<d_type, vec_type> & comp_;
          d_type sigma_r_;
          d_type sigma_z_;
+         d_type r_;
+         d_type C_amb_;
          pear::grid<d_type> & grid_;
 
      };

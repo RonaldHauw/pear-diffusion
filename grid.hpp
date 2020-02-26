@@ -135,12 +135,34 @@ namespace pear {
             return elem_nodes;
         }
 
+        std::vector<d_type> outer_edge(int i) const {
+            std::vector<d_type> edge_nodes(2);
+            edge_nodes[0] = outer_edges_[2*(i-1)];
+            edge_nodes[1] = outer_edges_[2*(i-1)+1];
+            return edge_nodes;
+        }
+
+        std::vector<d_type> inner_edge(int i) const {
+            std::vector<d_type> edge_nodes(2);
+            edge_nodes[0] = inner_edges_[2*(i-1)];
+            edge_nodes[1] = inner_edges_[2*(i-1)+1];
+            return edge_nodes;
+        }
+
         int nb_elements() const {
             return nb_elements_;
         }
 
         int nb_nodes() const {
             return nb_nodes_;
+        }
+
+        int nb_outer_edges() const {
+            return nb_outer_edges_;
+        }
+
+        int nb_inner_edges() const {
+            return nb_inner_edges_;
         }
 
 
@@ -150,8 +172,8 @@ namespace pear {
         std::vector<d_type> inner_edges_;
         std::vector<d_type> elements_;
         std::vector<d_type> outer_edges_;
-        int nb_nodes_; // nb of grid points
-        int nb_elements_; // nb of elements
+        int nb_nodes_;
+        int nb_elements_;
         int nb_outer_edges_;
         int nb_inner_edges_;
 

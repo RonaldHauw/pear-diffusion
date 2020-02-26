@@ -54,38 +54,33 @@ int main(int argc, char* argv[]) {
 
     if (argc>1) {
         if (std::string(argv[1]) == "-ShelfLife") {
-            // Ambient conditions
-            d_type T = 293.15; // 20 degrees Celsius
-            d_type eta_u = 20.8e-2;
-            d_type eta_v = 0;
+            T = 293.15; // 20 degrees Celsius
+            eta_u = 20.8e-2;
+            eta_v = 0;
         };
 
         if (std::string(argv[1]) == "-Refrigerator") {
-            // Ambient conditions
-            d_type T = 280.15; // 7 degrees Celsius
-            d_type eta_u = 20.8e-2;
-            d_type eta_v = 0;
+            T = 280.15; // 7 degrees Celsius
+            eta_u = 20.8e-2;
+            eta_v = 0;
         };
 
         if (std::string(argv[1]) == "-Precooling") {
-            // Ambient conditions
-            d_type T = 272.15; // -1 degrees Celsius
-            d_type eta_u = 20.8e-2;
-            d_type eta_v = 0;
+            T = 272.15; // -1 degrees Celsius
+            eta_u = 20.8e-2;
+            eta_v = 0;
         };
 
         if (std::string(argv[1]) == "-DisorderInducing") {
-            // Ambient conditions
-            d_type T = 272.15; // -1 degrees Celsius
-            d_type eta_u = 2e-2;
-            d_type eta_v = 5e-2;
+            T = 272.15; // -1 degrees Celsius
+            eta_u = 2e-2;
+            eta_v = 5e-2;
         };
 
         if (std::string(argv[1]) == "-OptimalCA") {
-            // Ambient conditions
-            d_type T = 272.15; // -1 degrees Celsius
-            d_type eta_u = 2e-2;
-            d_type eta_v = 0.7e-2;
+            T = 272.15; // -1 degrees Celsius
+            eta_u = 2e-2;
+            eta_v = 0.7e-2;
         };
     }; // if argc>1
 
@@ -93,12 +88,13 @@ int main(int argc, char* argv[]) {
     // Respiration parameters
     d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1 / T_ref - 1 / T));
     d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1 / T_ref - 1 / T));
-    vec_type respiration_param;
-    respiration_param.resize(6);
-    respiration_param<<v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q;
+    std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
+
     // Boundary parameters
     d_type c_u_amb = p_atm * eta_u / (R_g * T);
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
+    std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
+    std::vector<d_type> diffusion_co2_param = {sigma_v_r, sigma_v_z, r_v, c_v_amb};
 
     // allocate memory for the solution
     vec_type conc;
@@ -106,10 +102,10 @@ int main(int argc, char* argv[]) {
 
 
     std::cout << "Ola fellas, com estas?" << std::endl;
-    pear::component<d_type, vec_type> co2("CO_2", grid, conc, 0, grid.nb_nodes(), 1);
-    pear::component<d_type, vec_type> o2("O_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
-    pear::diffusion<d_type, vec_type> diff_co2(co2, grid, sigma_u_r, sigma_u_z);
-    pear::diffusion<d_type, vec_type> diff_o2(o2, grid, sigma_v_r, sigma_v_z);
+    pear::component<d_type, vec_type> o2("CO_2", grid, conc, 0, grid.nb_nodes(), 1);
+    pear::component<d_type, vec_type> co2("O_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
+    pear::diffusion<d_type, vec_type> diff_o2(o2, grid, diffusion_o2_param);
+    pear::diffusion<d_type, vec_type> diff_co2(co2, grid, diffusion_co2_param);
 
 
     pear::respiration<d_type, vec_type> resp_co2_o2(co2, o2, grid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
