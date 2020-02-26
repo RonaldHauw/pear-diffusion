@@ -23,8 +23,8 @@ namespace pear {
     public:
 
         // dedicated constructor for the pear problem
-        rdc(    pear::diffusion<d_type, vec_type> diff_o2,
-                pear::diffusion<d_type, vec_type> diff_co2,
+        rdc(    pear::diffusion<d_type, vec_type, mat_type> diff_o2,
+                pear::diffusion<d_type, vec_type, mat_type> diff_co2,
                 pear::respiration<d_type, vec_type> resp
                 )
                 : diff_o2_(diff_o2)
@@ -52,8 +52,8 @@ namespace pear {
 
 
     private:
-        pear::diffusion<d_type, vec_type> diff_o2_;
-        pear::diffusion<d_type, vec_type> diff_co2_;
+        pear::diffusion<d_type, vec_type, mat_type> diff_o2_;
+        pear::diffusion<d_type, vec_type, mat_type> diff_co2_;
         pear::respiration<d_type, vec_type> resp_;
     };
 
