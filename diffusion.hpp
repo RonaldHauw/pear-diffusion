@@ -105,7 +105,7 @@ namespace pear {
 
          vec_type & get_cons(){
              return comp_.get_cons();
-         }
+         };
 
          int length(){
              return grid_.length();

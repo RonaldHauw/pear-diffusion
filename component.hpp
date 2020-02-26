@@ -46,7 +46,9 @@ namespace pear {
             return concentration_(seq(start_, stop_, stride_), 1);
         }
 
-
+        d_type & concentration(int i){
+            return concentration_(start_ + i*stride_, 1);
+        }
 
         int length(){
             return grid_.length();
