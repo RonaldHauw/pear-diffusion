@@ -32,7 +32,7 @@ endif()
 #############################################################################
 
 # automatically parse the version number
-file(READ "${PROJECT_SOURCE_DIR}/Eigen/src/Core/util/Macros.h" _eigen_version_header)
+file(READ "Eigen/src/Core/util/Macros.h" _eigen_version_header)
 string(REGEX MATCH "define[ \t]+EIGEN_WORLD_VERSION[ \t]+([0-9]+)" _eigen_world_version_match "${_eigen_version_header}")
 set(EIGEN_WORLD_VERSION "${CMAKE_MATCH_1}")
 string(REGEX MATCH "define[ \t]+EIGEN_MAJOR_VERSION[ \t]+([0-9]+)" _eigen_major_version_match "${_eigen_version_header}")
@@ -534,18 +534,18 @@ if (NOT CMAKE_VERSION VERSION_LESS 3.0)
   include (CMakePackageConfigHelpers)
 
   # Imported target support
-  add_library (eigen INTERFACE)
+  add_library (Eigen INTERFACE)
 
-  target_compile_definitions (eigen INTERFACE ${EIGEN_DEFINITIONS})
-  target_include_directories (eigen INTERFACE
+  target_compile_definitions (Eigen INTERFACE ${EIGEN_DEFINITIONS})
+  target_include_directories (Eigen INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
   )
 
   # Export as title case Eigen
-  set_target_properties (eigen PROPERTIES EXPORT_NAME Eigen)
+  set_target_properties (Eigen PROPERTIES EXPORT_NAME Eigen)
 
-  install (TARGETS eigen EXPORT Eigen3Targets)
+  install (TARGETS Eigen EXPORT Eigen3Targets)
 
   configure_package_config_file (
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Eigen3Config.cmake.in
@@ -567,7 +567,7 @@ if (NOT CMAKE_VERSION VERSION_LESS 3.0)
 
   # The Eigen target will be located in the Eigen3 namespace. Other CMake
   # targets can refer to it using Eigen3::Eigen.
-  export (TARGETS eigen NAMESPACE Eigen3:: FILE Eigen3Targets.cmake)
+  export (TARGETS Eigen NAMESPACE Eigen3:: FILE Eigen3Targets.cmake)
   # Export Eigen3 package to CMake registry such that it can be easily found by
   # CMake even if it has not been installed to a standard directory.
   export (PACKAGE Eigen3)

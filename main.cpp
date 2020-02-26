@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 
     // allocate memory for the solution
     vec_type conc;
-    conc.resize(grid.nb_nodes() + grid.nb_nodes(), 1);
+    conc.resize(grid.nb_nodes(), 1);
 
 
     std::cout << "Ola fellas, com estas?" << std::endl;
@@ -121,9 +121,10 @@ int main(int argc, char* argv[]) {
     mat_type K;
     K.resize(grid.nb_nodes() + grid.nb_nodes(), grid.nb_nodes() + grid.nb_nodes());
 
-    diff_co2.J(K);
 
-    //pear::nlsolver<d_type, pear::rdc<d_type, vec_type>> nlsolve(equation);
+
+
+    pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
     //nlsolve.solve();
 
 

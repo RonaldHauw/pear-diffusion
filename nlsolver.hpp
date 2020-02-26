@@ -19,7 +19,7 @@
 
 namespace pear {
 
-    template <typename d_type, typename f_type>
+    template <typename d_type, typename f_type, typename vec_type, typename mat_type>
     class nlsolver{
     public:
 
@@ -33,11 +33,15 @@ namespace pear {
 
 
         int solve(){
+            mat_type J; J.resize(f_.size(), f_.size());
+            vec_type f; f.resize(f_.size(), 1);
             for (int i = 1; i<10; i++) {
-                Eigen::Matrix<d_type, Eigen::Dynamic, Eigen::Dynamic> J = f_.jacobian();
-                Eigen::Matrix<d_type, Eigen::Dynamic, 1> fx = f_.eval();
-                Eigen::Matrix<d_type, Eigen::Dynamic, 1> x = J.colPivHouseholderQr().solve(fx);
-                f_.set_concentrations(x);
+                J.setZero(); f_.J(J); f_.f(f);
+                std::cout<<J.rows()<<" "<<J.cols()<<std::endl;
+                std::cout<<f.rows()<<std::endl;
+
+                vec_type x = J.colPivHouseholderQr().solve(f);
+                f_.set_cons(x);
             }
             return 1;
         }

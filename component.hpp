@@ -17,6 +17,7 @@
 #include <iterator>
 #include "grid.hpp"
 #include "eigen-3.3.7/Eigen/Dense"
+#include "eigen-3.3.7/Eigen/Eigen"
 
 
 namespace pear {
@@ -42,14 +43,15 @@ namespace pear {
 
 
 
-        vec_type & get_cons(){
-            return concentration_(seq(start_, stop_, stride_), 1);
+        vec_type  concentrations(){
+            //return & concentration_(seq(start_, stop_, stride_), 1);
+            return  concentration_;
         }
 
 
 
-        int length(){
-            return grid_.length();
+        int nb_nodes(){
+            return grid_.nb_nodes();
         };
 
     private:

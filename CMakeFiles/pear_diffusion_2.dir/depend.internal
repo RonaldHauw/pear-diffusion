@@ -7,13 +7,21 @@ CMakeFiles/pear_diffusion_2.dir/main.cpp.o
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Cholesky
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Core
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Dense
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Eigen
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Eigenvalues
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Geometry
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Householder
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/IterativeLinearSolvers
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Jacobi
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/LU
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/OrderingMethods
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/QR
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/SVD
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/Sparse
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/SparseCholesky
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/SparseCore
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/SparseLU
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/SparseQR
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Cholesky/LDLT.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Cholesky/LLT.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Cholesky/LLT_LAPACKE.h
@@ -145,6 +153,7 @@ CMakeFiles/pear_diffusion_2.dir/main.cpp.o
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/Macros.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/Memory.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/Meta.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/NonMPL2.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/ReenableStupidWarnings.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/StaticAssert.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Core/util/XprHelper.h
@@ -180,6 +189,14 @@ CMakeFiles/pear_diffusion_2.dir/main.cpp.o
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Householder/BlockHouseholder.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Householder/Householder.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Householder/HouseholderSequence.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/LeastSquareConjugateGradient.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/IterativeLinearSolvers/SolveWithGuess.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/Jacobi/Jacobi.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/LU/Determinant.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/LU/FullPivLU.h
@@ -187,6 +204,9 @@ CMakeFiles/pear_diffusion_2.dir/main.cpp.o
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/LU/PartialPivLU.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/LU/PartialPivLU_LAPACKE.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/LU/arch/Inverse_SSE.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/OrderingMethods/Amd.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/OrderingMethods/Eigen_Colamd.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/OrderingMethods/Ordering.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/QR/ColPivHouseholderQR.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/QR/ColPivHouseholderQR_LAPACKE.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/QR/CompleteOrthogonalDecomposition.h
@@ -198,6 +218,56 @@ CMakeFiles/pear_diffusion_2.dir/main.cpp.o
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SVD/JacobiSVD_LAPACKE.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SVD/SVDBase.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SVD/UpperBidiagonalization.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCholesky/SimplicialCholesky.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCholesky/SimplicialCholesky_impl.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/AmbiVector.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/CompressedStorage.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/MappedSparseMatrix.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseAssign.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseBlock.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseColEtree.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseCompressedBase.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseCwiseBinaryOp.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseCwiseUnaryOp.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseDenseProduct.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseDiagonalProduct.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseDot.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseFuzzy.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseMap.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseMatrix.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseMatrixBase.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparsePermutation.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseProduct.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseRedux.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseRef.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseSelfAdjointView.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseSolverBase.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseSparseProductWithPruning.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseTranspose.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseTriangularView.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseUtil.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseVector.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/SparseView.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseCore/TriangularSolver.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLUImpl.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_Memory.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_Structs.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_Utils.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_column_bmod.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_column_dfs.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_gemm_kernel.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_heap_relax_snode.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_kernel_bmod.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_panel_dfs.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_pivotL.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_pruneL.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseLU/SparseLU_relax_snode.h
+ /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/SparseQR/SparseQR.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/misc/Image.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/misc/Kernel.h
  /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen-3.3.7/Eigen/src/misc/RealSvd2x2.h

@@ -30,7 +30,7 @@ namespace pear {
          }
 
 
-         void J(mat_type K) const {
+         void J(mat_type & K) const {
 
 
              for (int t = 1; t<grid_.nb_elements(); t++){
@@ -82,9 +82,9 @@ namespace pear {
 
          };
 
-         void f(vec_type f_vector) const{
-
-             for (int t = 0; t<grid_.nb_outer_edges_(); t++) {
+         void f(vec_type & f_vector, mat_type & K) const{
+             // Outer boundary
+             for (int t = 0; t<grid_.nb_outer_edges(); t++) {
                  std::vector<d_type> edge_nodes = grid_.outer_edge(t);
 
                  d_type r1   = grid_.node(edge_nodes[0])[0];     d_type z1 = grid_.node(edge_nodes[0])[1];
@@ -96,21 +96,23 @@ namespace pear {
 
              };
 
-             // In case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
+             // Inner boundary: in case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
+
+             // Add the matrix vector product
+             K.setZero(); this->J(K);
+
+             f_vector = f_vector + K*comp_.concentrations();
 
          };
 
-         void r(vec_type r_vector) const{};
 
-
-         vec_type & get_cons(){
-             return comp_.get_cons();
+         void set_cons(vec_type & x){
+             comp_.concentrations() = x;
          }
 
-         int length(){
-             return grid_.length();
-         };
-
+         int nb_nodes(){
+             return comp_.nb_nodes();
+         }
 
 
      private:

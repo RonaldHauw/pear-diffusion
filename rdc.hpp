@@ -33,20 +33,28 @@ namespace pear {
         {std::cout<<"Reaction diffusion equation composed."<<std::endl;}
 
 
-        void get_cons(vec_type & x){
-            x <<  diff_o2_.get_cons(),  diff_co2_.get_cons(); ; // concatanation
-        };
-
 
         void f(vec_type & x){
-            //
+            mat_type K;
+            K.resize(diff_o2_.nb_nodes(), diff_o2_.nb_nodes());
+            diff_o2_.f(x, K);
         };
 
         void J(mat_type & J){
-            //
+            J.setZero();
+            diff_o2_.J(J);
         };
 
-        void r(vec_type & x){}
+        void set_cons(vec_type & x){
+            diff_o2_.set_cons(x);
+        }
+        int size(){
+            return diff_o2_.nb_nodes();//+diff_co2_.nb_nodes()
+        }
+
+
+
+
 
 
 
