@@ -41,18 +41,21 @@ namespace pear {
 
 
 
-                 //d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5;
+                d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5;
 
-                //d_type sum_r = r1+r2+r3;
+                d_type sum_r = r1+r2+r3;
 
-                //d_type C_12_1 = 1.0/6 * 1.0/2/omega * (z1-z3)*(z3-z2) ;
-                //d_type C_12_2 = 1.0/6 * 1.0/2/omega * (r1-r3)*(r3-r2) ;
+                d_type C_12_1 = 1.0/6 * 1.0/2/omega * (z1-z3)*(z3-z2) ;
+                d_type C_12_2 = 1.0/6 * 1.0/2/omega * (r1-r3)*(r3-r2) ;
 
-                //d_type C_23_1 = 1.0/6 * 1.0/2/omega * (z2-z1)*(z1-z3) ;
-                //d_type C_23_2 = 1.0/6 * 1.0/2/omega * (r2-r1)*(r1-r3) ;
+                d_type C_23_1 = 1.0/6 * 1.0/2/omega * (z2-z1)*(z1-z3) ;
+                d_type C_23_2 = 1.0/6 * 1.0/2/omega * (r2-r1)*(r1-r3) ;
 
-                //d_type C_13_1 = 1.0/6 * 1.0/2/omega * (z1-z2)*(z2-z3) ;
-                //d_type C_13_2 = 1.0/6 * 1.0/2/omega * (r1-r2)*(r2-r3) ;
+                d_type C_13_1 = 1.0/6 * 1.0/2/omega * (z1-z2)*(z2-z3) ;
+                d_type C_13_2 = 1.0/6 * 1.0/2/omega * (r1-r2)*(r2-r3) ;
+
+
+
 
 
 
