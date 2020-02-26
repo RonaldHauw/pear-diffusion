@@ -20,8 +20,7 @@ namespace pear {
     class grid{
     public:
 
-        // todo put four file readers in one function.
-        /* constructor for grid
+        /* Constructor for grid
          *
          * loads coordinates from a text file in the following format:
          * int grid_number d_type x_coordinate d_type y_coordinate
@@ -34,37 +33,38 @@ namespace pear {
         : file_name_(file_name)
         {
             // NODES
-            std::ifstream nodes_file(file_name_ + "_Nodes.txt"); // read file
+
+            std::ifstream nodes_file(file_name_ + "_Nodes.txt");
             d_type x, y; int n, N, n1, n2, n3;
             if (nodes_file.is_open()){
-                // count number of grid points
+                // Count number of grid points to pre-allocate memory
                 N = 0; while(nodes_file>>n>>x>>y){N++;}; nb_nodes_ = N;
                 nodes_ = std::vector<d_type>(2*nb_nodes_);
-                // reopen
+
+                // Reopen
                 nodes_file.close();
                 std::ifstream nodes_file(file_name_+"_Nodes.txt");
-                // save coordinates
+
+                // Save coordinates
                 while(nodes_file>>n>>x>>y){
                     nodes_[2*n] = x;
                     nodes_[2*n+1] = y;
                 }
                 std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
             }
-
             else {std::cout << "Unable to open file, check the executable folder";}
 
             // ELEMENTS
 
-            std::ifstream elements_file(file_name_ + "_Elements.txt"); // read file
+            std::ifstream elements_file(file_name_ + "_Elements.txt");
             if (elements_file.is_open()){
-
-                // count number of grid points
+                // Count number of elements to pre-allocate memory
                 N = 0; while(elements_file>>n>>n1>>n2>>n3){N++;}; nb_elements_ = N;
                 elements_ = std::vector<d_type>(3*nb_elements_);
-                // reopen
+                // Reopen
                 elements_file.close();
                 std::ifstream elements_file(file_name_+"_Nodes.txt");
-                // save coordinates
+                // Save coordinates
                 while(elements_file>>n>>n1>>n2>>n3){
                     elements_[3*n] = n1;
                     elements_[3*n+1] = n2;
@@ -72,19 +72,19 @@ namespace pear {
                 }
                 std::cout<<"Grid elements loaded from: "<<file_name_<<" length: "<<nb_elements_<<std::endl;
             }
-
             else {std::cout << "Unable to open file, check the executable folder";}
 
             // OUTER EDGES
-            std::ifstream outer_file(file_name_ + "_OuterEdges.txt"); // read file
+
+            std::ifstream outer_file(file_name_ + "_OuterEdges.txt");
             if (outer_file.is_open()){
-                // count number of grid points
+                // Count number of outer edges to pre-allocate memory
                 N = 0; while(outer_file>>n>>n1>>n2>>n3){N++;}; nb_outer_edges_ = N;
                 outer_edges_ = std::vector<d_type>(2*nb_outer_edges_);
-                // reopen
+                // Reopen
                 outer_file.close();
                 std::ifstream outer_file(file_name_+"_OuterEdges.txt");
-                // save coordinates
+                // Save coordinates
                 while(outer_file>>n>>n1>>n2){
                     outer_edges_[2*n] = n1;
                     outer_edges_[2*n+1] = n2;
@@ -95,15 +95,16 @@ namespace pear {
             else {std::cout << "Unable to open file, check the executable folder";}
 
             // INNER EDGES
+
             std::ifstream inner_file(file_name_ + "_InnerEdges.txt"); // read file
             if (inner_file.is_open()){
-                // count number of grid points
+                // Count number of inner edges to pre-allocate memory
                 N = 0; while(inner_file>>n>>n1>>n2){N++;}; nb_inner_edges_ = N;
                 inner_edges_ = std::vector<d_type>(2*nb_inner_edges_);
-                // reopen
+                // Reopen
                 inner_file.close();
                 std::ifstream inner_file(file_name_+"_OuterEdges.txt");
-                // save coordinates
+                // Save coordinates
                 while(inner_file>>n>>n1>>n2){
                     inner_edges_[2*n] = n1;
                     inner_edges_[2*n+1] = n2;
@@ -126,7 +127,7 @@ namespace pear {
 
     private:
         std::string file_name_;
-        std::vector<d_type> nodes_; //  length 2N_: x1 y1 x2 y2 x3 y3 for sequantial mem access
+        std::vector<d_type> nodes_; //  length 2N_: x1 y1 x2 y2 x3 y3 for sequential mem access
         std::vector<d_type> inner_edges_;
         std::vector<d_type> elements_;
         std::vector<d_type> outer_edges_;
