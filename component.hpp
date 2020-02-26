@@ -48,7 +48,9 @@ namespace pear {
             return  concentration_;
         }
 
-
+        d_type & concentration(int i){
+            return concentration_(start_ + i*stride_, 1);
+        }
 
         int nb_nodes(){
             return grid_.nb_nodes();
