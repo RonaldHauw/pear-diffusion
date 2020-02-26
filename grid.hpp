@@ -20,15 +20,10 @@ namespace pear {
     class grid{
     public:
 
-        // todo put four file readers in one function.
         /* constructor for grid
          *
          * loads coordinates from a text file in the following format:
          * int grid_number d_type x_coordinate d_type y_coordinate
-         *
-         * for example:
-         * 1 0.0 0.0
-         * 2 0.5 0.5
          */
         grid(std::string file_name)
         : file_name_(file_name)
