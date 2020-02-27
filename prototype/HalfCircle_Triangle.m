@@ -25,7 +25,7 @@ axis equal;
 % Creation of the mesh
 model = createpde(1);
 geometryFromEdges(model,dl);
-mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',1.2,'Hmin',0.6);
+mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',1.2,'Hmin',1.0);
 pdeplot(model);
 
 
@@ -57,8 +57,9 @@ for i = 1:size(InnerBNodes, 2)-1
 end
 
 %% Export the data
-save('HCTmesh3', 'Nodes', 'Elements');
-save('HCTmesh3_Data', 'InnerBNodes', 'OuterBNodes');
+
+save('mesh/HCTmesh3', 'Nodes', 'Elements'); 
+save('mesh/HCTmesh3_Data', 'InnerBNodes', 'OuterBNodes', 'InnerBEdges', 'OuterBEdges'); 
 
 writematrix(Nodes,"mesh/HCTmesh3_Nodes.txt"," ");
 writematrix(Elements,'mesh/HCTmesh3_Elements.txt',' ');

@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Ello ello ello, com estas?" << std::endl;
 
-    std::string grid_name = "grid/HCTmesh2";
+    std::string grid_name = "prototype/mesh/HCTmesh3";
     pear::grid<d_type> grid(grid_name);
 
     // Diffusion parameters
@@ -30,8 +30,8 @@ int main(int argc, char* argv[]) {
     d_type sigma_u_z = 1.10e-9;
 
     // to remove!
-    sigma_u_r = sigma_u_r*1e10;
-    sigma_u_z = sigma_u_z*1e10;
+    //sigma_u_r = sigma_u_r*1e10;
+    //sigma_u_z = sigma_u_z*1e10;
 
     d_type sigma_v_r = 2.32e-9;
     d_type sigma_v_z = 6.97e-9;
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
     d_type r_v = 7.5e-7;
 
     // to remove!
-    r_u = r_u*1e7;
+    //r_u = r_u*1e7;
 
     d_type p_atm = 101300;
     d_type T_ref = 293.15;

@@ -45,8 +45,7 @@ namespace pear {
                 f_.set_cons(x);
                 // set concentrations doesnt work
 
-
-
+                std::cout<<" rows"<<J.rows()<<"   cols "<<J.cols()<<std::endl;
                 Eigen::SelfAdjointEigenSolver<mat_type> eigensolver(J);
                 if (eigensolver.info() != Eigen::Success) abort();
                 std::cout << "The eigenvalues of A are:\n" << eigensolver.eigenvalues() << std::endl;

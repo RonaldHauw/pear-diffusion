@@ -9,12 +9,12 @@ clear all
  %load mesh/HalfCircleMesh.mat
  %load mesh/HalfCircleMesh_Data.mat
 %
-load mesh/HCT_Mesh.mat
-load mesh/HCT_Mesh_Data.mat
+load mesh/HCTmesh3.mat
+load mesh/HCTmesh3_Data.mat
 %
-coordinates = Nodes';
-r           = coordinates(:, 1) ;
-z           = coordinates(:, 2) ;
+coordinates = Nodes;
+r           = coordinates(:, 2) ;
+z           = coordinates(:, 3) ;
 elements3   = Elements( : , 2:end ) ;
 G1_edges    = InnerBEdges( :, 2:end ) ;
 G1_nodes    = InnerBNodes' ;
@@ -99,11 +99,12 @@ C = A\b ;
 
 
 % Newton-Raphson iteration
-for n=1:20
+for n=1:2
     
     % K = [ K_u , 0 ; 0 , K_v ]
     K = assemble_K( coordinates, elements3, G2_edges, ...
-                    s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
+                    s_ur, s_vr, s_uz, s_vz, r_u, r_v );
+    dummy_var = K(1:size(K, 1)/2, 1:size(K, 2)/2)
     % f = [ f_u ; f_v ]
     f = assemble_f( coordinates, G2_edges, ...
                     r_u, r_v, C_u_amb, C_v_amb ) ;
@@ -152,13 +153,12 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
     z = coordinates(:, 2) ;
 
     K = zeros( 2*M, 2*M );
-    for t = elements3
-        
+    for t = elements3'
         % area of element (can be positive or negative)
-        omega = det([ ones(1,3) ; coordinates(t, :) ]) / 2 ;
+        omega = det([ ones(1,3) ; coordinates(t, 2:3)' ]) / 2 ;
 
         % sum of r-coordinates
-        sum_r = sum(coordinates(t, 1), 1) ;
+        sum_r = sum(coordinates(t, 2), 1) ;
         
         % for j different from i
         C_12 = 1/6 * 1/2/omega * [ (z(1)-z(3))*(z(3)-z(2)) ; (r(1)-r(3))*(r(3)-r(2))] ;
@@ -230,8 +230,8 @@ function f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb )
 
     % extract useful variables
     M = size(coordinates, 1) ;
-    r = coordinates(:, 1) ;
-    z = coordinates(:, 2) ;
+    r = coordinates(:, 2) ;
+    z = coordinates(:, 3) ;
     
     f = zeros( 2*M, 1 ) ;
     for e = G2_edges'
@@ -259,12 +259,12 @@ function H = assemble_H( coordinates, elements3, C, R_u, R_v )
 
     % extract useful variables
     M = size(coordinates, 1) ;
-    r = coordinates(:, 1) ;
+    r = coordinates(:, 2) ;
     
     H = zeros( 2*M, 1 ) ;
     for t = elements3'
         % area of element
-        area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
+        area = abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
         
         % in H_u
         H( t )   = H( t )   + 1/3*area * r(t) .* R_u(C(t), C(M+t)) ;
@@ -281,13 +281,13 @@ function [H, l] = assemble_H_lin( coordinates, elements3, C_u_amb, C_v_amb, R_u,
     
     % extract useful variables
     M = size(coordinates, 1) ;
-    r = coordinates(:, 1) ;
+    r = coordinates(:, 2) ;
     
     H = zeros(2*M, 2*M) ;
     l = zeros(2*M, 1) ;
     for t = elements3'
         % area of element
-        area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
+        area = abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
         
         % contribution of linearized R_u
         l(t)   = l(t)   + 1/3 * area * r(t) .* ( R_u(C_u_amb, C_v_amb) ...
@@ -319,7 +319,7 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
 
     % extract useful variables
     M = size(coordinates, 1) ;
-    r = coordinates(:, 1) ;
+    r = coordinates(:, 2) ;
 
     J = zeros( 2*M, 2*M ) ;
     for i = 1:M
@@ -327,7 +327,7 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
         T = elements3(any(elements3==i, 2), :) ;
         s = 0 ;
         for t = T'
-            s = s + abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
+            s = s + abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
         end
         
         % part derivative of H_u to C
