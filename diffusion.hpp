@@ -35,7 +35,7 @@ namespace pear {
 
 
              for (int t = 1; t<grid_.nb_elements(); t++){
-                 std::vector<d_type> elem_nodes = grid_.element(t); // vector of length 3 [node_1_n, node_2_n, node_3_n]
+                 std::vector<int> elem_nodes = grid_.element(t);
 
                  d_type r1   = grid_.node(elem_nodes[0])[0];     d_type z1 = grid_.node(elem_nodes[0])[1];
                  d_type r2   = grid_.node(elem_nodes[1])[0];     d_type z2 = grid_.node(elem_nodes[1])[1];
@@ -86,7 +86,7 @@ namespace pear {
          void f(vec_type & f_vector, mat_type & K) const{
              // Outer boundary
              for (int t = 0; t<grid_.nb_outer_edges(); t++) {
-                 std::vector<d_type> edge_nodes = grid_.outer_edge(t);
+                 std::vector<int> edge_nodes = grid_.outer_edge(t);
 
                  d_type r1     = grid_.node(edge_nodes[0])[0];   d_type z1 = grid_.node(edge_nodes[0])[1];
                  d_type r2     = grid_.node(edge_nodes[1])[0];   d_type z2 = grid_.node(edge_nodes[1])[1];
