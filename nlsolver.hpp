@@ -35,13 +35,15 @@ namespace pear {
         int solve(){
             mat_type J; J.resize(f_.size(), f_.size());
             vec_type f; f.resize(f_.size(), 1);
+            std::cout<<J.rows()<<" "<<J.cols()<<std::endl;
+            std::cout<<f.rows()<<std::endl;
+
             for (int i = 1; i<10; i++) {
                 J.setZero(); f_.J(J); f_.f(f);
-                std::cout<<J.rows()<<" "<<J.cols()<<std::endl;
-                std::cout<<f.rows()<<std::endl;
-
+                std::cout<<"F vect"<<f<<std::endl;
                 vec_type x = J.colPivHouseholderQr().solve(f);
                 f_.set_cons(x);
+
             }
             return 1;
         }

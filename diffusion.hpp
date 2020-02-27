@@ -27,6 +27,7 @@ namespace pear {
          , grid_(grid)
          {
              std::cout<<"Component: "<<comp_.name()<<" will diffuse with sigma_r = "<<sigma_r_<< " and sigma_z = " <<sigma_z_<< std::endl;
+             std::cout<<"  C_amb = "<<C_amb_<<"   r = "<<r_<<std::endl;
          }
 
 
@@ -44,39 +45,39 @@ namespace pear {
 
                  d_type sum_r = r1+r2+r3;
 
-                 d_type C_12_1 = 1.0/6 * 1.0/2/omega * (z1-z3)*(z3-z2) ;
-                 d_type C_12_2 = 1.0/6 * 1.0/2/omega * (r1-r3)*(r3-r2) ;
+                 d_type C_12_1 = 1./omega * (z1-z3)*(z3-z2) / 12. ;
+                 d_type C_12_2 = 1./omega * (r1-r3)*(r3-r2) / 12. ;
 
-                 d_type C_23_1 = 1.0/6 * 1.0/2/omega * (z2-z1)*(z1-z3) ;
-                 d_type C_23_2 = 1.0/6 * 1.0/2/omega * (r2-r1)*(r1-r3) ;
+                 d_type C_23_1 = 1./omega * (z2-z1)*(z1-z3) / 12. ;
+                 d_type C_23_2 = 1./omega * (r2-r1)*(r1-r3) / 12. ;
 
 
-                 d_type C_13_1 = 1.0/6 * 1.0/2/omega * (z1-z2)*(z2-z3) ;
-                 d_type C_13_2 = 1.0/6 * 1.0/2/omega * (r1-r2)*(r2-r3) ;
+                 d_type C_13_1 = 1./omega * (z1-z2)*(z2-z3) / 12. ;
+                 d_type C_13_2 = 1./omega * (r1-r2)*(r2-r3) / 12. ;
 
-                 d_type C_11_1 = 1.0/6 * 1.0/2/omega * (z2-z3)*(z2-z3);
-                 d_type C_11_2 = 1.0/6 * 1.0/2/omega * (r2-r3)*(r2-r3);
+                 d_type C_11_1 = 1./omega * (z2-z3)*(z2-z3) / 12.;
+                 d_type C_11_2 = 1./omega * (r2-r3)*(r2-r3) / 12.;
 
-                 d_type C_22_1 = 1.0/6 * 1.0/2/omega * (z1-z3)*(z1-z3);
-                 d_type C_22_2 = 1.0/6 * 1.0/2/omega * (r1-r3)*(r1-r3);
+                 d_type C_22_1 = 1./omega * (z1-z3)*(z1-z3) / 12.;
+                 d_type C_22_2 = 1./omega * (r1-r3)*(r1-r3) / 12.;
 
-                 d_type C_33_1 = 1.0/6 * 1.0/2/omega * (z1-z2)*(z1-z2);
-                 d_type C_33_2 = 1.0/6 * 1.0/2/omega * (r1-r2)*(r1-r2);
+                 d_type C_33_1 = 1./omega * (z1-z2)*(z1-z2) / 12.;
+                 d_type C_33_2 = 1./omega * (r1-r2)*(r1-r2) / 12.;
 
-                 K(elem_nodes[1], elem_nodes[2]) =  K(elem_nodes[1], elem_nodes[2]) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
-                 K(elem_nodes[2], elem_nodes[1]) =  K(elem_nodes[2], elem_nodes[1]) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
 
-                 K(elem_nodes[2], elem_nodes[3]) =  K(elem_nodes[2], elem_nodes[3]) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
-                 K(elem_nodes[3], elem_nodes[2]) =  K(elem_nodes[3], elem_nodes[2]) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
 
-                 K(elem_nodes[1], elem_nodes[3]) =  K(elem_nodes[1], elem_nodes[3]) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
-                 K(elem_nodes[3], elem_nodes[1]) =  K(elem_nodes[3], elem_nodes[1]) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[2]-1) =  K(elem_nodes[0]-1, elem_nodes[2]-1) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[0]-1) =  K(elem_nodes[2]-1, elem_nodes[0]-1) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
 
-                 K(elem_nodes[1], elem_nodes[1]) =  K(elem_nodes[1], elem_nodes[1]) + sigma_r_*C_11_1+sigma_z_*C_11_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[0]-1) =  K(elem_nodes[0]-1, elem_nodes[0]-1) + sigma_r_*C_11_1+sigma_z_*C_11_2 * sum_r;
 
-                 K(elem_nodes[2], elem_nodes[2]) =  K(elem_nodes[2], elem_nodes[2]) + sigma_r_*C_22_1+sigma_z_*C_22_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[1]-1) =  K(elem_nodes[1]-1, elem_nodes[1]-1) + sigma_r_*C_22_1+sigma_z_*C_22_2 * sum_r;
 
-                 K(elem_nodes[3], elem_nodes[3]) =  K(elem_nodes[3], elem_nodes[3]) + sigma_r_*C_33_1+sigma_z_*C_33_2 * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + sigma_r_*C_33_1+sigma_z_*C_33_2 * sum_r;
 
              };
 
@@ -93,6 +94,7 @@ namespace pear {
 
                  f_vector( r1 )   = f_vector( r1 )   + r_ * C_amb_ * (2*r1+r2) * length / 6. ;
                  f_vector( r2 )   = f_vector( r2 )   + r_ * C_amb_ * (r1+2*r2) * length / 6. ;
+                 std::cout<<" building f"<<f_vector(r1)<<std::endl;
 
              };
 
@@ -100,8 +102,8 @@ namespace pear {
 
              // Add the matrix vector product
              K.setZero(); this->J(K);
-
-             f_vector = f_vector + K*comp_.concentrations();
+             std::cout<<K.rows()<<" "<<K.cols()<<" "<<comp_.concentrations().rows()<<std::endl;
+             f_vector = f_vector+ K*comp_.concentrations();
 
          };
 

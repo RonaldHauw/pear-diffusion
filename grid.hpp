@@ -53,9 +53,7 @@ namespace pear {
 
                 }
                 std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
-                for (auto it = nodes_.begin(); it!= nodes_.end(); it++){
-                    std::cout<< *it<<" ";
-                }
+
             }
             else {std::cout << "Unable to open file, check the executable folder";}
 
