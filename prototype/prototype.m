@@ -160,21 +160,24 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         omega = det([ ones(1,3) ; coordinates(t, 2:3)' ]) / 2;
         
         % CHANGED: added
-        r = coordinates(t, 2)' 
-        z = coordinates(t, 3)' 
+        r = coordinates(t, 2)'; 
+        z = coordinates(t, 3)';
 
 
         % sum of r-coordinates
-        sum_r = sum(coordinates(t, 2), 1) 
+        sum_r = sum(coordinates(t, 2), 1); 
         
-        r1 = r(1)
         
         % for j different from i
-        C_12 = 1/6 * 1/2/omega * [ (z(1)-z(3))*(z(3)-z(2)) ; (r(1)-r(3))*(r(3)-r(2))] 
+        C_12 = 1/6 * 1/2/omega * [ (z(1)-z(3))*(z(3)-z(2)) ; (r(1)-r(3))*(r(3)-r(2))] ;
         C_23 = 1/6 * 1/2/omega * [ (z(2)-z(1))*(z(1)-z(3)) ; (r(2)-r(1))*(r(1)-r(3))] ;
         C_13 = 1/6 * 1/2/omega * [ (z(1)-z(2))*(z(2)-z(3)) ; (r(1)-r(2))*(r(2)-r(3))] ;
         %
         K(t(1),   t(2))   = K(t(1),   t(2))   + [s_ur, s_uz] * C_12 * sum_r ;
+        Kcoord = [t(1), t(2)]
+        intermed_val = [s_ur, s_uz] * C_12 * sum_r
+        Kval = K(t(1),   t(2)) 
+        
         K(t(2),   t(1))   = K(t(2),   t(1))   + [s_ur, s_uz] * C_12 * sum_r ;
         %
         K(t(2),   t(3))   = K(t(2),   t(3))   + [s_ur, s_uz] * C_23 * sum_r ;
@@ -196,6 +199,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         C_11 = 1/6 * 1/2/omega * [ (z(2)-z(3))^2 ; (r(2)-r(3))^2] ;
         C_22 = 1/6 * 1/2/omega * [ (z(1)-z(3))^2 ; (r(1)-r(3))^2] ;
         C_33 = 1/6 * 1/2/omega * [ (z(1)-z(2))^2 ; (r(1)-r(2))^2] ;
+        
         %
         K(t(1),   t(1))   = K(t(1),   t(1))   + [s_ur, s_uz] * C_11 * sum_r ;
         K(t(2),   t(2))   = K(t(2),   t(2))   + [s_ur, s_uz] * C_22 * sum_r ;

@@ -32,7 +32,7 @@ namespace pear {
 
 
          void J(mat_type & K) const {
-
+             K.setZero();
 
              for (int t = 1; t<grid_.nb_elements(); t++){
                  std::vector<int> elem_nodes = grid_.element(t);
@@ -49,15 +49,18 @@ namespace pear {
                  d_type C_12_2 = 1./omega * (r1-r3)*(r3-r2) / 12. ; // checked with matlab after bug fix there (!)
 
 
-                 d_type C_23_1 = 1./omega * (z2-z1)*(z1-z3) / 12. ;
-                 d_type C_23_2 = 1./omega * (r2-r1)*(r1-r3) / 12. ;
+                 d_type C_23_1 = 1./omega * (z2-z1)*(z1-z3) / 12. ; // checked with matlab after bug fix there (!)
+                 d_type C_23_2 = 1./omega * (r2-r1)*(r1-r3) / 12. ; // checked with matalb after bug fix there (!)
 
 
-                 d_type C_13_1 = 1./omega * (z1-z2)*(z2-z3) / 12. ;
-                 d_type C_13_2 = 1./omega * (r1-r2)*(r2-r3) / 12. ;
+                 d_type C_13_1 = 1./omega * (z1-z2)*(z2-z3) / 12. ; // checked with matalb after bug fix there (!)
+                 d_type C_13_2 = 1./omega * (r1-r2)*(r2-r3) / 12. ; // checked with matalb after bug fix there (!)
 
-                 d_type C_11_1 = 1./omega * (z2-z3)*(z2-z3) / 12.;
-                 d_type C_11_2 = 1./omega * (r2-r3)*(r2-r3) / 12.;
+
+                 d_type C_11_1 = 1./omega * (z2-z3)*(z2-z3) / 12.; // checked with matalb after bug fix there (!)
+                 d_type C_11_2 = 1./omega * (r2-r3)*(r2-r3) / 12.; // checked with matalb after bug fix there (!)
+
+
 
                  d_type C_22_1 = 1./omega * (z1-z3)*(z1-z3) / 12.;
                  d_type C_22_2 = 1./omega * (r1-r3)*(r1-r3) / 12.;
@@ -65,20 +68,26 @@ namespace pear {
                  d_type C_33_1 = 1./omega * (z1-z2)*(z1-z2) / 12.;
                  d_type C_33_2 = 1./omega * (r1-r2)*(r1-r2) / 12.;
 
-                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
-                 K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
+                 // sigma_r_ and sigma_z_ checked with matlab
 
-                 K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
+                 // (sigma_r_*C_12_1+sigma_z_*C_12_2) checked with matlab
+                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[2]-1) =  K(elem_nodes[0]-1, elem_nodes[2]-1) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[0]-1) =  K(elem_nodes[2]-1, elem_nodes[0]-1) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[0]-1) =  K(elem_nodes[0]-1, elem_nodes[0]-1) + sigma_r_*C_11_1+sigma_z_*C_11_2 * sum_r;
+                 std::cout<<"K("<<elem_nodes[0]<<", "<<elem_nodes[1]<<") = "<<K(elem_nodes[0]-1, elem_nodes[1]-1)<<"  (   )*sum = "<<(sigma_r_*C_12_1+sigma_z_*C_12_2)*sum_r<<std::endl;
 
-                 K(elem_nodes[1]-1, elem_nodes[1]-1) =  K(elem_nodes[1]-1, elem_nodes[1]-1) + sigma_r_*C_22_1+sigma_z_*C_22_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
 
-                 K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + sigma_r_*C_33_1+sigma_z_*C_33_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[2]-1) =  K(elem_nodes[0]-1, elem_nodes[2]-1) + (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[0]-1) =  K(elem_nodes[2]-1, elem_nodes[0]-1) + (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
+
+                 K(elem_nodes[0]-1, elem_nodes[0]-1) =  K(elem_nodes[0]-1, elem_nodes[0]-1) + (sigma_r_*C_11_1+sigma_z_*C_11_2) * sum_r;
+
+                 K(elem_nodes[1]-1, elem_nodes[1]-1) =  K(elem_nodes[1]-1, elem_nodes[1]-1) + (sigma_r_*C_22_1+sigma_z_*C_22_2) * sum_r;
+
+                 K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + (sigma_r_*C_33_1+sigma_z_*C_33_2) * sum_r;
 
              };
              for (int t = 1; t<grid_.nb_outer_edges(); t++) {
