@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Ello ello ello, com estas?" << std::endl;
 
-    std::string grid_name = "grid/HCTmesh";
+    std::string grid_name = "grid/HCTmesh2";
     pear::grid<d_type> grid(grid_name);
 
     // Diffusion parameters
@@ -104,6 +104,7 @@ int main(int argc, char* argv[]) {
     // allocate memory for the solution
     vec_type conc;
     conc.resize(grid.nb_nodes(), 1);
+    conc.setOnes();
 
 
     std::cout << "Ola fellas, com estas?" << std::endl;
@@ -121,18 +122,12 @@ int main(int argc, char* argv[]) {
     mat_type K;
     K.resize(grid.nb_nodes() + grid.nb_nodes(), grid.nb_nodes() + grid.nb_nodes());
 
-
-
-
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
+
     nlsolve.solve();
 
     //std::cout<<conc<<std::endl;
 
-
-    // nlsolve.solve(lasolver="cg", linesearch="wolfe");
-
-    // export_solution(co2.concentration, o2.concentration)
 
 
 };

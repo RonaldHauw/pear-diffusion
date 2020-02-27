@@ -88,22 +88,21 @@ namespace pear {
              for (int t = 0; t<grid_.nb_outer_edges(); t++) {
                  std::vector<d_type> edge_nodes = grid_.outer_edge(t);
 
-                 d_type r1   = grid_.node(edge_nodes[0])[0];     d_type z1 = grid_.node(edge_nodes[0])[1];
-                 d_type r2   = grid_.node(edge_nodes[1])[0];     d_type z2 = grid_.node(edge_nodes[1])[1];
+                 d_type r1     = grid_.node(edge_nodes[0])[0];   d_type z1 = grid_.node(edge_nodes[0])[1];
+                 d_type r2     = grid_.node(edge_nodes[1])[0];   d_type z2 = grid_.node(edge_nodes[1])[1];
                  d_type length = sqrt((r1-r2)*(r1-r2) + (z1-z2)*(z1-z2));
 
-                 f_vector( r1 )   = f_vector( r1 )   + r_ * C_amb_ * (2*r1+r2) * length / 6. ;
-                 f_vector( r2 )   = f_vector( r2 )   + r_ * C_amb_ * (r1+2*r2) * length / 6. ;
-                 std::cout<<" building f"<<f_vector(r1)<<std::endl;
+                 f_vector( edge_nodes[0] )   = f_vector( edge_nodes[0] )   + r_ * C_amb_ * (2*r1+r2) * length / 6. ;
+                 f_vector( edge_nodes[1] )   = f_vector( edge_nodes[1] )   + r_ * C_amb_ * (r1+2*r2) * length / 6. ;
 
              };
 
              // Inner boundary: in case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
 
              // Add the matrix vector product
-             K.setZero(); this->J(K);
-             std::cout<<K.rows()<<" "<<K.cols()<<" "<<comp_.concentrations().rows()<<std::endl;
+             K.setZero(); J(K);
              f_vector = f_vector+ K*comp_.concentrations();
+             std::cout<<"concentrations"<<comp_.concentrations()<<std::endl;
 
          };
 

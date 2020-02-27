@@ -26,24 +26,23 @@ namespace pear {
 
         nlsolver(f_type f)
         :f_(f)
-        //,lasolve_(lasolver)
         {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
 
-
         int solve(){
             mat_type J; J.resize(f_.size(), f_.size());
             vec_type f; f.resize(f_.size(), 1);
-            std::cout<<J.rows()<<" "<<J.cols()<<std::endl;
-            std::cout<<f.rows()<<std::endl;
 
-            for (int i = 1; i<10; i++) {
+            for (int i = 1; i<3; i++) {
                 J.setZero(); f_.J(J); f_.f(f);
-                std::cout<<"F vect"<<f<<std::endl;
+                std::cout<<J<<std::endl;
+                // Jabobian likely singular
                 vec_type x = J.colPivHouseholderQr().solve(f);
+                //std::cout<<"x"<<x<<std::endl;
+                std::cout<<" correctness: "<<(J*x-f).norm()/f.norm()<<std::endl;
                 f_.set_cons(x);
-
+                // set concentrations doesnt work
             }
             return 1;
         }
