@@ -131,7 +131,7 @@ namespace pear {
             int N = 0;                                  // Number of elements found
             for (int i = 0; i < nb_elements_ ; i++) {   // Loop on all the elements
 
-                if (elements_[3*(i-1)] == node) || (elements_[3*(i-1)+1] == node) || (elements_[3*(i-1)+2] == node){
+                if (elements_[3*(i-1)] == node || elements_[3*(i-1)+1] == node || elements_[3*(i-1)+2] == node){
                     ++N;                                                            // Update count
                     if ( N > edge_nodes.size() ) { edge_nodes.resize(N*2); }        // Resize if necessary
                     edge_nodes[N-1] = i;

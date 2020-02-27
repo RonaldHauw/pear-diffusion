@@ -38,11 +38,21 @@ namespace pear {
                 J.setZero(); f_.J(J); f_.f(f);
                 std::cout<<J<<std::endl;
                 // Jabobian likely singular
-                vec_type x = J.colPivHouseholderQr().solve(f);
+                vec_type x; x.resize(f_.size(), 1);
+                x = J.fullPivLu().solve(f);
                 //std::cout<<"x"<<x<<std::endl;
-                std::cout<<" correctness: "<<(J*x-f).norm()/f.norm()<<std::endl;
+                std::cout<<" correctness: "<<(J*x-f).norm()<<"  "<<f.norm()<<std::endl;
                 f_.set_cons(x);
                 // set concentrations doesnt work
+
+
+
+                Eigen::SelfAdjointEigenSolver<mat_type> eigensolver(J);
+                if (eigensolver.info() != Eigen::Success) abort();
+                std::cout << "The eigenvalues of A are:\n" << eigensolver.eigenvalues() << std::endl;
+                std::cout << "Here's a matrix whose columns are eigenvectors of J \n"
+                     << "corresponding to these eigenvalues:\n"
+                     << eigensolver.eigenvectors() << std::endl;
             }
             return 1;
         }

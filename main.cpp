@@ -29,6 +29,10 @@ int main(int argc, char* argv[]) {
     d_type sigma_u_r = 2.8e-10;
     d_type sigma_u_z = 1.10e-9;
 
+    // to remove!
+    sigma_u_r = sigma_u_r*1e10;
+    sigma_u_z = sigma_u_z*1e10;
+
     d_type sigma_v_r = 2.32e-9;
     d_type sigma_v_z = 6.97e-9;
 
@@ -43,9 +47,13 @@ int main(int argc, char* argv[]) {
     d_type k_mfu = 0.1149;
     d_type r_q = 0.97;
 
+
     // Boundary parameters
     d_type r_u = 7e-7;
     d_type r_v = 7.5e-7;
+
+    // to remove!
+    r_u = r_u*1e7;
 
     d_type p_atm = 101300;
     d_type T_ref = 293.15;
@@ -95,7 +103,7 @@ int main(int argc, char* argv[]) {
     d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1 / T_ref - 1 / T));
     std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
 
-    // Boundary parameters
+    // Boundary parameters // remove last hard coded number
     d_type c_u_amb = p_atm * eta_u / (R_g * T);
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
     std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
