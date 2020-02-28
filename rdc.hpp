@@ -32,12 +32,17 @@ namespace pear {
                 , resp_(resp)
         {std::cout<<"Reaction diffusion equation composed."<<std::endl;}
 
-
-
         void f(vec_type & x){
             mat_type K;
             K.resize(diff_o2_.nb_nodes(), diff_o2_.nb_nodes());
             diff_o2_.f(x, K);
+        };
+
+        void f_draft(vec_type & x){
+            mat_type K;
+            K.resize(diff_o2_.nb_nodes(), diff_o2_.nb_nodes());
+            diff_o2_.f(x.segment(0, diff_o2_.nb_nodes() ), K );
+            diff_co2_.f(x.segment(diff_o2_.nb_nodes()-1, diff_co2_.nb_nodes() ), K );
         };
 
         void J(mat_type & J){
@@ -45,19 +50,19 @@ namespace pear {
             diff_o2_.J(J);
         };
 
+        void J_draft(mat_type & J){
+            J.setZero();
+            //diff_o2_.J(K.block(0,0,diff_o2_.nb_nodes(),diff_o2_.nb_nodes()) );
+            //diff_co2_.J(K.block(diff_o2_.nb_nodes()-1,diff_o2_.nb_nodes()-1,diff_co2_.nb_nodes(),diff_co2_.nb_nodes()) );
+        };
+
         void set_cons(vec_type & x){
             diff_o2_.set_cons(x);
         }
+
         int size(){
             return diff_o2_.nb_nodes();//+diff_co2_.nb_nodes()
         }
-
-
-
-
-
-
-
 
     private:
         pear::diffusion<d_type, vec_type, mat_type> diff_o2_;

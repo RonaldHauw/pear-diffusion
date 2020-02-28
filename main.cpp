@@ -9,11 +9,6 @@
 #include "eigen-3.3.7/Eigen/Dense"
 
 
-
-
-
-
-
 int main(int argc, char* argv[]) {
 
     typedef double d_type; // change data type here

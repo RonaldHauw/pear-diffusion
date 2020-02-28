@@ -43,17 +43,12 @@ namespace pear {
                  d_type r3   = grid_.node(elem_nodes[2])[0];     d_type z3 = grid_.node(elem_nodes[2])[1]; // checked
 
 
-                 d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5; // checked with Matlab :)
-                 std::cout<<"r1 = "<<r1<<" r2 = "<<r2<<"  r3 = "<<r3<<std::endl;
-                 std::cout<<"z1 = "<<z1<<" z2 = "<<z2<<"  z3 = "<<z3<<std::endl;
-                 std::cout<<"elem_nodes[0] = "<<elem_nodes[0]<<"  elem_nodes[1] = "<<elem_nodes[1]<<"  elem_nodes[2] = "<<elem_nodes[2]<<std::endl;
-
-
+                 d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1)) * 0.5; // checked with Matlab :)
 
                  d_type sum_r = r1+r2+r3; // checked with Matlab :)
 
-                 d_type C_12_1 = 1./omega * (z1-z3)*(z3-z2) / 12. ; // checked with matlab after bug fix there (!)
-                 d_type C_12_2 = 1./omega * (r1-r3)*(r3-r2) / 12. ; // checked with matlab after bug fix there (!)
+                 d_type C_12_1 = (z1-z3)*(z3-z2) / 12. /omega ; // checked with matlab after bug fix there (!)
+                 d_type C_12_2 = (r1-r3)*(r3-r2) / 12. /omega ; // checked with matlab after bug fix there (!)
 
 
                  d_type C_23_1 = 1./omega * (z2-z1)*(z1-z3) / 12. ; // checked with matlab after bug fix there (!)
@@ -68,7 +63,6 @@ namespace pear {
                  d_type C_11_2 = 1./omega * (r2-r3)*(r2-r3) / 12.; // checked with matalb after bug fix there (!)
 
 
-
                  d_type C_22_1 = 1./omega * (z1-z3)*(z1-z3) / 12.;
                  d_type C_22_2 = 1./omega * (r1-r3)*(r1-r3) / 12.;
 
@@ -80,9 +74,6 @@ namespace pear {
                  // (sigma_r_*C_12_1+sigma_z_*C_12_2) checked with matlab
                  K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
                  K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
-
-
-                 std::cout<<"K("<<elem_nodes[0]<<", "<<elem_nodes[1]<<") = "<<K(elem_nodes[0]-1, elem_nodes[1]-1)<<"  (   )*sum = "<<(sigma_r_*C_12_1+sigma_z_*C_12_2)*sum_r<<std::endl;
 
                  K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
                  K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
@@ -106,12 +97,10 @@ namespace pear {
                  // code seems to need initialisation
                  d_type len = sqrt( (r2-r1)*(r2-r1) + (z2-z1)*(z2-z1) ); // checked
 
-                 std::cout<<" r1 = "<<r1<<"  r2 = "<<r2<<std::endl;
                  d_type parallel_term_1     = 1./12. * len * ( 3*r1 +   r2 ) ;
                  d_type parallel_term_2     = 1./12. * len * (   r1 + 3*r2 ) ;
                  d_type cross_term          = 1./12. * len * (   r1 +   r2 ) ;
 
-                 std::cout<<" p1 = "<<parallel_term_1<< " p2 =  "<<parallel_term_2<< "  c = "<<cross_term<<std::endl;
                  K( edge_nodes[0]-1, edge_nodes[0]-1 )  = K( edge_nodes[0]-1, edge_nodes[0]-1 ) + r_ * parallel_term_1 ;
                  K( edge_nodes[0]-1, edge_nodes[1]-1 )  = K( edge_nodes[0]-1, edge_nodes[1]-1 ) + r_ * cross_term ;
                  K( edge_nodes[1]-1, edge_nodes[0]-1 )  = K( edge_nodes[1]-1, edge_nodes[0]-1 ) + r_ * cross_term ;
@@ -142,8 +131,6 @@ namespace pear {
 
          };
 
-
-
          void set_cons(vec_type & x){
              comp_.concentrations() = x;
          }
@@ -151,7 +138,6 @@ namespace pear {
          int nb_nodes(){
              return comp_.nb_nodes();
          }
-
 
      private:
 

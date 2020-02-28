@@ -64,7 +64,7 @@ namespace pear {
             return r_q_*dR_u_v(C_u, C_v);
         };
 
-        void f_o2(vec_type & H) {
+        void f(vec_type & H) {
             for (int t = 1; t < grid_.nb_elements(); t++) {
                 std::vector<int> elem_nodes = grid_.element(t);
 
@@ -73,30 +73,18 @@ namespace pear {
                 d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
-                H(elem_nodes[0]-1) = H(elem_nodes[0]-1) + r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-                H(elem_nodes[1]-1) = H(elem_nodes[1]-1) + r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-                H(elem_nodes[2]-1) = H(elem_nodes[2]-1) + r3 * R_u(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                H(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                H(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                H(elem_nodes[2]-1) += r3 * R_u(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+
+                H(elem_nodes[0]-1) -= r1 * R_v(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                H(elem_nodes[1]-1) -= r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                H(elem_nodes[2]-1) -= r3 * R_v(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
 
             };
         };
 
-        void f_co2(vec_type & H){
-            for (int t = 1; t < grid_.nb_elements(); t++) {
-                std::vector<int> elem_nodes = grid_.element(t);
-
-                d_type r1 = grid_.node(elem_nodes[0])[0];   d_type z1 = grid_.node(elem_nodes[0])[1];
-                d_type r2 = grid_.node(elem_nodes[1])[0];   d_type z2 = grid_.node(elem_nodes[1])[1];
-                d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
-
-                d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
-                H(elem_nodes[0]-1) = H(elem_nodes[0]-1) - r1 * R_v(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-                H(elem_nodes[1]-1) = H(elem_nodes[1]-1) - r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-                H(elem_nodes[2]-1) = H(elem_nodes[2]-1) - r3 * R_v(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-
-            };
-        };
-
-        void J_o2(mat_type J) {
+        void J(mat_type dH) {
             for (int t = 1; t < grid_.nb_nodes(); t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
 
@@ -109,12 +97,11 @@ namespace pear {
                     area += (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2);
                 };
 
-                J(t-1) = area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t-1, t-1) += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t-1, t + grid_.nb_nodes() -1) += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t + grid_.nb_nodes() -1, t-1) -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1) -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
-        };
-
-        void J_co2(mat_type J){
-            std::cout<<"empty function"<<std::endl;
         };
 
 
@@ -123,7 +110,6 @@ namespace pear {
         pear::component<d_type, vec_type> & co2_;
         pear::grid<d_type> & grid_;
         d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_;
-
     };
 
 
