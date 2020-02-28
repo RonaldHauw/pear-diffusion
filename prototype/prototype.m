@@ -175,6 +175,8 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         %
         K(t(1),   t(2))   = K(t(1),   t(2))   + [s_ur, s_uz] * C_12 * sum_r ;
         
+        nodes = t
+        
         K(t(2),   t(1))   = K(t(2),   t(1))   + [s_ur, s_uz] * C_12 * sum_r ;
         %
         K(t(2),   t(3))   = K(t(2),   t(3))   + [s_ur, s_uz] * C_23 * sum_r ;
@@ -223,8 +225,8 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         parallel_term_1     = 1./12 * len * ( 3*r(e(1)) +   r(e(2)) ) ;
         parallel_term_2     = 1./12 * len * (   r(e(1)) + 3*r(e(2)) ) ;
         cross_term          = 1./12 * len * (   r(e(1)) +   r(e(2)) ) ;
-        rterms = [r(e(1)) r(e(2))]
-        pterms = [parallel_term_1 parallel_term_2 cross_term]
+        %rterms = [r(e(1)) r(e(2))]
+        %pterms = [parallel_term_1 parallel_term_2 cross_term]
         
         % in K_u
         K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;

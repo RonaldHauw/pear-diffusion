@@ -2,6 +2,13 @@
 // Created by Ronald on 20/02/2020.
 //
 
+// date time library
+// eenheden
+// boost library
+// fstack
+// Wall
+//
+
 template <typename d_type, typename vec_type>
 class respiration_co2{
 public:

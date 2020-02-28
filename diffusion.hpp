@@ -44,6 +44,11 @@ namespace pear {
 
 
                  d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5; // checked with Matlab :)
+                 std::cout<<"r1 = "<<r1<<" r2 = "<<r2<<"  r3 = "<<r3<<std::endl;
+                 std::cout<<"z1 = "<<z1<<" z2 = "<<z2<<"  z3 = "<<z3<<std::endl;
+                 std::cout<<"elem_nodes[0] = "<<elem_nodes[0]<<"  elem_nodes[1] = "<<elem_nodes[1]<<"  elem_nodes[2] = "<<elem_nodes[2]<<std::endl;
+
+
 
                  d_type sum_r = r1+r2+r3; // checked with Matlab :)
 

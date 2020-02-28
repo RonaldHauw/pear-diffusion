@@ -1,1 +1,1 @@
-/usr/bin/g++  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/pear_diffusion_2.dir/main.cpp.o  -o pear_diffusion_2 
+/usr/bin/g++  -Wall -Og -Fstack -Fbounds-check -O1 -Wall -g -Wall -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/pear_diffusion_2.dir/main.cpp.o  -o pear_diffusion_2 
