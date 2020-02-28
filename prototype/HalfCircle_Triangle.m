@@ -61,8 +61,8 @@ end
 save('mesh/HCTmesh3', 'Nodes', 'Elements'); 
 save('mesh/HCTmesh3_Data', 'InnerBNodes', 'OuterBNodes', 'InnerBEdges', 'OuterBEdges'); 
 
-writematrix(Nodes,"mesh/HCTmesh3_Nodes.txt"," ");
-writematrix(Elements,'mesh/HCTmesh3_Elements.txt',' ');
-writematrix(InnerBEdges,'mesh/HCTmesh3_InnerEdges.txt',' ');
-writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt',' ');
+writematrix(Nodes,'mesh/HCTmesh3_Nodes.txt','delimiter', 'space');
+writematrix(Elements,'mesh/HCTmesh3_Elements.txt','delimiter', 'space');
+writematrix(InnerBEdges,'mesh/HCTmesh3_InnerEdges.txt','delimiter', 'space');
+writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 

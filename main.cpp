@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
     conc.resize(grid.nb_nodes(), 1);
     conc.setOnes();
 
-
+    // automatically deallocated pointers
     std::cout << "Ola fellas, com estas?" << std::endl;
 
     pear::component<d_type, vec_type> o2("CO_2", grid, conc, 0, grid.nb_nodes(), 1);

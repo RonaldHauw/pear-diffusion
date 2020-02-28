@@ -33,13 +33,15 @@ namespace pear {
 
          void J(mat_type & K) const {
              K.setZero();
-
-             for (int t = 1; t<grid_.nb_elements(); t++){
+            // USE STRUCTS!!!!! -->
+            // sometimes after first run we see nan --> memory issue? divide by zero?
+             for (int t = 1; t<grid_.nb_elements()+1; t++){ // iteration seems too short
                  std::vector<int> elem_nodes = grid_.element(t);
 
                  d_type r1   = grid_.node(elem_nodes[0])[0];     d_type z1 = grid_.node(elem_nodes[0])[1]; // checked with Matlab :)
-                 d_type r2   = grid_.node(elem_nodes[1])[0];     d_type z2 = grid_.node(elem_nodes[1])[1];
-                 d_type r3   = grid_.node(elem_nodes[2])[0];     d_type z3 = grid_.node(elem_nodes[2])[1];
+                 d_type r2   = grid_.node(elem_nodes[1])[0];     d_type z2 = grid_.node(elem_nodes[1])[1]; // checked
+                 d_type r3   = grid_.node(elem_nodes[2])[0];     d_type z3 = grid_.node(elem_nodes[2])[1]; // checked
+
 
                  d_type omega = ((r2-r1)*(z3-z1)-(r3-r1)*(z2-z1))*0.5; // checked with Matlab :)
 
@@ -71,7 +73,7 @@ namespace pear {
                  // sigma_r_ and sigma_z_ checked with matlab
 
                  // (sigma_r_*C_12_1+sigma_z_*C_12_2) checked with matlab
-                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
                  K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
 
 
@@ -90,29 +92,32 @@ namespace pear {
                  K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + (sigma_r_*C_33_1+sigma_z_*C_33_2) * sum_r;
 
              };
-             for (int t = 1; t<grid_.nb_outer_edges(); t++) {
-                 std::vector<int> edge_nodes = grid_.inner_edge(t);
+             for (int t = 1; t<grid_.nb_outer_edges()+1; t++) {
+                 std::vector<int> edge_nodes = grid_.outer_edge(t);
 
-                 d_type r1   = grid_.node(edge_nodes[0])[0];     d_type z1 = grid_.node(edge_nodes[0])[1];
-                 d_type r2   = grid_.node(edge_nodes[1])[0];     d_type z2 = grid_.node(edge_nodes[1])[1];
+                 d_type r1   = grid_.node(edge_nodes[0])[0];     d_type z1 = grid_.node(edge_nodes[0])[1]; // checked
+                 d_type r2   = grid_.node(edge_nodes[1])[0];     d_type z2 = grid_.node(edge_nodes[1])[1]; // checked
 
-                 d_type len = sqrt( (r2-r1)*(r2-r1) + (z2-z1)*(z2-z1) );
+                 // code seems to need initialisation
+                 d_type len = sqrt( (r2-r1)*(r2-r1) + (z2-z1)*(z2-z1) ); // checked
 
+                 std::cout<<" r1 = "<<r1<<"  r2 = "<<r2<<std::endl;
                  d_type parallel_term_1     = 1./12. * len * ( 3*r1 +   r2 ) ;
                  d_type parallel_term_2     = 1./12. * len * (   r1 + 3*r2 ) ;
                  d_type cross_term          = 1./12. * len * (   r1 +   r2 ) ;
 
-                 K( edge_nodes[0], edge_nodes[0] )  = K( edge_nodes[0], edge_nodes[0] ) + r_ * parallel_term_1 ;
-                 K( edge_nodes[0], edge_nodes[1] )  = K( edge_nodes[0], edge_nodes[1] ) + r_ * cross_term ;
-                 K( edge_nodes[1], edge_nodes[0] )  = K( edge_nodes[1], edge_nodes[0] ) + r_ * cross_term ;
-                 K( edge_nodes[1], edge_nodes[1] )  = K( edge_nodes[1], edge_nodes[1] ) + r_ * parallel_term_2 ;
+                 std::cout<<" p1 = "<<parallel_term_1<< " p2 =  "<<parallel_term_2<< "  c = "<<cross_term<<std::endl;
+                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  = K( edge_nodes[0]-1, edge_nodes[0]-1 ) + r_ * parallel_term_1 ;
+                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  = K( edge_nodes[0]-1, edge_nodes[1]-1 ) + r_ * cross_term ;
+                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  = K( edge_nodes[1]-1, edge_nodes[0]-1 ) + r_ * cross_term ;
+                 K( edge_nodes[1]-1, edge_nodes[1]-1 )  = K( edge_nodes[1]-1, edge_nodes[1]-1 ) + r_ * parallel_term_2 ;
              }
 
          };
 
          void f(vec_type & f_vector, mat_type & K) const{
              // Outer boundary
-             for (int t = 0; t<grid_.nb_outer_edges(); t++) {
+             for (int t = 1; t<grid_.nb_outer_edges()+1; t++) { // Ronald: changed the counter from t=0->t=1 and ' '->'+1'
                  std::vector<int> edge_nodes = grid_.outer_edge(t);
 
                  d_type r1     = grid_.node(edge_nodes[0])[0];   d_type z1 = grid_.node(edge_nodes[0])[1];

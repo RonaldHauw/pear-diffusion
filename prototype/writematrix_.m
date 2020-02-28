@@ -1,4 +1,4 @@
-function [out] = writematrix(data, filename,delimiter)
+function [out] = writematrix_(data, filename,delimiter)
 %WRITEMATRIX Summary of this function goes here
 %   Detailed explanation goes here
 fid = fopen(filename,'wt');

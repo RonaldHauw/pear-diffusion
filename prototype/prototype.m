@@ -174,9 +174,6 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         C_13 = 1/6 * 1/2/omega * [ (z(1)-z(2))*(z(2)-z(3)) ; (r(1)-r(2))*(r(2)-r(3))] ;
         %
         K(t(1),   t(2))   = K(t(1),   t(2))   + [s_ur, s_uz] * C_12 * sum_r ;
-        Kcoord = [t(1), t(2)]
-        intermed_val = [s_ur, s_uz] * C_12 * sum_r
-        Kval = K(t(1),   t(2)) 
         
         K(t(2),   t(1))   = K(t(2),   t(1))   + [s_ur, s_uz] * C_12 * sum_r ;
         %
@@ -212,14 +209,22 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
     end
     % add terms for vertices on outer boundary
     % assume outer boundary goes from bottom to top
+    
+    % CHANGED: added
+    % bug: waarom enkel r component hier? 
+    r = coordinates(:, 2) ;
+    z = coordinates(:, 3) ;
     for e = G2_edges'
         % length of edge
         len = norm(diff(coordinates(e, 2:3)), 2) ;
         
+        
         % compute two different terms
-        parallel_term_1     = 1/12 * len * ( 3*r(e(1)) +   r(e(2)) ) ;
-        parallel_term_2     = 1/12 * len * (   r(e(1)) + 3*r(e(2)) ) ;
-        cross_term          = 1/12 * len * (   r(e(1)) +   r(e(2)) ) ;
+        parallel_term_1     = 1./12 * len * ( 3*r(e(1)) +   r(e(2)) ) ;
+        parallel_term_2     = 1./12 * len * (   r(e(1)) + 3*r(e(2)) ) ;
+        cross_term          = 1./12 * len * (   r(e(1)) +   r(e(2)) ) ;
+        rterms = [r(e(1)) r(e(2))]
+        pterms = [parallel_term_1 parallel_term_2 cross_term]
         
         % in K_u
         K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;
