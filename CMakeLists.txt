@@ -5,3 +5,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(pear_diffusion_2 main.cpp vector.hpp)
 
+add_compile_options(-Wall)

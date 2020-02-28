@@ -63,7 +63,7 @@ namespace pear {
             if (elements_file.is_open()){
                 // Count number of elements to pre-allocate memory
                 N = 0; while(elements_file>>n>>n1>>n2>>n3){N++;}; nb_elements_ = N;
-                elements_ = std::vector<d_type>(3*nb_elements_);
+                elements_ = std::vector<int>(3*nb_elements_);
                 // Reopen
                 elements_file.close();
                 std::ifstream elements_file(file_name_+"_Elements.txt");
@@ -84,7 +84,7 @@ namespace pear {
             if (outer_file.is_open()){
                 // Count number of outer edges to pre-allocate memory
                 N = 0; while(outer_file>>n>>n1>>n2>>n3){N++;}; nb_outer_edges_ = N;
-                outer_edges_ = std::vector<d_type>(2*nb_outer_edges_);
+                outer_edges_ = std::vector<int>(2*nb_outer_edges_);
                 // Reopen
                 outer_file.close();
                 std::ifstream outer_file(file_name_+"_OuterEdges.txt");
@@ -104,7 +104,7 @@ namespace pear {
             if (inner_file.is_open()){
                 // Count number of inner edges to pre-allocate memory
                 N = 0; while(inner_file>>n>>n1>>n2){N++;}; nb_inner_edges_ = N;
-                inner_edges_ = std::vector<d_type>(2*nb_inner_edges_);
+                inner_edges_ = std::vector<int>(2*nb_inner_edges_);
                 // Reopen
                 inner_file.close();
                 std::ifstream inner_file(file_name_+"_OuterEdges.txt");
@@ -131,7 +131,7 @@ namespace pear {
             int N = 0;                                  // Number of elements found
             for (int i = 0; i < nb_elements_ ; i++) {   // Loop on all the elements
 
-                if (elements_[3*(i-1)] == node) || (elements_[3*(i-1)+1] == node) || (elements_[3*(i-1)+2] == node){
+                if (elements_[3*(i-1)] == node || elements_[3*(i-1)+1] == node || elements_[3*(i-1)+2] == node){
                     ++N;                                                            // Update count
                     if ( N > edge_nodes.size() ) { edge_nodes.resize(N*2); }        // Resize if necessary
                     edge_nodes[N-1] = i;
@@ -185,9 +185,9 @@ namespace pear {
     private:
         std::string file_name_;
         std::vector<d_type> nodes_; //  length 2N_: x1 y1 x2 y2 x3 y3 for sequential mem access
-        std::vector<d_type> inner_edges_;
-        std::vector<d_type> elements_;
-        std::vector<d_type> outer_edges_;
+        std::vector<int> inner_edges_;
+        std::vector<int> elements_;
+        std::vector<int> outer_edges_;
         int nb_nodes_;
         int nb_elements_;
         int nb_outer_edges_;

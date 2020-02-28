@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2
+CMAKE_SOURCE_DIR = /Users/Ag/Documents/MASTER1/Project/pear-diffusion
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2
+CMAKE_BINARY_DIR = /Users/Ag/Documents/MASTER1/Project/pear-diffusion
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,8 +69,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/local/Cellar/cmake/3.11.1/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles /Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeFiles /Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
