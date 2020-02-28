@@ -83,7 +83,7 @@ namespace pear {
             std::ifstream outer_file(file_name_ + "_OuterEdges.txt");
             if (outer_file.is_open()){
                 // Count number of outer edges to pre-allocate memory
-                N = 0; while(outer_file>>n>>n1>>n2>>n3){N++;}; nb_outer_edges_ = N;
+                N = 0; while(outer_file>>n>>n1>>n2){N++;}; nb_outer_edges_ = N;
                 outer_edges_ = std::vector<int>(2*nb_outer_edges_);
                 // Reopen
                 outer_file.close();

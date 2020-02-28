@@ -105,6 +105,9 @@ namespace pear {
                  K( edge_nodes[0]-1, edge_nodes[1]-1 )  = K( edge_nodes[0]-1, edge_nodes[1]-1 ) + r_ * cross_term ;
                  K( edge_nodes[1]-1, edge_nodes[0]-1 )  = K( edge_nodes[1]-1, edge_nodes[0]-1 ) + r_ * cross_term ;
                  K( edge_nodes[1]-1, edge_nodes[1]-1 )  = K( edge_nodes[1]-1, edge_nodes[1]-1 ) + r_ * parallel_term_2 ;
+
+                 std::cout << t << "Edge placing" << edge_nodes[0]-1 << edge_nodes[1]-1 << std::endl;
+
              }
 
          };

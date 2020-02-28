@@ -15,6 +15,11 @@ Icon
 ._*
 
 cmake*
+CMakeFiles*
+cmake-build-debug*
+CMake*
+cmake_*
+
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
@@ -33,6 +38,8 @@ Temporary Items
 .apdisk
 
 .idea
+
+
 
 # End of https://www.gitignore.io/api/macos
 
