@@ -64,20 +64,20 @@ namespace pear {
                  d_type C_33_1 = 1./omega * (z1-z2)*(z1-z2) / 12.;
                  d_type C_33_2 = 1./omega * (r1-r2)*(r1-r2) / 12.;
 
-                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
-                 K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[1]-1) += sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[0]-1) += sigma_r_*C_12_1+sigma_z_*C_12_2 * sum_r;
 
-                 K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[2]-1) += sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[1]-1) += sigma_r_*C_23_1+sigma_z_*C_23_2 * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[2]-1) =  K(elem_nodes[0]-1, elem_nodes[2]-1) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[0]-1) =  K(elem_nodes[2]-1, elem_nodes[0]-1) + sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[2]-1) += sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[0]-1) += sigma_r_*C_13_1+sigma_z_*C_13_2 * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[0]-1) =  K(elem_nodes[0]-1, elem_nodes[0]-1) + sigma_r_*C_11_1+sigma_z_*C_11_2 * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[0]-1) += sigma_r_*C_11_1+sigma_z_*C_11_2 * sum_r;
 
-                 K(elem_nodes[1]-1, elem_nodes[1]-1) =  K(elem_nodes[1]-1, elem_nodes[1]-1) + sigma_r_*C_22_1+sigma_z_*C_22_2 * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[1]-1) += sigma_r_*C_22_1+sigma_z_*C_22_2 * sum_r;
 
-                 K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + sigma_r_*C_33_1+sigma_z_*C_33_2 * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[2]-1) += sigma_r_*C_33_1+sigma_z_*C_33_2 * sum_r;
 
              };
 
@@ -107,8 +107,6 @@ namespace pear {
 
          };
 
-
-
          void set_cons(vec_type & x){
              comp_.concentrations() = x;
          }
@@ -116,7 +114,6 @@ namespace pear {
          int nb_nodes(){
              return comp_.nb_nodes();
          }
-
 
      private:
 
