@@ -14,7 +14,7 @@
 #include "reaction.hpp"
 #include "component.hpp"
 #include "rdc.hpp"
-#include "eigen-3.3.7/Eigen/Dense"
+#include "eigen/Eigen/Dense"
 
 
 namespace pear {
@@ -31,27 +31,22 @@ namespace pear {
         }
 
         int solve(){
+
+            std::cout<<"pear::nlsolver.solve(): allocating work memory: "<<std::endl;
+            std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
+            std::cout<<"       - vec_type of size  "<<f_.size()<<std::endl;
             mat_type J; J.resize(f_.size(), f_.size());
             vec_type f; f.resize(f_.size(), 1);
 
             for (int i = 1; i<3; i++) {
-                J.setZero(); f_.J(J); f_.f(f);
-                std::cout<<J<<std::endl;
-                // Jabobian likely singular
-                vec_type x; x.resize(f_.size(), 1);
-                x = J.fullPivLu().solve(f);
-                //std::cout<<"x"<<x<<std::endl;
-                std::cout<<" correctness: "<<(J*x-f).norm()<<"  "<<f.norm()<<std::endl;
-                f_.set_cons(x);
-                // set concentrations doesnt work
-
-                std::cout<<" rows"<<J.rows()<<"   cols "<<J.cols()<<std::endl;
-                Eigen::SelfAdjointEigenSolver<mat_type> eigensolver(J);
-                if (eigensolver.info() != Eigen::Success) abort();
-                std::cout << "The eigenvalues of A are:\n" << eigensolver.eigenvalues() << std::endl;
-                std::cout << "Here's a matrix whose columns are eigenvectors of J \n"
-                     << "corresponding to these eigenvalues:\n"
-                     << eigensolver.eigenvectors() << std::endl;
+                // reset memory to zero
+                J.setZero();
+                f.setZero();
+                // load the Jacobian and rhs
+                f_.J(J);
+                f_.f(f);
+                // solve the linear system
+                f_.cons() = J.fullPivLu().solve(f);
             }
             return 1;
         }
@@ -60,7 +55,6 @@ namespace pear {
 
     private:
         f_type f_;
-        //lasolve_type lasolve_;
     };
 
 

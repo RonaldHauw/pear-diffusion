@@ -6,7 +6,7 @@
 #include "rdc.hpp"
 #include <random>
 #include "nlsolver.hpp"
-#include "eigen-3.3.7/Eigen/Dense"
+#include "eigen/Eigen/Dense"
 
 
 int main(int argc, char* argv[]) {
@@ -105,15 +105,18 @@ int main(int argc, char* argv[]) {
     std::vector<d_type> diffusion_co2_param = {sigma_v_r, sigma_v_z, r_v, c_v_amb};
 
     // allocate memory for the solution
+    std::cout<<"pear::main(): allocating memory to store the solution"<<std::endl;
+    std::cout<<"       - vec_type of size "<<grid.nb_nodes()*2<<std::endl;
     vec_type conc;
-    conc.resize(grid.nb_nodes(), 1);
-    conc.setOnes();
+    conc.resize(grid.nb_nodes()*2, 1);
+    conc.setOnes(); // initial values
 
     // automatically deallocated pointers
-    std::cout << "Ola fellas, com estas?" << std::endl;
 
-    pear::component<d_type, vec_type> o2("CO_2", grid, conc, 0, grid.nb_nodes(), 1);
-    pear::component<d_type, vec_type> co2("O_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
+    pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,                      grid.nb_nodes(),     1);
+    pear::component<d_type, vec_type> co2("CO_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
+
+
     pear::diffusion<d_type, vec_type, mat_type> diff_o2(o2, grid, diffusion_o2_param);
     pear::diffusion<d_type, vec_type, mat_type> diff_co2(co2, grid, diffusion_co2_param);
 
@@ -122,14 +125,11 @@ int main(int argc, char* argv[]) {
 
     pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, resp_co2_o2);
 
-    mat_type K;
-    K.resize(grid.nb_nodes() + grid.nb_nodes(), grid.nb_nodes() + grid.nb_nodes());
-
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
 
     nlsolve.solve();
 
-    //std::cout<<conc<<std::endl;
+    std::cout<<conc<<std::endl;
 
 
 
