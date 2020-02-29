@@ -66,3 +66,6 @@ writematrix(Elements,'mesh/HCTmesh3_Elements.txt','delimiter', 'space');
 writematrix(InnerBEdges,'mesh/HCTmesh3_InnerEdges.txt','delimiter', 'space');
 writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
+
+!../pear-diffusion_2
+

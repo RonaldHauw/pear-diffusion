@@ -45,7 +45,7 @@ namespace pear {
 
 
         Eigen::Ref<vec_type> cons()  {
-            return concentration_.segment(start_, stop_);
+            return concentration_.segment(start_, grid_.nb_nodes());
         }
 
         Eigen::Ref<vec_type> cons_full()  {

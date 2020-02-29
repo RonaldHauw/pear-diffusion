@@ -8,6 +8,25 @@
 #include "nlsolver.hpp"
 #include "eigen/Eigen/Dense"
 
+template<typename d_type, typename vec_type>
+int export_solution(std::string const file_name, pear::grid<d_type> grid, std::vector<pear::component<d_type, vec_type>> components){
+    for(int i = 0; i < components.size(); i++){
+        pear::component<d_type, vec_type> comp = components[i];
+        std::ofstream file;
+        file.open(file_name+"_"+comp.name()+".txt");
+        for (int n = 0; n < grid.nb_nodes(); n++){
+            file
+            <<n
+            <<" "<<grid.node(n)[0]
+            <<" "<<grid.node(n)[1]
+            <<" "<<comp.cons()(n)
+            <<std::endl;
+        }
+        file.close();
+    }
+    return 1;
+}
+
 
 int main(int argc, char* argv[]) {
 
@@ -129,8 +148,9 @@ int main(int argc, char* argv[]) {
 
     nlsolve.solve();
 
-    std::cout<<conc<<std::endl;
 
+    int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});
 
+    if (exp_flag == 1){std::cout<<"solutions exported"<<std::endl; }
 
 };
