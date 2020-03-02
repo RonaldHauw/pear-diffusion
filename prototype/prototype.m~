@@ -8,14 +8,14 @@ clear all
 
 % LOAD DOMAIN
 %
-load mesh/HalfCircleMesh.mat
-load mesh/HalfCircleMesh_Data.mat
+% load mesh/HalfCircleMesh.mat
+% load mesh/HalfCircleMesh_Data.mat
 %
 % load mesh/HCT_Mesh.mat
 % load mesh/HCT_Mesh_Data.mat
 %
-% load mesh/HCT_Fine_Mesh.mat
-% load mesh/HCT_Fine_Mesh_Data.mat
+load mesh/HCT_Fine_Mesh.mat
+load mesh/HCT_Fine_Mesh_Data.mat
 %
 coordinates = mesh.Nodes' ;
 r           = coordinates(:, 1) ;
@@ -64,7 +64,7 @@ p_atm           = 101300 ;
 C_u_amb         = p_atm*n_u/R_g/T ;
 C_v_amb         = p_atm*n_v/R_g/T ;
 % respiration
-R_u     		= @(c_u, c_v) K_mv * V_mu * c_u ./ ( (K_mu+c_u) .* (K_mv+c_v) ) ;
+R_u     		= @(c_u, c_v) V_mu * c_u ./ ( (K_mu+c_u) .* (1+c_v/K_mv) ) ;
 R_v     		= @(c_u, c_v) r_q*R_u(c_u, c_v) +  V_mfv ./ (1+c_u/K_mfu) ;
 % derivative of respiration
 dR_u_u  		= @(c_u, c_v) V_mu ./ (K_mu+c_u) ./ (1+c_v/K_mv) .* (1-c_u./(K_mu+c_u)) ;
