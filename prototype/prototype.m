@@ -67,9 +67,9 @@ C_v_amb         = p_atm*n_v/R_g/T ;
 R_u     		= @(c_u, c_v) K_mv * V_mu * c_u ./ ( (K_mu+c_u) .* (K_mv+c_v) ) ;
 R_v     		= @(c_u, c_v) r_q*R_u(c_u, c_v) +  V_mfv ./ (1+c_u/K_mfu) ;
 % derivative of respiration
-dR_u_u  		= @(c_u, c_v) V_mu ./ (K_mu+c_u) ./ (1+c_v/K_mv) .* (1-c_u./(K_mu+c_u)) ;
+dR_u_u  		= @(c_u, c_v) K_mv * V_mu ./ (K_mu+c_u) ./ (K_mv+c_v) .* (1-c_u./(K_mu+c_u)) ;
 dR_u_v  		= @(c_u, c_v) - K_mv * V_mu * c_u ./ (K_mu+c_u) ./ (K_mv+c_v).^2 ;
-dR_v_u  		= @(c_u, c_v) r_q*dR_u_u(c_u, c_v) - 1/K_mfu * V_mfv ./ (1+c_u/K_mfu).^2 ;
+dR_v_u  		= @(c_u, c_v) r_q*dR_u_u(c_u, c_v) - K_mfu * V_mfv ./ (K_mfu+c_u).^2 ;
 dR_v_v  		= @(c_u, c_v) r_q*dR_u_v(c_u, c_v) ;
 % linearization of respiration around (c_u_amb, C_v_amb)
 R_u_lin 		= @(c_u, c_v) R_u(C_u_amb, C_v_amb) + dR_u_u(C_u_amb, C_v_amb)*(c_u-C_u_amb) ...
@@ -82,10 +82,6 @@ R_v_lin 		= @(c_u, c_v) R_v(C_u_amb, C_v_amb) + dR_v_u(C_u_amb, C_v_amb)*(c_u-C_
 % INITIAL VALUE
 % find solution of linearized system to initialize Newton-Raphson
 
-% C holds the coefficients c_i and c_{M+i}
-C = zeros(2*M,1);
-
-% build linear system
 % K = [ K_u , 0 ; 0 , K_v ]
 K = assemble_K( coordinates, elements3, G2_edges, ...
                 s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
@@ -97,7 +93,7 @@ f = assemble_f( coordinates, G2_edges, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
 % minus sign in front of second linearization in R_v is already accounted for
 
-% set up linear system to solve
+% C holds the coefficients c_i and c_{M+i}
 C = (K+H)\(f-l) ;
 
 % C = [ C_u_amb*ones(M, 1) ; C_v_amb*ones(M, 1) ] ;
@@ -105,7 +101,7 @@ C = (K+H)\(f-l) ;
 
 % SOLVE NONLINEAR SYSTEM
 % Newton-Raphson iteration
-% for n=1:20
+% for n=1:50
 %     
 %     % K = [ K_u , 0 ; 0 , K_v ]
 %     K = assemble_K( coordinates, elements3, G2_edges, ...
@@ -129,23 +125,37 @@ C = (K+H)\(f-l) ;
 %     
 %     % check for convergence
 %     norm(P)
-%     if norm(P) < 10^(-5)
+%     if norm(P) < 10^(-10)
 %         disp("stop at iteration " + num2str(n) ) ;
 %         break
 %     end
 % end
 
 
-
 % GRAPHIC REPRESENTATION OF CONCENTRATIONS
-figure()
+
+% convert units from mol/m^3 to %
+density     = 970 ;     % density of pear in kg/m^3 (see Lammertyn 2003a)
+mass_o2     = 3.2e-2 ;  % molar mass of oxigen in kg/mol
+mass_co2    = 4.4e-2 ;  % molar mass of carbon dioxide in kg/mol
+% convert
+C(1:M)     = C(1:M)     * mass_o2  / density ;
+C(M+1:end) = C(M+1:end) * mass_co2 / density ;
+
+figure('position', [300 100 800 500])
 subplot(1, 2, 1)
 show(elements3,[],coordinates,full(C(1:M)));
-title('oxygen')
+title('O_2 concentration (%)')
 subplot(1, 2, 2)
 show(elements3,[],coordinates,full(C(M+1:end)));
-title('carbon dioxide')
+title('CO_2 concentration (%)')
 
+suptitle(join(['Conditions : ', num2str(100*n_u), '% O_2, ', num2str(100*n_v), '% CO_2, and ', num2str(T_cel), '°C' ]))
+
+
+% CHECK FOR CORRECTNESS OF RESULTS
+% norm(C(unique(G2_edges))   - C_u_amb*mass_o2/density*ones(size(unique(G2_edges), 1), 1))
+% norm(C(unique(M+G2_edges)) - C_v_amb*mass_co2/density*ones(size(unique(G2_edges), 1), 1))
 
 
 % FUNCTIONS
@@ -165,14 +175,14 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
                 
         % area of element (can be positive or negative)
         omega = det([ ones(1,3) ; coordinates(t, :)' ]) / 2 ;
-
-
 		% omega_12 = det([ ones(1,3) ; coordinates(t, :)' ]) / 2
 		% omega_21 = det([ ones(1,3) ; coordinates(t([1, 3, 2]), :)' ]) / 2
 
-
         % sum of r-coordinates
         sum_r = sum(coordinates(t, 1), 1) ;
+        
+        % coordinates of elements vertices
+        
         
         % for j different from i
         C_12 = 1/6 * 1/2/omega * [ (z(t(1))-z(t(3)))*(z(t(3))-z(t(2))) ; ...
@@ -185,22 +195,22 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
                                    (r(t(1))-r(t(2)))*(r(t(2))-r(t(3)))] ;
         %
         K(t(1),   t(2))   = K(t(1),   t(2))   + [s_ur, s_uz] * C_12 * sum_r ;
-        K(t(2),   t(1))   = K(t(2),   t(1))   - [s_ur, s_uz] * C_12 * sum_r ;
+        K(t(2),   t(1))   = K(t(2),   t(1))   + [s_ur, s_uz] * C_12 * sum_r ;
         %
         K(t(2),   t(3))   = K(t(2),   t(3))   + [s_ur, s_uz] * C_23 * sum_r ;
-        K(t(3),   t(2))   = K(t(3),   t(2))   - [s_ur, s_uz] * C_23 * sum_r ;
+        K(t(3),   t(2))   = K(t(3),   t(2))   + [s_ur, s_uz] * C_23 * sum_r ;
         %
         K(t(1),   t(3))   = K(t(1),   t(3))   + [s_ur, s_uz] * C_13 * sum_r ;
-        K(t(3),   t(1))   = K(t(3),   t(1))   - [s_ur, s_uz] * C_13 * sum_r ;
+        K(t(3),   t(1))   = K(t(3),   t(1))   + [s_ur, s_uz] * C_13 * sum_r ;
 
         K(M+t(1), M+t(2)) = K(M+t(1), M+t(2)) + [s_vr, s_vz] * C_12 * sum_r ;
-        K(M+t(2), M+t(1)) = K(M+t(2), M+t(1)) - [s_vr, s_vz] * C_12 * sum_r ;
+        K(M+t(2), M+t(1)) = K(M+t(2), M+t(1)) + [s_vr, s_vz] * C_12 * sum_r ;
         %
         K(M+t(2), M+t(3)) = K(M+t(2), M+t(3)) + [s_vr, s_vz] * C_23 * sum_r ;
-        K(M+t(3), M+t(2)) = K(M+t(3), M+t(2)) - [s_vr, s_vz] * C_23 * sum_r ;
+        K(M+t(3), M+t(2)) = K(M+t(3), M+t(2)) + [s_vr, s_vz] * C_23 * sum_r ;
         %
         K(M+t(1), M+t(3)) = K(M+t(1), M+t(3)) + [s_vr, s_vz] * C_13 * sum_r ;
-        K(M+t(3), M+t(1)) = K(M+t(3), M+t(1)) - [s_vr, s_vz] * C_13 * sum_r ;
+        K(M+t(3), M+t(1)) = K(M+t(3), M+t(1)) + [s_vr, s_vz] * C_13 * sum_r ;
         
         % for j equal i
         C_11 = 1/6 * 1/2/omega * [ (z(t(2))-z(t(3)))^2 ; (r(t(2))-r(t(3)))^2] ;
@@ -254,7 +264,6 @@ function f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb )
     % extract useful variables
     M = size(coordinates, 1) ;
     r = coordinates(:, 1) ;
-    z = coordinates(:, 2) ;
     
     f = zeros( 2*M, 1 ) ;
     for e = G2_edges'
@@ -266,11 +275,13 @@ function f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb )
         term_2 = 1/6 * len * (   r(e(1)) + 2*r(e(2)) ) ;
         
         % in f_u
-        f( e(1) )   = f( e(1) )   + r_u * C_u_amb * term_1 ;
-        f( e(2) )   = f( e(2) )   + r_u * C_u_amb * term_2 ;
+        %f( e(1) )   = f( e(1) )   + r_u * C_u_amb * term_1 ;
+        %f( e(2) )   = f( e(2) )   + r_u * C_u_amb * term_2 ;
+        f( e )   = f( e )   + r_u * C_u_amb * [ term_1 ; term_2 ] ;
         % in f_v
-        f( M+e(1) ) = f( M+e(1) ) + r_v * C_v_amb * term_1 ;
-        f( M+e(2) ) = f( M+e(2) ) + r_v * C_v_amb * term_2 ;
+        %f( M+e(1) ) = f( M+e(1) ) + r_v * C_v_amb * term_1 ;
+        %f( M+e(2) ) = f( M+e(2) ) + r_v * C_v_amb * term_2 ;
+        f( M+e ) = f( M+e ) + r_v * C_v_amb * [ term_1 ; term_2 ] ;
     end
 end
 
