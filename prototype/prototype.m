@@ -5,17 +5,20 @@
 clear all
 
 
+% compare results with Lammertyn-2003b
+% O2    : low  concentration in center, increases towards surface
+% CO2   : high concentration in center, decreases towards surface
 
 % LOAD DOMAIN
 %
-load mesh/HalfCircleMesh.mat
-load mesh/HalfCircleMesh_Data.mat
+% load mesh/HalfCircleMesh.mat
+% load mesh/HalfCircleMesh_Data.mat
 %
 % load mesh/HCT_Mesh.mat
 % load mesh/HCT_Mesh_Data.mat
 %
-% load mesh/HCT_Fine_Mesh.mat
-% load mesh/HCT_Fine_Mesh_Data.mat
+load mesh/HCT_Fine_Mesh.mat
+load mesh/HCT_Fine_Mesh_Data.mat
 %
 coordinates = mesh.Nodes' ;
 r           = coordinates(:, 1) ;
@@ -93,6 +96,9 @@ f = assemble_f( coordinates, G2_edges, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
 % minus sign in front of second linearization in R_v is already accounted for
 
+% test second linearization of H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)]
+H2 = assemble_H_lin_test( coordinates, elements3 ) ;
+
 % C holds the coefficients c_i and c_{M+i}
 C = (K+H)\(f-l) ;
 
@@ -101,35 +107,35 @@ C = (K+H)\(f-l) ;
 
 % SOLVE NONLINEAR SYSTEM
 % Newton-Raphson iteration
-% for n=1:50
-%     
-%     % K = [ K_u , 0 ; 0 , K_v ]
-%     K = assemble_K( coordinates, elements3, G2_edges, ...
-%                     s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
-%     % f = [ f_u ; f_v ]
-%     f = assemble_f( coordinates, G2_edges, ...
-%                     r_u, r_v, C_u_amb, C_v_amb ) ;
-%     % H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)]
-%     H = assemble_H( coordinates, elements3, ...
-%                     C, R_u, R_v ) ;
-%     % Jacobian J = K + dH/dC
-%     J = assemble_J( coordinates, elements3, ...
-%                     C, K, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
-%     
-%     % Variational
-%     G = K*C - f + H ;
-%     
-%     % Solving one Newton step
-%     P = J\G ;
-%     C = C - P;
-%     
-%     % check for convergence
-%     norm(P)
-%     if norm(P) < 10^(-10)
-%         disp("stop at iteration " + num2str(n) ) ;
-%         break
-%     end
-% end
+for n=1:50
+    
+    % K = [ K_u , 0 ; 0 , K_v ]
+    K = assemble_K( coordinates, elements3, G2_edges, ...
+                    s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
+    % f = [ f_u ; f_v ]
+    f = assemble_f( coordinates, G2_edges, ...
+                    r_u, r_v, C_u_amb, C_v_amb ) ;
+    % H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)]
+    H = assemble_H( coordinates, elements3, ...
+                    C, R_u, R_v ) ;
+    % Jacobian J = K + dH/dC
+    J = assemble_J( coordinates, elements3, ...
+                    C, K, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
+    
+    % Variational
+    G = K*C - f + H ;
+    
+    % Solving one Newton step
+    P = J\G ;
+    C = C - P;
+    
+    % check for convergence
+    norm(P)
+    if norm(P) < 10^(-10)
+        disp("stop at iteration " + num2str(n) ) ;
+        break
+    end
+end
 
 
 % GRAPHIC REPRESENTATION OF CONCENTRATIONS
@@ -139,23 +145,26 @@ density     = 970 ;     % density of pear in kg/m^3 (see Lammertyn 2003a)
 mass_o2     = 3.2e-2 ;  % molar mass of oxigen in kg/mol
 mass_co2    = 4.4e-2 ;  % molar mass of carbon dioxide in kg/mol
 % convert
-C(1:M)     = C(1:M)     * mass_o2  / density ;
-C(M+1:end) = C(M+1:end) * mass_co2 / density ;
+C(1:M)     = 100 * C(1:M)     * mass_o2  / density ;
+C(M+1:end) = 100 * C(M+1:end) * mass_co2 / density ;
+
+% scale of concentrations (zoom)
+scale = 1 ;
 
 figure('position', [300 100 800 500])
 subplot(1, 2, 1)
-show(elements3,[],coordinates,full(C(1:M)));
+show(elements3,[],coordinates,full(scale*C(1:M)));
 title('O_2 concentration (%)')
 subplot(1, 2, 2)
-show(elements3,[],coordinates,full(C(M+1:end)));
+show(elements3,[],coordinates,full(scale*C(M+1:end)));
 title('CO_2 concentration (%)')
-
 suptitle(join(['Conditions : ', num2str(100*n_u), '% O_2, ', num2str(100*n_v), '% CO_2, and ', num2str(T_cel), '°C' ]))
 
 
 % CHECK FOR CORRECTNESS OF RESULTS
 % norm(C(unique(G2_edges))   - C_u_amb*mass_o2/density*ones(size(unique(G2_edges), 1), 1))
 % norm(C(unique(M+G2_edges)) - C_v_amb*mass_co2/density*ones(size(unique(G2_edges), 1), 1))
+
 
 
 % FUNCTIONS
@@ -238,19 +247,19 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         cross_term          = 1/12 * len * (   r(e(1)) +   r(e(2)) ) ;
         
         % in K_u
-        % K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;
-        % K( e(1),   e(2) )   = K( e(1), e(2) )     + r_u * cross_term ;
-        % K( e(2),   e(1) )   = K( e(2), e(1) )     + r_u * cross_term ; 
-        % K( e(2),   e(2) )   = K( e(2), e(2) )     + r_u * parallel_term_2 ;
-        K( e,   e )   = K( e,   e )   + [ r_u * parallel_term_1 , r_u * cross_term ; ...
-        							      r_u * cross_term      , r_u * parallel_term_2 ] ;
+%         K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;
+%         K( e(1),   e(2) )   = K( e(1), e(2) )     + r_u * cross_term ;
+%         K( e(2),   e(1) )   = K( e(2), e(1) )     + r_u * cross_term ; 
+%         K( e(2),   e(2) )   = K( e(2), e(2) )     + r_u * parallel_term_2 ;
+        K( e,   e )   = K( e,   e )   + r_u * [ parallel_term_1 , cross_term ; ...
+                                                cross_term      , parallel_term_2 ] ;
         % in K_v
-        % K( M+e(1), M+e(1) ) = K( M+e(1), M+e(1) ) + r_v * parallel_term_1 ;
-        % K( M+e(1), M+e(2) ) = K( M+e(1), M+e(2) ) + r_v * cross_term ;
-        % K( M+e(2), M+e(1) ) = K( M+e(2), M+e(1) ) + r_v * cross_term ; 
-        % K( M+e(2), M+e(2) ) = K( M+e(2), M+e(2) ) + r_v * parallel_term_2 ;
-        K( M+e, M+e ) = K( M+e, M+e ) + [ r_v * parallel_term_1 , r_v * cross_term ; ...
-        							      r_v * cross_term      , r_v * parallel_term_2 ] ;
+%         K( M+e(1), M+e(1) ) = K( M+e(1), M+e(1) ) + r_v * parallel_term_1 ;
+%         K( M+e(1), M+e(2) ) = K( M+e(1), M+e(2) ) + r_v * cross_term ;
+%         K( M+e(2), M+e(1) ) = K( M+e(2), M+e(1) ) + r_v * cross_term ; 
+%         K( M+e(2), M+e(2) ) = K( M+e(2), M+e(2) ) + r_v * parallel_term_2 ;
+        K( M+e, M+e ) = K( M+e, M+e ) + r_v * [ parallel_term_1 , cross_term ; ...
+                                                cross_term      , parallel_term_2 ] ;
     end
 
 end
@@ -345,6 +354,26 @@ function [H, l] = assemble_H_lin( coordinates, elements3, C_u_amb, C_v_amb, R_u,
     
 end
 
+
+function H = assemble_H_lin_test( coordinates, elements3 )
+    % coordinates       coordinates of vertices of mesh
+    % elements3         index of vertices that form trinagular elements
+    
+    % extract useful variables
+    M = size(coordinates, 1) ;
+    r = coordinates(:, 1) ;
+    
+    H = zeros(2*M, 1) ;
+    for t = elements3'
+        
+        % area of element (can be positive or negative)
+        omega = det([ ones(1,3) ; coordinates(t, :)' ]) / 2 ;
+        
+        H(t) = H(t) + 1/12 * omega ;
+        
+    end
+
+end
 
 % Assemble Jacobian J = K + dH/dC
 function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, dR_v_v )
