@@ -114,7 +114,6 @@ namespace pear {
 
          void f(Eigen::Ref<vec_type> f_vector, mat_type & K) const{
 
-             //Eigen::Ref<vec_type> f_vector = f_vector_global.segment(comp_.cons_start(), comp_.cons_stop());
 
              // Outer boundary
              for (int t = 1; t<grid_.nb_outer_edges()+1; t++) { // Ronald: changed the counter from t=0->t=1 and ' '->'+1'
@@ -132,8 +131,8 @@ namespace pear {
              // Inner boundary: in case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
 
              // Add the matrix vector product
-             //K.setZero(); J(K);
-             //f_vector = f_vector+ K*comp_.concentrations();
+             K.setZero(); J(K);
+             f_vector =  K*comp_.cons() - f_vector;
 
          };
 

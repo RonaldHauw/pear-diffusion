@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
 
     // automatically deallocated pointers
 
-    pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,                      grid.nb_nodes(),     1);
+    pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,        grid.nb_nodes(),     1);
     pear::component<d_type, vec_type> co2("CO_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
 
 
