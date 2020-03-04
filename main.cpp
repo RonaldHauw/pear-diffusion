@@ -111,10 +111,11 @@ int main(int argc, char* argv[]) {
         };
     }; // if argc>1
 
+    // vanwaar komt de Eigen
 
     // Respiration parameters
-    d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1 / T_ref - 1 / T));
-    d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1 / T_ref - 1 / T));
+    d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1. / T_ref - 1. / T));
+    d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1. / T_ref - 1. / T));
     std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
 
     // Boundary parameters // remove last hard coded number
@@ -129,6 +130,11 @@ int main(int argc, char* argv[]) {
     vec_type conc;
     conc.resize(grid.nb_nodes()*2, 1);
     conc.setOnes(); // initial values
+
+    // linearisatie
+    // sparseheid patroon
+    // niet homogene oplossing
+    // test juiste implementatie Jacobiaan met eindige differenties
 
     // automatically deallocated pointers
 

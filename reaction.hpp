@@ -49,7 +49,8 @@ namespace pear {
         // Respiration dynamics: derivatives
 
         d_type dR_u_u(d_type C_u, d_type C_v){
-            return v_mu_ / (k_mu_ + C_u) / (1 + C_v/k_mv_) * (1 - C_u/(k_mu_+C_u));
+            //std::cout<<" v_mu = "<<v_mu_<<" k_mu_ = "<<k_mu_<<" k_mv_ = "<<k_mv_;
+            return v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
         };
 
         d_type dR_u_v(d_type C_u, d_type C_v){
@@ -89,20 +90,27 @@ namespace pear {
         void J(Eigen::Ref<mat_type> dH) {
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
-
+                std::cout<<" elements = ["<<elements.size()<<"]"<<std::endl;
+                std::cout<<" node = "<<t<<std::endl;
                 d_type area = 0.;
                 for (int e = 1; e < elements.size()+1; e++) {
-                    std::vector<int> nodes = grid_.element(e);
-                    d_type r1 = grid_.node(nodes[0])[0];   d_type z1 = grid_.node(nodes[0])[1];
-                    d_type r2 = grid_.node(nodes[1])[0];   d_type z2 = grid_.node(nodes[1])[1];
-                    d_type r3 = grid_.node(nodes[2])[0];   d_type z3 = grid_.node(nodes[2])[1];
-                    area += (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2);
-                    std::cout<<"area it "<<area<<std::endl;
+
+                        std::vector<int> nodes = grid_.element(elements[e - 1]);
+
+                        d_type r1 = grid_.node(nodes[0])[0]; d_type z1 = grid_.node(nodes[0])[1];
+                        d_type r2 = grid_.node(nodes[1])[0]; d_type z2 = grid_.node(nodes[1])[1];
+                        d_type r3 = grid_.node(nodes[2])[0]; d_type z3 = grid_.node(nodes[2])[1];
+                        area += (r2 * z3 - r3 * z2) - (r1 * z3 - r3 * z1) + (r1 * z2 - z1 * r2);
+                        //std::cout<<"r1 = "<<r1<<"  r2 = "<<r2<<" r3 = "<<r3;
+                        //std::cout<<" z1  = "<<z1<<" z2 = "<<z2<<" z3 = "<<z3<<std::endl;
+                        //std::cout<<"area it "<<area<<std::endl;
                 };
 
                 dH(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                std::cout<<"area "<<area/2.<<"  druu "<<dR_u_u(o2_.concentration(t), co2_.concentration(t) )<<"  r(i) "<<grid_.node(t)[0]<<std::endl;
-                std::cout<<"dvar_1 "<<area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6.<<" "<<t<<" "<<t<<std::endl;
+                std::cout<<"area "<<area<<"  druu "<<dR_u_u(o2_.concentration(t), co2_.concentration(t) )<<"  r(i) "<<grid_.node(t)[0]<<std::endl;
+                //std::cout<<"dvar_1 "<<area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6.<<" "<<t<<" "<<t<<std::endl;
+                std::cout<<"Cco2 = "<<o2_.concentration(t)<<" Co2 = "<<co2_.concentration(t)<<std::endl;
+
                 dH(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
