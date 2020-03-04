@@ -65,24 +65,6 @@ namespace pear {
         }
 
 
-        //void J_draft(mat_type & J){
-          //  J.setZero();
-            //diff_o2_.J(K.block(0,0,diff_o2_.nb_nodes(),diff_o2_.nb_nodes()) );
-            //diff_co2_.J(K.block(diff_o2_.nb_nodes()-1,diff_o2_.nb_nodes()-1,diff_co2_.nb_nodes(),diff_co2_.nb_nodes()) );
-        //};
-
-        //void f_draft(vec_type & x){
-         //   std::cout<<"pear::rdc.f_draft(x): allocating work memory: "<<std::endl;
-         //   std::cout<<"       - mat_type of size ("<<diff_o2_.nb_nodes()<<", "<<diff_o2_.nb_nodes()<<")"<<std::endl;
-         //   mat_type K;
-         //   K.resize(diff_o2_.nb_nodes(), diff_o2_.nb_nodes());
-
-
-         //   diff_o2_.f(x.segment(0, diff_o2_.nb_nodes() ), K );
-         //   diff_co2_.f(x.segment(diff_o2_.nb_nodes()-1, diff_co2_.nb_nodes() ), K );
-        //};
-
-
     private:
         pear::diffusion<d_type, vec_type, mat_type> diff_o2_;
         pear::diffusion<d_type, vec_type, mat_type> diff_co2_;

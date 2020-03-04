@@ -73,20 +73,20 @@ namespace pear {
                  // sigma_r_ and sigma_z_ checked with matlab
 
                  // (sigma_r_*C_12_1+sigma_z_*C_12_2) checked with matlab
-                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
-                 K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[1]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
+                 K(elem_nodes[1]-1, elem_nodes[0]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
 
-                 K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[2]-1) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[1]-1) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[2]-1) =  K(elem_nodes[0]-1, elem_nodes[2]-1) + (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[0]-1) =  K(elem_nodes[2]-1, elem_nodes[0]-1) + (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[2]-1) += (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[0]-1) += (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[0]-1) =  K(elem_nodes[0]-1, elem_nodes[0]-1) + (sigma_r_*C_11_1+sigma_z_*C_11_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[0]-1) += (sigma_r_*C_11_1+sigma_z_*C_11_2) * sum_r;
 
-                 K(elem_nodes[1]-1, elem_nodes[1]-1) =  K(elem_nodes[1]-1, elem_nodes[1]-1) + (sigma_r_*C_22_1+sigma_z_*C_22_2) * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[1]-1) += (sigma_r_*C_22_1+sigma_z_*C_22_2) * sum_r;
 
-                 K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + (sigma_r_*C_33_1+sigma_z_*C_33_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[2]-1) += (sigma_r_*C_33_1+sigma_z_*C_33_2) * sum_r;
 
              };
              for (int t = 1; t<grid_.nb_outer_edges()+1; t++) {
@@ -104,10 +104,11 @@ namespace pear {
 
                  //std::cout<<" p1 = "<<parallel_term_1<<"  p2 = "<<parallel_term_2<<" c = "<<cross_term<<std::endl;
 
-                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  = K( edge_nodes[0]-1, edge_nodes[0]-1 ) + r_ * parallel_term_1 ;
-                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  = K( edge_nodes[0]-1, edge_nodes[1]-1 ) + r_ * cross_term ;
-                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  = K( edge_nodes[1]-1, edge_nodes[0]-1 ) + r_ * cross_term ;
-                 K( edge_nodes[1]-1, edge_nodes[1]-1 )  = K( edge_nodes[1]-1, edge_nodes[1]-1 ) + r_ * parallel_term_2 ;
+                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;
+                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term ;
+                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term ;
+                 K( edge_nodes[1]-1, edge_nodes[1]-1 )  += r_ * parallel_term_2 ;
+
              }
 
          };
@@ -123,8 +124,8 @@ namespace pear {
                  d_type r2     = grid_.node(edge_nodes[1])[0];   d_type z2 = grid_.node(edge_nodes[1])[1];
                  d_type length = sqrt((r1-r2)*(r1-r2) + (z1-z2)*(z1-z2));
 
-                 f_vector( edge_nodes[0]-1 )   = f_vector( edge_nodes[0]-1 )   + r_ * C_amb_ * (2*r1+r2) * length / 6. ;
-                 f_vector( edge_nodes[1]-1 )   = f_vector( edge_nodes[1]-1 )   + r_ * C_amb_ * (r1+2*r2) * length / 6. ;
+                 f_vector( edge_nodes[0]-1 ) += r_ * C_amb_ * (2*r1+r2) * length / 6. ;
+                 f_vector( edge_nodes[1]-1 ) += r_ * C_amb_ * (r1+2*r2) * length / 6. ;
 
              };
 

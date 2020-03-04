@@ -53,7 +53,6 @@ namespace pear {
         }
 
 
-
     private:
         f_type f_;
     };

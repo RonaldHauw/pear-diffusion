@@ -83,7 +83,7 @@ namespace pear {
             std::ifstream outer_file(file_name_ + "_OuterEdges.txt");
             if (outer_file.is_open()){
                 // Count number of outer edges to pre-allocate memory
-                N = 0; while(outer_file>>n>>n1>>n2>>n3){N++;}; nb_outer_edges_ = N;
+                N = 0; while(outer_file>>n>>n1>>n2){N++;}; nb_outer_edges_ = N;
                 outer_edges_ = std::vector<int>(2*nb_outer_edges_);
                 // Reopen
                 outer_file.close();
@@ -129,7 +129,7 @@ namespace pear {
             std::vector<int> edge_nodes(15);         // Pre-allocation to upper-limit
 
             int N = 0;                                  // Number of elements found
-            for (int i = 0; i < nb_elements_ ; i++) {   // Loop on all the elements
+            for (int i = 1; i < nb_elements_ + 1 ; i++) {   // Loop on all the elements
 
                 if (elements_[3*(i-1)] == node || elements_[3*(i-1)+1] == node || elements_[3*(i-1)+2] == node){
                     ++N;                                                            // Update count
