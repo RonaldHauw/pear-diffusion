@@ -31,10 +31,11 @@ namespace pear {
          }
 
 
-         void J(mat_type & K) const {
+         void J(Eigen::Ref<mat_type> K) const {
+
+             //Eigen::Ref<mat_type> K = K_global.block(comp_.nb_nodes()+1, comp_.nb_nodes()+1, comp_.cons_start(), comp_.cons_start());
+
              K.setZero();
-            // USE STRUCTS!!!!! -->
-            // sometimes after first run we see nan --> memory issue? divide by zero?
              for (int t = 1; t<grid_.nb_elements()+1; t++){ // iteration seems too short
                  std::vector<int> elem_nodes = grid_.element(t);
 
@@ -72,20 +73,20 @@ namespace pear {
                  // sigma_r_ and sigma_z_ checked with matlab
 
                  // (sigma_r_*C_12_1+sigma_z_*C_12_2) checked with matlab
-                 K(elem_nodes[0]-1, elem_nodes[1]-1) =  K(elem_nodes[0]-1, elem_nodes[1]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
-                 K(elem_nodes[1]-1, elem_nodes[0]-1) =  K(elem_nodes[1]-1, elem_nodes[0]-1) + (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[1]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
+                 K(elem_nodes[1]-1, elem_nodes[0]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
 
-                 K(elem_nodes[1]-1, elem_nodes[2]-1) =  K(elem_nodes[1]-1, elem_nodes[2]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[1]-1) =  K(elem_nodes[2]-1, elem_nodes[1]-1) + (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[2]-1) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[1]-1) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[2]-1) =  K(elem_nodes[0]-1, elem_nodes[2]-1) + (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
-                 K(elem_nodes[2]-1, elem_nodes[0]-1) =  K(elem_nodes[2]-1, elem_nodes[0]-1) + (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[2]-1) += (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[0]-1) += (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
 
-                 K(elem_nodes[0]-1, elem_nodes[0]-1) =  K(elem_nodes[0]-1, elem_nodes[0]-1) + (sigma_r_*C_11_1+sigma_z_*C_11_2) * sum_r;
+                 K(elem_nodes[0]-1, elem_nodes[0]-1) += (sigma_r_*C_11_1+sigma_z_*C_11_2) * sum_r;
 
-                 K(elem_nodes[1]-1, elem_nodes[1]-1) =  K(elem_nodes[1]-1, elem_nodes[1]-1) + (sigma_r_*C_22_1+sigma_z_*C_22_2) * sum_r;
+                 K(elem_nodes[1]-1, elem_nodes[1]-1) += (sigma_r_*C_22_1+sigma_z_*C_22_2) * sum_r;
 
-                 K(elem_nodes[2]-1, elem_nodes[2]-1) =  K(elem_nodes[2]-1, elem_nodes[2]-1) + (sigma_r_*C_33_1+sigma_z_*C_33_2) * sum_r;
+                 K(elem_nodes[2]-1, elem_nodes[2]-1) += (sigma_r_*C_33_1+sigma_z_*C_33_2) * sum_r;
 
              };
              for (int t = 1; t<grid_.nb_outer_edges()+1; t++) {
@@ -101,18 +102,20 @@ namespace pear {
                  d_type parallel_term_2     = 1./12. * len * (   r1 + 3*r2 ) ;
                  d_type cross_term          = 1./12. * len * (   r1 +   r2 ) ;
 
-                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  = K( edge_nodes[0]-1, edge_nodes[0]-1 ) + r_ * parallel_term_1 ;
-                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  = K( edge_nodes[0]-1, edge_nodes[1]-1 ) + r_ * cross_term ;
-                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  = K( edge_nodes[1]-1, edge_nodes[0]-1 ) + r_ * cross_term ;
-                 K( edge_nodes[1]-1, edge_nodes[1]-1 )  = K( edge_nodes[1]-1, edge_nodes[1]-1 ) + r_ * parallel_term_2 ;
+                 //std::cout<<" p1 = "<<parallel_term_1<<"  p2 = "<<parallel_term_2<<" c = "<<cross_term<<std::endl;
 
-                 std::cout << t << "Edge placing" << edge_nodes[0]-1 << edge_nodes[1]-1 << std::endl;
+                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;
+                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term ;
+                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term ;
+                 K( edge_nodes[1]-1, edge_nodes[1]-1 )  += r_ * parallel_term_2 ;
 
              }
 
          };
 
-         void f(vec_type & f_vector, mat_type & K) const{
+         void f(Eigen::Ref<vec_type> f_vector, mat_type & K) const{
+
+
              // Outer boundary
              for (int t = 1; t<grid_.nb_outer_edges()+1; t++) { // Ronald: changed the counter from t=0->t=1 and ' '->'+1'
                  std::vector<int> edge_nodes = grid_.outer_edge(t);
@@ -121,8 +124,8 @@ namespace pear {
                  d_type r2     = grid_.node(edge_nodes[1])[0];   d_type z2 = grid_.node(edge_nodes[1])[1];
                  d_type length = sqrt((r1-r2)*(r1-r2) + (z1-z2)*(z1-z2));
 
-                 f_vector( edge_nodes[0] )   = f_vector( edge_nodes[0] )   + r_ * C_amb_ * (2*r1+r2) * length / 6. ;
-                 f_vector( edge_nodes[1] )   = f_vector( edge_nodes[1] )   + r_ * C_amb_ * (r1+2*r2) * length / 6. ;
+                 f_vector( edge_nodes[0]-1 ) += r_ * C_amb_ * (2*r1+r2) * length / 6. ;
+                 f_vector( edge_nodes[1]-1 ) += r_ * C_amb_ * (r1+2*r2) * length / 6. ;
 
              };
 
@@ -130,13 +133,26 @@ namespace pear {
 
              // Add the matrix vector product
              K.setZero(); J(K);
-             f_vector = f_vector+ K*comp_.concentrations();
+             f_vector =  K*comp_.cons() - f_vector;
 
          };
 
          void set_cons(vec_type & x){
              comp_.concentrations() = x;
          }
+
+         Eigen::Ref<vec_type> cons(){
+             return comp_.cons();
+         }
+
+         Eigen::Ref<vec_type> cons_full(){
+             return comp_.cons_full();
+         }
+
+         int cons_start(){ return comp_.cons_start(); };
+         int cons_stop(){ return comp_.cons_stop(); };
+         int cons_stride(){ return comp_.cons_stride(); };
+
 
          int nb_nodes(){
              return comp_.nb_nodes();

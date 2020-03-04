@@ -97,10 +97,10 @@ namespace pear {
                     area += (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2);
                 };
 
-                dH(t-1, t-1) += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH(t-1, t + grid_.nb_nodes() -1) += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH(t + grid_.nb_nodes() -1, t-1) -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1) -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
         };
 

@@ -86,7 +86,7 @@ K = assemble_K( coordinates, elements3, G2_edges, ...
                 s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
 % f = [ f_u ; f_v ]
 f = assemble_f( coordinates, G2_edges, ...
-                r_u, r_v, C_u_amb, C_v_amb ) ;
+                r_u, r_v, C_u_amb, C_v_amb ) 
 % linearization of H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)] around (C_u_amb, C_v_amb)
 [H, l] = assemble_H_lin( coordinates, elements3, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
@@ -174,7 +174,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         C_13 = 1/6 * 1/2/omega * [ (z(1)-z(2))*(z(2)-z(3)) ; (r(1)-r(2))*(r(2)-r(3))] ;
         %
         K(t(1),   t(2))   = K(t(1),   t(2))   + [s_ur, s_uz] * C_12 * sum_r ;
-        
+                
         K(t(2),   t(1))   = K(t(2),   t(1))   + [s_ur, s_uz] * C_12 * sum_r ;
         %
         K(t(2),   t(3))   = K(t(2),   t(3))   + [s_ur, s_uz] * C_23 * sum_r ;
@@ -223,8 +223,6 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         parallel_term_1     = 1./12 * len * ( 3*r(e(1)) +   r(e(2)) ) ;
         parallel_term_2     = 1./12 * len * (   r(e(1)) + 3*r(e(2)) ) ;
         cross_term          = 1./12 * len * (   r(e(1)) +   r(e(2)) ) ;
-        rterms = [r(e(1)) r(e(2))]
-        pterms = [parallel_term_1 parallel_term_2 cross_term]
         
         % in K_u
         K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;

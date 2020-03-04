@@ -16,8 +16,9 @@
 #include <chrono>
 #include <iterator>
 #include "grid.hpp"
-#include "eigen-3.3.7/Eigen/Dense"
-#include "eigen-3.3.7/Eigen/Eigen"
+#include "eigen/Eigen/Dense"
+#include "eigen/Eigen/Eigen"
+#include "eigen/Eigen/Core"
 
 
 namespace pear {
@@ -43,13 +44,22 @@ namespace pear {
 
 
 
-        vec_type  concentrations(){
-            //return & concentration_(seq(start_, stop_, stride_), 1);
-            return  concentration_;
+        Eigen::Ref<vec_type> cons()  {
+            return concentration_.segment(start_, grid_.nb_nodes());
         }
+
+        Eigen::Ref<vec_type> cons_full()  {
+            return concentration_;
+        }
+
+        int cons_start(){ return start_; };
+        int cons_stop(){ return stop_; };
+        int cons_stride(){ return stride_; };
 
         d_type & concentration(int i){
             return concentration_(start_ + i*stride_, 1);
+
+
         }
 
         int nb_nodes(){
