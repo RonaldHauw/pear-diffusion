@@ -47,7 +47,6 @@ namespace pear {
                 f_.J(J);
                 f_.f(f);
                 // solve the linear system
-
                 f_.cons() = f_.cons() - J.fullPivLu().solve(f) ;
             }
             return 1;

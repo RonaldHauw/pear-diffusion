@@ -44,6 +44,7 @@ namespace pear {
 
             diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()), K);
             diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()), K);
+            resp_.f(x);
 
         };
 
