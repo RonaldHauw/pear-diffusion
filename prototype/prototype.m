@@ -77,7 +77,7 @@ R_v_lin = @(c_u, c_v) R_v(C_u_amb, C_v_amb) + dR_v_u(C_u_amb, C_v_amb)*(c_u-C_u_
 
 % INITIAL VALUE
 % C holds the coefficients c_i and c_{M+i}
-C = randn(2*M,1);
+C = ones(2*M,1);
 
 
 % find solution of linearized system to initialize Newton-Raphson 
@@ -86,7 +86,7 @@ K = assemble_K( coordinates, elements3, G2_edges, ...
                 s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
 % f = [ f_u ; f_v ]
 f = assemble_f( coordinates, G2_edges, ...
-                r_u, r_v, C_u_amb, C_v_amb ) 
+                r_u, r_v, C_u_amb, C_v_amb ); 
 % linearization of H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)] around (C_u_amb, C_v_amb)
 [H, l] = assemble_H_lin( coordinates, elements3, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
@@ -95,7 +95,7 @@ f = assemble_f( coordinates, G2_edges, ...
 % set up linear system to solve
 A = K + H ;
 b = f - l ;
-C = A\b ;
+% C = A\b ;
 
 
 % Newton-Raphson iteration
@@ -343,22 +343,12 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
         s = 0 ;
         for t = T'
             s = s + abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
-            s
         end
-        i
-        ri = r(i)
-        dru = dR_u_u(C(i), C(M+i))
-        
-        
-        
+
         % part derivative of H_u to C
         J( i, i )     =  s/3. * r(i) * dR_u_u(C(i), C(M+i)) ;
         J( i, M+i )   =  s/3. * r(i) * dR_u_v(C(i), C(M+i)) ;
-        
-        
-        
-        dvar_1 = s/3. * r(i) * dR_u_u(C(i), C(M+i))
-        
+
         % part derivative of H_v to C
         J( M+i, i )   = -s/3 * r(i) * dR_v_u(C(i), C(M+i)) ;
         J( M+i, M+i ) = -s/3 * r(i) * dR_v_v(C(i), C(M+i)) ;
