@@ -39,7 +39,7 @@ namespace pear {
             vec_type f; f.resize(f_.size(), 1);
             vec_type dx; dx.resize(f_.size(), 1);
 
-            for (int i = 1; i<4; i++) {
+            for (int i = 1; i<2; i++) {
                 // reset memory to zero
                 J.setZero();
                 f.setZero();

@@ -25,7 +25,7 @@ axis equal;
 % Creation of the mesh
 model = createpde(1);
 geometryFromEdges(model,dl);
-mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',0.1,'Hmin',0.05);
+mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',0.5,'Hmin',0.40);
 pdeplot(model);
 
 

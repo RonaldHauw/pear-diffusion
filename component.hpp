@@ -57,9 +57,7 @@ namespace pear {
         int cons_stride(){ return stride_; };
 
         d_type & concentration(int i){
-            return concentration_(start_ + i*stride_, 1);
-
-
+            return concentration_(start_ + (i-1)*stride_);
         }
 
         int nb_nodes(){

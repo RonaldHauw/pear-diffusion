@@ -343,21 +343,13 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
         s = 0 ;
         for t = T'
             s = s + abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
-            s
         end
-        i
-        ri = r(i)
-        dru = dR_u_u(C(i), C(M+i))
-        
-        
         
         % part derivative of H_u to C
-        J( i, i )     =  s/3. * r(i) * dR_u_u(C(i), C(M+i)) ;
-        J( i, M+i )   =  s/3. * r(i) * dR_u_v(C(i), C(M+i)) ;
+        J( i, i )     =  s/3 * r(i) * dR_u_u(C(i), C(M+i)) ;
+        J( i, M+i )   =  s/3 * r(i) * dR_u_v(C(i), C(M+i)) ;
         
-        
-        
-        dvar_1 = s/3. * r(i) * dR_u_u(C(i), C(M+i))
+        [dvar_1 i i] = s/3 * r(i) * dR_u_u(C(i), C(M+i))
         
         % part derivative of H_v to C
         J( M+i, i )   = -s/3 * r(i) * dR_v_u(C(i), C(M+i)) ;

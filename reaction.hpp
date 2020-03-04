@@ -74,12 +74,13 @@ namespace pear {
                 d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
-                H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-                H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+
+                H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
+                H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_o2(elem_nodes[2]-1) += r3 * R_u(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
 
-                H_co2(elem_nodes[0]-1) -= r1 * R_v(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[2])) * area / 6. ;
-                H_co2(elem_nodes[1]-1) -= r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                H_co2(elem_nodes[0]-1) -= r1 * R_v(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
+                H_co2(elem_nodes[1]-1) -= r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_co2(elem_nodes[2]-1) -= r3 * R_v(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
 
             };
@@ -96,15 +97,17 @@ namespace pear {
                     d_type r2 = grid_.node(nodes[1])[0];   d_type z2 = grid_.node(nodes[1])[1];
                     d_type r3 = grid_.node(nodes[2])[0];   d_type z3 = grid_.node(nodes[2])[1];
                     area += (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2);
+                    std::cout<<"area it "<<area<<std::endl;
                 };
 
                 dH(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                std::cout<<"area "<<area/2.<<"  druu "<<dR_u_u(o2_.concentration(t), co2_.concentration(t) )<<"  r(i) "<<grid_.node(t)[0]<<std::endl;
+                std::cout<<"dvar_1 "<<area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6.<<" "<<t<<" "<<t<<std::endl;
                 dH(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
         };
-
 
     private:
         pear::component<d_type, vec_type> & o2_;

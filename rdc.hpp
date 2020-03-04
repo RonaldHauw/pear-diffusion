@@ -54,7 +54,7 @@ namespace pear {
             Jmat.setZero();
             diff_o2_.J(Jmat.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
             diff_co2_.J(Jmat.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
-            //resp_.J(Jmat);
+            resp_.J(Jmat);
         };
 
 
