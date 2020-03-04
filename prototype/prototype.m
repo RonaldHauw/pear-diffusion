@@ -1,9 +1,8 @@
-%% Group 11 - 21st February 2020
+%% Group 11 - Mars 4th 2020
 % finite element method for two-dimensional nonlinear equation
 % based on https://www.math.hu-berlin.de/~cc/cc_homepage/download/1999-AJ_CC_FS-50_Lines_of_Matlab.pdf
 
 clear all
-
 
 % compare results with Lammertyn-2003b
 % O2    : low  concentration in center, increases towards surface
@@ -14,11 +13,11 @@ clear all
 % load mesh/HalfCircleMesh.mat
 % load mesh/HalfCircleMesh_Data.mat
 %
-% load mesh/HCT_Mesh.mat
-% load mesh/HCT_Mesh_Data.mat
+load mesh/HCT_Mesh.mat
+load mesh/HCT_Mesh_Data.mat
 %
-load mesh/HCT_Fine_Mesh.mat
-load mesh/HCT_Fine_Mesh_Data.mat
+% load mesh/HCT_Fine_Mesh.mat
+% load mesh/HCT_Fine_Mesh_Data.mat
 %
 coordinates = mesh.Nodes' ;
 r           = coordinates(:, 1) ;
@@ -30,12 +29,11 @@ G2_edges    = OuterBEdges( :, 2:end ) ;
 G2_nodes    = OuterBNodes' ;
 
 
-
 % DECLARE PARAMETERS and functions
 % variable
 T_cel           = 20 ;      % degrees in celcius	
-n_u             = 0.208 ;   % percentage in 0 < . < 1
-n_v             = 0 ;       % percentage in 0 < . < 1
+n_u             = 0.208 ;   % concentration O2  percentage in 0 < . < 1
+n_v             = 0.0 ;       % concentration CO2 percentage in 0 < . < 1
 % fixed
 M               = size(coordinates, 1) ;
 %
@@ -67,19 +65,13 @@ p_atm           = 101300 ;
 C_u_amb         = p_atm*n_u/R_g/T ;
 C_v_amb         = p_atm*n_v/R_g/T ;
 % respiration
-R_u     		= @(c_u, c_v) K_mv * V_mu * c_u ./ ( (K_mu+c_u) .* (K_mv+c_v) ) ;
-R_v     		= @(c_u, c_v) r_q*R_u(c_u, c_v) +  V_mfv ./ (1+c_u/K_mfu) ;
+R_u     		= @(c_u, c_v) K_mv .* V_mu .* c_u ./ ( (K_mu+c_u) .* (K_mv+c_v) ) ;
+R_v     		= @(c_u, c_v) r_q.*R_u(c_u, c_v) +  K_mfu .* V_mfv ./ (K_mfu+c_u) ;
 % derivative of respiration
-dR_u_u  		= @(c_u, c_v) K_mv * V_mu ./ (K_mu+c_u) ./ (K_mv+c_v) .* (1-c_u./(K_mu+c_u)) ;
-dR_u_v  		= @(c_u, c_v) - K_mv * V_mu * c_u ./ (K_mu+c_u) ./ (K_mv+c_v).^2 ;
-dR_v_u  		= @(c_u, c_v) r_q*dR_u_u(c_u, c_v) - K_mfu * V_mfv ./ (K_mfu+c_u).^2 ;
-dR_v_v  		= @(c_u, c_v) r_q*dR_u_v(c_u, c_v) ;
-% linearization of respiration around (c_u_amb, C_v_amb)
-R_u_lin 		= @(c_u, c_v) R_u(C_u_amb, C_v_amb) + dR_u_u(C_u_amb, C_v_amb)*(c_u-C_u_amb) ...
-                                           		    + dR_u_v(C_u_amb, C_v_amb)*(c_v-C_v_amb) ;
-R_v_lin 		= @(c_u, c_v) R_v(C_u_amb, C_v_amb) + dR_v_u(C_u_amb, C_v_amb)*(c_u-C_u_amb) ...
-                                          		    + dR_v_v(C_u_amb, C_v_amb)*(c_v-C_v_amb) ;
-
+dR_u_u  		= @(c_u, c_v) K_mu .* K_mv .* V_mu ./ ( (K_mu+c_u)^2 .* (K_mv+c_v) ) ;
+dR_u_v  		= @(c_u, c_v) - K_mv .* V_mu .* c_u ./ ( (K_mu+c_u) .* (K_mv+c_v).^2 ) ;
+dR_v_u  		= @(c_u, c_v) r_q .* dR_u_u(c_u, c_v) - K_mfu .* V_mfv ./ (K_mfu+c_u).^2 ;
+dR_v_v  		= @(c_u, c_v) r_q .* dR_u_v(c_u, c_v) ;
 
 
 % INITIAL VALUE
@@ -92,15 +84,15 @@ K = assemble_K( coordinates, elements3, G2_edges, ...
 f = assemble_f( coordinates, G2_edges, ...
                 r_u, r_v, C_u_amb, C_v_amb ) ;
 % linearization of H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)] around (C_u_amb, C_v_amb)
-[H, l] = assemble_H_lin( coordinates, elements3, ...
+[J, l] = assemble_H_lin( coordinates, elements3, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
-% minus sign in front of second linearization in R_v is already accounted for
-
-% test second linearization of H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)]
-H2 = assemble_H_lin_test( coordinates, elements3 ) ;
+% minus sign in front of linearization in R_v is already accounted for
 
 % C holds the coefficients c_i and c_{M+i}
-C = (K+H)\(f-l) ;
+C = (K+J)\(f-l) ;
+% C = K\f ; % check only diffusion
+
+% C = max(0, C) ;
 
 % C = [ C_u_amb*ones(M, 1) ; C_v_amb*ones(M, 1) ] ;
 
@@ -109,33 +101,30 @@ C = (K+H)\(f-l) ;
 % Newton-Raphson iteration
 for n=1:50
     
-    % K = [ K_u , 0 ; 0 , K_v ]
-    K = assemble_K( coordinates, elements3, G2_edges, ...
-                    s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
-    % f = [ f_u ; f_v ]
-    f = assemble_f( coordinates, G2_edges, ...
-                    r_u, r_v, C_u_amb, C_v_amb ) ;
+    % no need to recompute K and f
+    
     % H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)]
     H = assemble_H( coordinates, elements3, ...
                     C, R_u, R_v ) ;
     % Jacobian J = K + dH/dC
     J = assemble_J( coordinates, elements3, ...
-                    C, K, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
+                    C, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
     
     % Variational
     G = K*C - f + H ;
     
     % Solving one Newton step
-    P = J\G ;
+    P = (K+J)\G ;
     C = C - P;
     
     % check for convergence
     norm(P)
-    if norm(P) < 10^(-10)
+    if norm(P) < 10^(-8)
         disp("stop at iteration " + num2str(n) ) ;
         break
     end
 end
+
 
 
 % GRAPHIC REPRESENTATION OF CONCENTRATIONS
@@ -161,10 +150,6 @@ title('CO_2 concentration (%)')
 suptitle(join(['Conditions : ', num2str(100*n_u), '% O_2, ', num2str(100*n_v), '% CO_2, and ', num2str(T_cel), '°C' ]))
 
 
-% CHECK FOR CORRECTNESS OF RESULTS
-% norm(C(unique(G2_edges))   - C_u_amb*mass_o2/density*ones(size(unique(G2_edges), 1), 1))
-% norm(C(unique(M+G2_edges)) - C_v_amb*mass_co2/density*ones(size(unique(G2_edges), 1), 1))
-
 
 
 % FUNCTIONS
@@ -184,14 +169,13 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
                 
         % area of element (can be positive or negative)
         omega = det([ ones(1,3) ; coordinates(t, :)' ]) / 2 ;
-		% omega_12 = det([ ones(1,3) ; coordinates(t, :)' ]) / 2
-		% omega_21 = det([ ones(1,3) ; coordinates(t([1, 3, 2]), :)' ]) / 2
-
+    
+        if (omega < 0)
+            disp('omega smaller than 0')
+        end
+        
         % sum of r-coordinates
         sum_r = sum(coordinates(t, 1), 1) ;
-        
-        % coordinates of elements vertices
-        
         
         % for j different from i
         C_12 = 1/6 * 1/2/omega * [ (z(t(1))-z(t(3)))*(z(t(3))-z(t(2))) ; ...
@@ -247,17 +231,9 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         cross_term          = 1/12 * len * (   r(e(1)) +   r(e(2)) ) ;
         
         % in K_u
-%         K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;
-%         K( e(1),   e(2) )   = K( e(1), e(2) )     + r_u * cross_term ;
-%         K( e(2),   e(1) )   = K( e(2), e(1) )     + r_u * cross_term ; 
-%         K( e(2),   e(2) )   = K( e(2), e(2) )     + r_u * parallel_term_2 ;
         K( e,   e )   = K( e,   e )   + r_u * [ parallel_term_1 , cross_term ; ...
                                                 cross_term      , parallel_term_2 ] ;
         % in K_v
-%         K( M+e(1), M+e(1) ) = K( M+e(1), M+e(1) ) + r_v * parallel_term_1 ;
-%         K( M+e(1), M+e(2) ) = K( M+e(1), M+e(2) ) + r_v * cross_term ;
-%         K( M+e(2), M+e(1) ) = K( M+e(2), M+e(1) ) + r_v * cross_term ; 
-%         K( M+e(2), M+e(2) ) = K( M+e(2), M+e(2) ) + r_v * parallel_term_2 ;
         K( M+e, M+e ) = K( M+e, M+e ) + r_v * [ parallel_term_1 , cross_term ; ...
                                                 cross_term      , parallel_term_2 ] ;
     end
@@ -284,12 +260,8 @@ function f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb )
         term_2 = 1/6 * len * (   r(e(1)) + 2*r(e(2)) ) ;
         
         % in f_u
-        %f( e(1) )   = f( e(1) )   + r_u * C_u_amb * term_1 ;
-        %f( e(2) )   = f( e(2) )   + r_u * C_u_amb * term_2 ;
         f( e )   = f( e )   + r_u * C_u_amb * [ term_1 ; term_2 ] ;
         % in f_v
-        %f( M+e(1) ) = f( M+e(1) ) + r_v * C_v_amb * term_1 ;
-        %f( M+e(2) ) = f( M+e(2) ) + r_v * C_v_amb * term_2 ;
         f( M+e ) = f( M+e ) + r_v * C_v_amb * [ term_1 ; term_2 ] ;
     end
 end
@@ -298,7 +270,7 @@ end
 % Assemble H = [ H_u ; H_v]
 function H = assemble_H( coordinates, elements3, C, R_u, R_v )
     % coordinates       coordinates of vertices of mesh
-    % elements3         index of vertices that form trinagular elements
+    % elements3         index of vertices that form triangular elements
 
     % extract useful variables
     M = size(coordinates, 1) ;
@@ -309,74 +281,20 @@ function H = assemble_H( coordinates, elements3, C, R_u, R_v )
         % area of element
         area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
         
-        % in H_u
-        H( t )   = H( t )   + 1/3 * area * r(t) .* R_u(C(t), C(M+t)) ;
-        % in H_v
-        H( M+t ) = H( M+t ) - 1/3 * area * r(t) .* R_v(C(t), C(M+t)) ;
+        % quadrature points in each vertex
+        % H( t )   = H( t )   + 1/3 * area .* r(t) .* R_u(C(t), C(M+t)) ;
+        % H( M+t ) = H( M+t ) - 1/3 * area .* r(t) .* R_v(C(t), C(M+t)) ;
+        
+        % one quadrature point in the center of element t
+        H( t )   = H( t )   + area/3 * mean(r(t)) * R_u( mean(C(t)), mean(C(M+t)) ) ;
+        H( M+t ) = H( M+t ) - area/3 * mean(r(t)) * R_v( mean(C(t)), mean(C(M+t)) ) ;
         
     end
 end
 
 
-function [H, l] = assemble_H_lin( coordinates, elements3, C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v )
-    % coordinates       coordinates of vertices of mesh
-    % elements3         index of vertices that form trinagular elements
-    
-    % extract useful variables
-    M = size(coordinates, 1) ;
-    r = coordinates(:, 1) ;
-    
-    H = zeros(2*M, 2*M) ;
-    l = zeros(2*M, 1) ;
-    for t = elements3'
-        % area of element
-        area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
-        
-        % contribution of linearized R_u
-        l(t)   = l(t)   + 1/3 * area * r(t) .* ( R_u(C_u_amb, C_v_amb) ...
-                                               - C_u_amb*dR_u_u(C_u_amb, C_v_amb) ...
-                                               - C_v_amb*dR_u_v(C_u_amb, C_v_amb)) ;
-        % contribution of linearized R_v
-        l(M+t) = l(M+t) - 1/3 * area * r(t) .* ( R_v(C_u_amb, C_v_amb) ...
-                                               - C_u_amb*dR_v_u(C_u_amb, C_v_amb) ...
-                                               - C_v_amb*dR_v_v(C_u_amb, C_v_amb)) ;
-
-        for i = t'
-            % contribution from R_u
-            H(i, i)     = H(i, i)     + 1/3 * area * r(i) .* dR_u_u(C_u_amb, C_v_amb) ;
-            H(i, M+i)   = H(i, M+i)   + 1/3 * area * r(i) .* dR_u_v(C_u_amb, C_v_amb) ;
-            % contribution from R_v
-            H(M+i, i)   = H(M+i, i)   - 1/3 * area * r(i) .* dR_v_u(C_u_amb, C_v_amb) ; 
-            H(M+i, M+i) = H(M+i, M+i) - 1/3 * area * r(i) .* dR_v_v(C_u_amb, C_v_amb) ;
-        end
-        
-    end
-    
-end
-
-
-function H = assemble_H_lin_test( coordinates, elements3 )
-    % coordinates       coordinates of vertices of mesh
-    % elements3         index of vertices that form trinagular elements
-    
-    % extract useful variables
-    M = size(coordinates, 1) ;
-    r = coordinates(:, 1) ;
-    
-    H = zeros(2*M, 1) ;
-    for t = elements3'
-        
-        % area of element (can be positive or negative)
-        omega = det([ ones(1,3) ; coordinates(t, :)' ]) / 2 ;
-        
-        H(t) = H(t) + 1/12 * omega ;
-        
-    end
-
-end
-
-% Assemble Jacobian J = K + dH/dC
-function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, dR_v_v )
+% Assemble Jacobian J = dH/dC
+function J = assemble_J( coordinates, elements3, C, dR_u_u, dR_u_v, dR_v_u, dR_v_v )
     % coordinates       coordinates of vertices of mesh
     % elements3         index of vertices that form trinagular elements
 
@@ -385,22 +303,50 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
     r = coordinates(:, 1) ;
 
     J = zeros( 2*M, 2*M ) ;
-    for i = 1:M
-        % sum of areas of elements arount vertex i
-        T = elements3(any(elements3==i, 2), :) ;
-        s = 0 ;
-        for t = T'
-            s = s + abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
-        end
+    % quadrature points in each vertex
+%     for i = 1:M
+%         % sum of areas of elements arount vertex i
+%         T = elements3(any(elements3==i, 2), :) ;
+%         s = 0 ;
+%         for t = T'
+%             s = s + abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
+%         end
+%         J([i, M+i],[i, M+i]) = s/3 * r(i) * [   dR_u_u(C(i), C(M+i)) ,   dR_u_v(C(i), C(M+i)) ;
+%                                              - dR_v_u(C(i), C(M+i)) , - dR_v_v(C(i), C(M+i))] ;
+%                 
+%     end
+
+    % one quadrature point in the center of element t
+    for t = elements3'
         
-        % part derivative of H_u to C
-        J( i, i )     =  s/3 * r(i) * dR_u_u(C(i), C(M+i)) ;
-        J( i, M+i )   =  s/3 * r(i) * dR_u_v(C(i), C(M+i)) ;
+%         if (t==[1210;1192;1191])
+%             disp("looped over")
+%         end
         
-        % part derivative of H_v to C
-        J( M+i, i )   = -s/3 * r(i) * dR_v_u(C(i), C(M+i)) ;
-        J( M+i, M+i ) = -s/3 * r(i) * dR_v_v(C(i), C(M+i)) ;
+        area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
+        
+        J(t, t)     = J(t, t)     + area/9 * mean(r(t)) * dR_u_u( mean(C(t)), mean(C(M+t)) ) ;
+        J(t, M+t)   = J(t, M+t)   + area/9 * mean(r(t)) * dR_u_v( mean(C(t)), mean(C(M+t)) ) ;
+        
+        J(M+t, t)   = J(M+t, t)   - area/9 * mean(r(t)) * dR_v_u( mean(C(t)), mean(C(M+t)) ) ;
+        J(M+t, M+t) = J(M+t, M+t) - area/9 * mean(r(t)) * dR_v_v( mean(C(t)), mean(C(M+t)) ) ;
         
     end
-    J = J + K ;
+end
+
+
+function [J, l] = assemble_H_lin( coordinates, elements3, C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v )
+    % coordinates       coordinates of vertices of mesh
+    % elements3         index of vertices that form triangular elements
+    
+    % extract useful variables
+    M = size(coordinates, 1) ;
+    C_amb = [ C_u_amb*ones(M, 1) ; C_v_amb*ones(M, 1) ] ;
+    
+    % build linearization H ~ H(C_amb) + J(C_amb)*(C-C_amb)
+    H_c = assemble_H( coordinates, elements3, C_amb, R_u, R_v ) ;
+    J_c = assemble_J( coordinates, elements3, C_amb, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
+    
+    J   = J_c ;
+    l   = H_c - J_c*C_amb ;    
 end
