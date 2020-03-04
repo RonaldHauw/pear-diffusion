@@ -1,4 +1,4 @@
-%% Group 11 - Mars 4th 2020
+%% Group 11 - March 4th 2020
 % compute derivative of reaction functions
 
 clear all
