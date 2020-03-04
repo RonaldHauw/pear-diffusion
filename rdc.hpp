@@ -44,15 +44,17 @@ namespace pear {
 
             diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()), K);
             diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()), K);
-            resp_.f(x);
+            resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
+                    x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
 
         };
 
 
-        void J(mat_type & J){
-            J.setZero();
-            diff_o2_.J(J.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
-            diff_co2_.J(J.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
+        void J(mat_type & Jmat){
+            Jmat.setZero();
+            diff_o2_.J(Jmat.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
+            diff_co2_.J(Jmat.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
+            //resp_.J(Jmat);
         };
 
 

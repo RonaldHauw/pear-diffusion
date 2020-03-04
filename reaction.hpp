@@ -65,7 +65,8 @@ namespace pear {
         };
 
         void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) {
-            for (int t = 1; t < grid_.nb_elements(); t++) {
+            for (int t = 1; t < grid_.nb_elements()+1; t++) {
+
                 std::vector<int> elem_nodes = grid_.element(t);
 
                 d_type r1 = grid_.node(elem_nodes[0])[0];   d_type z1 = grid_.node(elem_nodes[0])[1];
