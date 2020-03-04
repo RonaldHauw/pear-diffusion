@@ -49,7 +49,7 @@ namespace pear {
         // Respiration dynamics: derivatives
 
         d_type dR_u_u(d_type C_u, d_type C_v){
-            return v_mu_ / (k_mu_ + C_u) / (1 + C_v/k_mv_) * (1 - C_u/(k_mu_+C_u));
+            return v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
         };
 
         d_type dR_u_v(d_type C_u, d_type C_v){
@@ -95,9 +95,11 @@ namespace pear {
         void J(Eigen::Ref<mat_type> dH) {
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
-
+                std::cout<<" elements = ["<<elements.size()<<"]"<<std::endl;
+                std::cout<<" node = "<<t<<std::endl;
                 d_type area = 0.;
                 for (int e = 1; e < elements.size()+1; e++) {
+<<<<<<< HEAD
                     std::vector<int> nodes = grid_.element(elements[e]);
                     d_type r1 = grid_.node(nodes[0])[0];   d_type z1 = grid_.node(nodes[0])[1];
                     d_type r2 = grid_.node(nodes[1])[0];   d_type z2 = grid_.node(nodes[1])[1];

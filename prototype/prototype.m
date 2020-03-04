@@ -86,7 +86,11 @@ K = assemble_K( coordinates, elements3, G2_edges, ...
                 s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
 % f = [ f_u ; f_v ]
 f = assemble_f( coordinates, G2_edges, ...
+<<<<<<< HEAD
                 r_u, r_v, C_u_amb, C_v_amb ); 
+=======
+                r_u, r_v, C_u_amb, C_v_amb ) ;
+>>>>>>> f13088a5727400895f9c5d5a5919bdcf32bf26a6
 % linearization of H = [ H_u(c_u, c_v) ; H_v(c_u, c_v)] around (C_u_amb, C_v_amb)
 [H, l] = assemble_H_lin( coordinates, elements3, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
@@ -95,7 +99,11 @@ f = assemble_f( coordinates, G2_edges, ...
 % set up linear system to solve
 A = K + H ;
 b = f - l ;
+<<<<<<< HEAD
 % C = A\b ;
+=======
+%C = A\b ;
+>>>>>>> f13088a5727400895f9c5d5a5919bdcf32bf26a6
 
 
 % Newton-Raphson iteration
@@ -341,6 +349,7 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
         % sum of areas of elements arount vertex i
         T = elements3(any(elements3==i, 2), :) ;
         s = 0 ;
+        
         for t = T'
             s = s + abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
         end
@@ -348,6 +357,7 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
         % part derivative of H_u to C
         J( i, i )     =  s/3. * r(i) * dR_u_u(C(i), C(M+i)) ;
         J( i, M+i )   =  s/3. * r(i) * dR_u_v(C(i), C(M+i)) ;
+
 
         % part derivative of H_v to C
         J( M+i, i )   = -s/3 * r(i) * dR_v_u(C(i), C(M+i)) ;
