@@ -129,7 +129,7 @@ namespace pear {
             std::vector<int> edge_nodes(15);         // Pre-allocation to upper-limit
 
             int N = 0;                                  // Number of elements found
-            for (int i = 0; i < nb_elements_ ; i++) {   // Loop on all the elements
+            for (int i = 1; i < nb_elements_ + 1 ; i++) {   // Loop on all the elements
 
                 if (elements_[3*(i-1)] == node || elements_[3*(i-1)+1] == node || elements_[3*(i-1)+2] == node){
                     ++N;                                                            // Update count
