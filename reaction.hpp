@@ -75,15 +75,11 @@ namespace pear {
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
 
-                std::cout << "For the element with nodes " << elem_nodes[0] << elem_nodes[1] << elem_nodes[2] << std::endl;
-                std::cout << "THIS IS THE AREA OH YEAH " << area << std::endl;
 
                 H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_o2(elem_nodes[2]-1) += r3 * R_u(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
 
-                std::cout << "individual " << r1 << " " << R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) << " " << o2_.concentration(elem_nodes[0]) << std::endl;
-                std::cout << "H02 " << r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. << std::endl;
 
                 H_co2(elem_nodes[0]-1) -= r1 * R_v(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_co2(elem_nodes[1]-1) -= r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
@@ -97,7 +93,6 @@ namespace pear {
                 std::vector<int> elements = grid_.elements_for_node(t);
                 d_type area = 0.;
                 for (int e = 1; e < elements.size()+1; e++) {
-<<<<<<< HEAD
 
                         std::vector<int> nodes = grid_.element(elements[e - 1]);
 
@@ -105,14 +100,7 @@ namespace pear {
                         d_type r2 = grid_.node(nodes[1])[0]; d_type z2 = grid_.node(nodes[1])[1];
                         d_type r3 = grid_.node(nodes[2])[0]; d_type z3 = grid_.node(nodes[2])[1];
                         area += (r2 * z3 - r3 * z2) - (r1 * z3 - r3 * z1) + (r1 * z2 - z1 * r2);
-=======
-<<<<<<< HEAD
-                    std::vector<int> nodes = grid_.element(elements[e]);
-                    d_type r1 = grid_.node(nodes[0])[0];   d_type z1 = grid_.node(nodes[0])[1];
-                    d_type r2 = grid_.node(nodes[1])[0];   d_type z2 = grid_.node(nodes[1])[1];
-                    d_type r3 = grid_.node(nodes[2])[0];   d_type z3 = grid_.node(nodes[2])[1];
-                    area += (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2);
->>>>>>> bd8d69fa922767a961f90083a00a7a787fe3a46c
+
                 };
 
                 dH(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;

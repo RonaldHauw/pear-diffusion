@@ -68,7 +68,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2 -ShelfLife -maxit 40 -vmuref 1e-7 -vmfvref 1e-7 -steplength 0.3
+!cd ../; ./pear_diffusion_2 -ShelfLife -maxit 40 -vmuref 1e-7 -vmfvref 1e-7 -steplength .3
 
 
 %% Plot the solution 
