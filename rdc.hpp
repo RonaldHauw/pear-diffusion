@@ -33,20 +33,14 @@ namespace pear {
                     std::cout<<"Reaction diffusion equation composed."<<std::endl;
                 }
 
-        void f(vec_type & x){
+        void f(vec_type & x, mat_type & workmat){
 
-            std::cout<<"pear::rdc.f(x): allocating work memory: "<<std::endl;
-            std::cout<<"       - mat_type of size ("<<diff_o2_.nb_nodes()<<", "<<diff_o2_.nb_nodes()<<")"<<std::endl;
+            x.setZero();
 
-            mat_type K;
-            K.resize(diff_o2_.nb_nodes(), diff_o2_.nb_nodes());
-
-
-            diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()), K);
-            diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()), K);
+            diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()), workmat);
+            diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()), workmat);
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
-
         };
 
 

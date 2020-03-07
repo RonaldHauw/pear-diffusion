@@ -79,39 +79,72 @@ int main(int argc, char* argv[]) {
     d_type eta_v = 0.04e-2;
 
 
-    if (argc>1) {
-        if (std::string(argv[1]) == "-ShelfLife") {
+    int nl_maxit = 10;
+    int set_environment = 0;
+    d_type steplength = 1.;
+    for (int i = 0; i <argc; i++) {
+        if (std::string(argv[i]) == "-ShelfLife" && set_environment == 0) {
             T = 293.15; // 20 degrees Celsius
             eta_u = 20.8e-2;
             eta_v = 0;
+            std::cout<<"Shelflife environment chosen"<<std::endl;
+            set_environment = 1;
         };
 
-        if (std::string(argv[1]) == "-Refrigerator") {
+        if (std::string(argv[i]) == "-Refrigerator" && set_environment == 0) {
             T = 280.15; // 7 degrees Celsius
             eta_u = 20.8e-2;
             eta_v = 0;
+            std::cout<<"Refrigerator environment chosen"<<std::endl;
+            set_environment = 1;
         };
 
-        if (std::string(argv[1]) == "-Precooling") {
+        if (std::string(argv[i]) == "-Precooling" && set_environment == 0) {
             T = 272.15; // -1 degrees Celsius
             eta_u = 20.8e-2;
             eta_v = 0;
+            std::cout<<"Precooling environment chosen"<<std::endl;
+            set_environment = 1;
         };
 
-        if (std::string(argv[1]) == "-DisorderInducing") {
+        if (std::string(argv[i]) == "-DisorderInducing" && set_environment == 0) {
             T = 272.15; // -1 degrees Celsius
             eta_u = 2e-2;
             eta_v = 5e-2;
+            std::cout<<"DisorderInducing environment chosen"<<std::endl;
+            set_environment = 1;
         };
 
-        if (std::string(argv[1]) == "-OptimalCA") {
+        if (std::string(argv[i]) == "-OptimalCA" && set_environment == 0) {
             T = 272.15; // -1 degrees Celsius
             eta_u = 2e-2;
             eta_v = 0.7e-2;
+            std::cout<<"OptimalCA environment chosen"<<std::endl;
+            set_environment = 1;
         };
-    }; // if argc>1
+        if (argc - i > 1) { // at least two arguments remain
+            if (std::string(argv[i]) == "-maxit") {
+                nl_maxit = std::stoi(argv[i + 1]);
+                std::cout<<"Setting maximum nonlinear iterations to: "<<nl_maxit<<std::endl;
+            }
+            if (std::string(argv[i]) == "-vmuref") {
+                v_mu_ref = std::stod(argv[i + 1]);
+                std::cout<<"Settig v_mu_ref to: "<<v_mu_ref<<std::endl;
+            }
+            if (std::string(argv[i]) == "-vmfvref") {
+                v_mfv_ref = std::stod(argv[i + 1]);
+                std::cout<<"Settig v_mfv_ref to: "<<v_mfv_ref<<std::endl;
+            }
+            if (std::string(argv[i]) == "-steplength") {
+                steplength = std::stod(argv[i + 1]);
+                std::cout<<"Settig steplength to: "<<steplength<<std::endl;
+            }
+        }
 
-    // vanwaar komt de Eigen
+    };
+
+    if (set_environment == 0){std::cout<<"Orchard environment chosen"<<std::endl;};
+
 
     // Respiration parameters
     d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1. / T_ref - 1. / T));
@@ -129,7 +162,6 @@ int main(int argc, char* argv[]) {
     std::cout<<"       - vec_type of size "<<grid.nb_nodes()*2<<std::endl;
     vec_type conc;
     conc.resize(grid.nb_nodes()*2, 1);
-    conc.setOnes(); // initial values
 
     // linearisatie
     // sparseheid patroon
@@ -140,6 +172,8 @@ int main(int argc, char* argv[]) {
 
     pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,        grid.nb_nodes(),     1);
     pear::component<d_type, vec_type> co2("CO_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
+    o2.set_initial(c_u_amb);
+    co2.set_initial(c_v_amb);
 
 
     pear::diffusion<d_type, vec_type, mat_type> diff_o2(o2, grid, diffusion_o2_param);
@@ -152,7 +186,7 @@ int main(int argc, char* argv[]) {
 
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
 
-    nlsolve.solve();
+    nlsolve.solve(nl_maxit, steplength);
 
 
     int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});

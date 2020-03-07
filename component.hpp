@@ -64,6 +64,11 @@ namespace pear {
             return grid_.nb_nodes();
         };
 
+        void set_initial(d_type c_amb){
+            this->cons().setOnes();
+            this->cons() *= c_amb;
+        }
+
     private:
         std::string name_;
         vec_type & concentration_;

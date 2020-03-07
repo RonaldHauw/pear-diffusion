@@ -30,29 +30,34 @@ namespace pear {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
 
-        int solve(){
+        int solve(int maxit = 10, d_type steplength = 1.){
 
             std::cout<<"pear::nlsolver.solve(): allocating work memory: "<<std::endl;
             std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
             std::cout<<"       - vec_type of size  "<<f_.size()<<std::endl;
+            std::cout<<"       - mat_type of size ("<<f_.size()/2<<", "<<f_.size()/2<<")"<<std::endl;
+            mat_type workmat;
+            workmat.resize(f_.size()/2, f_.size()/2);
             mat_type J; J.resize(f_.size(), f_.size());
             vec_type f; f.resize(f_.size(), 1);
-            vec_type dx; dx.resize(f_.size(), 1);
 
-            for (int i = 1; i<2; i++) {
-                // reset memory to zero
-                J.setZero();
-                f.setZero();
+            for (int i = 1; i<maxit; i++) {
                 // load the Jacobian and rhs
                 f_.J(J);
-                f_.f(f);
+                f_.f(f, workmat);
+                std::cout<<"iterations = "<<i<<"  residual = "<<f.norm()<<std::endl;
+
                 // solve the linear system
-                f_.cons() = f_.cons() - J.fullPivLu().solve(f) ;
+                f_.cons() = f_.cons() - steplength*J.fullPivLu().solve(f) ; // shortened step length
             }
             return 1;
         }
 
-
+// observation: CO2 keeps increasing in solution after O2 reaches zero
+// step length stabilizes
+// corresponds to Matlab
+// parsing
+//
     private:
         f_type f_;
     };

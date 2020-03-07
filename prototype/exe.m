@@ -25,7 +25,7 @@ axis equal;
 % Creation of the mesh
 model = createpde(1);
 geometryFromEdges(model,dl);
-mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',0.5,'Hmin',0.40);
+mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',0.15,'Hmin',0.04);
 pdeplot(model);
 
 
@@ -68,7 +68,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2
+!cd ../; ./pear_diffusion_2 -ShelfLife -maxit 40 -vmuref 1e-7 -vmfvref 1e-7 -steplength 0.3
 
 
 %% Plot the solution 
