@@ -42,10 +42,16 @@ namespace pear {
             mat_type J2; J2.resize(f_.size(), f_.size());
             vec_type f; f.resize(f_.size(), 1);
             vec_type f2; f2.resize(f_.size(), 1);
+            vec_type f3; f3.resize(f_.size(), 1);
 
             d_type cur_alpha = 0.0;
             f_.suppress_nonlinearity(cur_alpha);
+
+            d_type res = 1.0;
+
             for (int i = 0; i < 1./alpha; i++){
+
+
                 // prediction step
                 f_.f_react_only(f2, workmat);  // f stores H
                 f_.J_diff_only(J); // J stores K
@@ -56,18 +62,32 @@ namespace pear {
                 f_.suppress_nonlinearity(cur_alpha);
 
                 for (int j = 1; j < maxit; j++ ){
-                    if (f.norm()>1e-9){
-                        steplength = 0.3;
-                    } else if(f.norm()>1e-8) {
-                        steplength = 0.2;
-                    } else {
-                        steplength = 0.99;
-                    }
+
                     f_.f(f, workmat);
                     f_.J(J);
-                    f_.cons() = f_.cons() - steplength*J.fullPivLu().solve(f) ; // shortened step length
-                    std::cout<<"iterations = "<<i<<"  newton residual = "<<f.norm()<<std::endl;
-                    if (f.norm() < 1e-20) {
+                    f2 = J.fullPivLu().solve(f);  // direction
+
+                    res = f.norm();
+
+                    steplength = 1.;
+                    f = f_.cons(); // store current concentrations
+
+                    for (int k = 0; k < 100; k++){
+                        f_.cons() = f-steplength*f2;
+                        f_.f(f3, workmat); // residual
+                        if (f3.norm()>res) {
+                            steplength *= 0.5;
+                        } else {
+                            std::cout<<"steplength = "<<steplength<<std::endl;
+                            break;
+                        }
+                    }
+
+
+                    res = f3.norm();
+
+                    std::cout<<"iterations = "<<i<<"  newton residual = "<<res<<std::endl;
+                    if (res < 5e-19) {
                         break;
                     }
                 }
