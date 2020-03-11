@@ -32,6 +32,7 @@ namespace pear {
                 , k_mv_(param[3])
                 , k_mfu_(param[4])
                 , r_q_(param[5])
+                , alpha_(1.) // used to suppress nonlinearity
         {
             std::cout<<"Respiration between O2 and CO2"<<std::endl;
         }
@@ -39,25 +40,25 @@ namespace pear {
         // Respiration dynamics: functions
 
         d_type R_u(d_type C_u, d_type C_v){
-            return v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
+            return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
         };
 
         d_type R_v(d_type C_u, d_type C_v){
-            return r_q_*R_u(C_u, C_v) + v_mfv_/(1+C_u/k_mfu_);
+            return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
         };
 
         // Respiration dynamics: derivatives
 
         d_type dR_u_u(d_type C_u, d_type C_v){
-            return v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
+            return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
         };
 
         d_type dR_u_v(d_type C_u, d_type C_v){
-            return -1 / k_mv_ * v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
+            return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
         };
 
         d_type dR_v_u(d_type C_u, d_type C_v){
-            return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
+            return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
         };
 
         d_type dR_v_v(d_type C_u, d_type C_v){
@@ -74,7 +75,6 @@ namespace pear {
                 d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
-
 
                 H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
@@ -113,11 +113,18 @@ namespace pear {
 
         };
 
+        void suppress_nonlinearity(d_type alpha){
+            //if (alpha <= 0) {alpha_ = exp(alpha);}
+            //else { alpha_ = 1.; };
+            alpha_ = alpha;
+            std::cout<<"pear::respiration.suppress_nonlinearity(): alpha_ = "<<alpha_<<std::endl;
+        };
+
     private:
         pear::component<d_type, vec_type> & o2_;
         pear::component<d_type, vec_type> & co2_;
         pear::grid<d_type> & grid_;
-        d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_;
+        d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_, alpha_;
     };
 
 

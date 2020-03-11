@@ -82,6 +82,7 @@ int main(int argc, char* argv[]) {
     int nl_maxit = 10;
     int set_environment = 0;
     d_type steplength = 1.;
+    d_type alpha = 1.;
     for (int i = 0; i <argc; i++) {
         if (std::string(argv[i]) == "-ShelfLife" && set_environment == 0) {
             T = 293.15; // 20 degrees Celsius
@@ -139,6 +140,10 @@ int main(int argc, char* argv[]) {
                 steplength = std::stod(argv[i + 1]);
                 std::cout<<"Settig steplength to: "<<steplength<<std::endl;
             }
+            if (std::string(argv[i]) == "-anl") {
+                alpha = std::stod(argv[i + 1]);
+                std::cout<<"Adaptive nonlinearity: "<<alpha<<std::endl;
+            }
         }
 
     };
@@ -151,7 +156,7 @@ int main(int argc, char* argv[]) {
     d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1. / T_ref - 1. / T));
     std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
 
-    // Boundary parameters // remove last hard coded number
+    // Boundary parameters // remove last hard coded number changed to zero!
     d_type c_u_amb = p_atm * eta_u / (R_g * T);
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
     std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
@@ -162,6 +167,7 @@ int main(int argc, char* argv[]) {
     std::cout<<"       - vec_type of size "<<grid.nb_nodes()*2<<std::endl;
     vec_type conc;
     conc.resize(grid.nb_nodes()*2, 1);
+    //conc.setZero();
 
     // linearisatie
     // sparseheid patroon
@@ -186,7 +192,7 @@ int main(int argc, char* argv[]) {
 
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
 
-    nlsolve.solve(nl_maxit, steplength);
+    nlsolve.solve(nl_maxit, steplength, alpha);
 
 
     int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});

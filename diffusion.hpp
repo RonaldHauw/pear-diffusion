@@ -104,9 +104,9 @@ namespace pear {
 
                  //std::cout<<" p1 = "<<parallel_term_1<<"  p2 = "<<parallel_term_2<<" c = "<<cross_term<<std::endl;
 
-                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;
-                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term ;
-                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term ;
+                 K( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;// add Camb?
+                 K( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term      ;
+                 K( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term      ;
                  K( edge_nodes[1]-1, edge_nodes[1]-1 )  += r_ * parallel_term_2 ;
 
              }

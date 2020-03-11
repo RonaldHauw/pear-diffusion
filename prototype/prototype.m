@@ -102,11 +102,11 @@ b = f - l ;
 
 
 % Newton-Raphson iteration
-for n=1:200
+for n=1:2
     
     % K = [ K_u , 0 ; 0 , K_v ]
     K = assemble_K( coordinates, elements3, G2_edges, ...
-                    s_ur, s_vr, s_uz, s_vz, r_u, r_v );
+                    s_ur, s_vr, s_uz, s_vz, r_u, r_v )
     % f = [ f_u ; f_v ]
     f = assemble_f( coordinates, G2_edges, ...
                     r_u, r_v, C_u_amb, C_v_amb ) ;

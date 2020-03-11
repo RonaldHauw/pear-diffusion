@@ -30,7 +30,7 @@ namespace pear {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
 
-        int solve(int maxit = 10, d_type steplength = 1.){
+        int solve(int maxit = 10, d_type steplength = 1., d_type alpha = 0.){
 
             std::cout<<"pear::nlsolver.solve(): allocating work memory: "<<std::endl;
             std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
@@ -39,16 +39,38 @@ namespace pear {
             mat_type workmat;
             workmat.resize(f_.size()/2, f_.size()/2);
             mat_type J; J.resize(f_.size(), f_.size());
+            mat_type J2; J2.resize(f_.size(), f_.size());
             vec_type f; f.resize(f_.size(), 1);
+            vec_type f2; f2.resize(f_.size(), 1);
 
-            for (int i = 1; i<maxit; i++) {
-                // load the Jacobian and rhs
-                f_.J(J);
-                f_.f(f, workmat);
-                std::cout<<"iterations = "<<i<<"  residual = "<<f.norm()<<std::endl;
+            d_type cur_alpha = 0.0;
+            f_.suppress_nonlinearity(cur_alpha);
+            for (int i = 0; i < 1./alpha; i++){
+                // prediction step
+                f_.f_react_only(f2, workmat);  // f stores H
+                f_.J_diff_only(J); // J stores K
+                f_.J_react_only(J2); // J2 stores dHdc
+                J = J+cur_alpha*J2; // J stores dGammadc
+                f_.cons() = f_.cons() + alpha*J.fullPivLu().solve(f2);
+                cur_alpha += alpha; // take a step
+                f_.suppress_nonlinearity(cur_alpha);
 
-                // solve the linear system
-                f_.cons() = f_.cons() - steplength*J.fullPivLu().solve(f) ; // shortened step length
+                for (int j = 1; j < maxit; j++ ){
+                    if (f.norm()>1e-9){
+                        steplength = 0.3;
+                    } else if(f.norm()>1e-8) {
+                        steplength = 0.2;
+                    } else {
+                        steplength = 0.99;
+                    }
+                    f_.f(f, workmat);
+                    f_.J(J);
+                    f_.cons() = f_.cons() - steplength*J.fullPivLu().solve(f) ; // shortened step length
+                    std::cout<<"iterations = "<<i<<"  newton residual = "<<f.norm()<<std::endl;
+                    if (f.norm() < 1e-20) {
+                        break;
+                    }
+                }
             }
             return 1;
         }
@@ -58,6 +80,12 @@ namespace pear {
 // corresponds to Matlab
 // parsing
 //
+// boundary conditions violated
+// add C_amb?
+// dubbele randpunten zijn een issue
+
+
+
     private:
         f_type f_;
     };

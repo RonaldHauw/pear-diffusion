@@ -25,7 +25,7 @@ axis equal;
 % Creation of the mesh
 model = createpde(1);
 geometryFromEdges(model,dl);
-mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',0.15,'Hmin',0.04);
+mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',0.3,'Hmin',0.2);
 pdeplot(model);
 
 
@@ -36,15 +36,15 @@ Elements = [(1:size(mesh.Elements,2))' mesh.Elements'];
 InnerBNodes = findNodes(mesh,'region','Edge',[3 4 5]);
 OuterBNodes = findNodes(mesh,'region','Edge',[1 6 7]);
 
-figure
-pdemesh(model,'NodeLabels','on')
-hold on
-plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
+%figure
+%pdemesh(model,'NodeLabels','on')
+%hold on
+%plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
 
-figure
-pdemesh(model,'NodeLabels','on')
-hold on
-plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
+%figure
+%pdemesh(model,'NodeLabels','on')
+%hold on
+%plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
 
 OuterBEdges = zeros(size(OuterBNodes, 2)-1, 3);
 for i = 1:size(OuterBNodes, 2)-1
@@ -68,8 +68,11 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2 -ShelfLife -maxit 40 -vmuref 1e-7 -vmfvref 1e-7 -steplength .3
-
+!cd ../; ./pear_diffusion_2 -maxit 1000 -steplength 1. -anl 1. 
+ 
+% observation: if residuals keep decreasing uniformly, the plausible
+% solution is attained
+% observation:
 
 %% Plot the solution 
 sol_o2 = readmatrix('mesh/solution_O_2.txt'); 
