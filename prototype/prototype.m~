@@ -19,7 +19,7 @@ load mesh/HalfCircleMesh_Data.mat
 % load mesh/HCT_Fine_Mesh.mat
 % load mesh/HCT_Fine_Mesh_Data.mat
 %
-coordinates = mesh.Nodes'/15 ;
+coordinates = mesh.Nodes'/20 ;
 % coordinates(:, 2) = coordinates(:, 2) + 2 ;
 r           = coordinates(:, 1) ;
 z           = coordinates(:, 2) ;
@@ -103,8 +103,6 @@ C = (K+J)\(f-l) ;
 % C = max(0, C) ;
 % C = [ C_u_amb*ones(M, 1) ; C_v_amb*ones(M, 1) ] ;
 
-
-% C = C + min(C) ;
 
 % SOLVE NONLINEAR SYSTEM
 % Newton-Raphson iteration

@@ -1,5 +1,5 @@
 %% Group 11 - March 4th 2020
-% compute derivative of reaction functions
+% verify derivative of reaction functions
 
 clear all
 clc
