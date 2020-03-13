@@ -74,6 +74,7 @@ namespace pear {
 
                  // (sigma_r_*C_12_1+sigma_z_*C_12_2) checked with matlab
                  K(elem_nodes[0]-1, elem_nodes[1]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r; // checked with matlab
+                 //K.coeffRef(elem_nodes[0]-1, elem_nodes[1]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
                  K(elem_nodes[1]-1, elem_nodes[0]-1) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
 
                  K(elem_nodes[1]-1, elem_nodes[2]-1) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;

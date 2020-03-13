@@ -7,6 +7,7 @@
 #include <random>
 #include "nlsolver.hpp"
 #include "eigen/Eigen/Dense"
+#include "eigen/Eigen/Sparse"
 
 template<typename d_type, typename vec_type>
 int export_solution(std::string const file_name, pear::grid<d_type> grid, std::vector<pear::component<d_type, vec_type>> components){

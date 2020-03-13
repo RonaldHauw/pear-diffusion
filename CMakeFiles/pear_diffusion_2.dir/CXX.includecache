@@ -1665,6 +1665,8 @@ nlsolver.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/nlsolver.hpp
 eigen/Eigen/Dense
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen/Eigen/Dense
+eigen/Eigen/Sparse
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/eigen/Eigen/Sparse
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/nlsolver.hpp
 cassert
