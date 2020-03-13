@@ -15,6 +15,7 @@ load mesh/HCTmesh3_Data.mat
 coordinates = Nodes;
 r           = coordinates(:, 2) ;
 z           = coordinates(:, 3) ;
+
 elements3   = Elements( : , 2:end ) ;
 G1_edges    = InnerBEdges( :, 2:end ) ;
 G1_nodes    = InnerBNodes' ;
@@ -80,6 +81,7 @@ R_v_lin = @(c_u, c_v) R_v(C_u_amb, C_v_amb) + dR_v_u(C_u_amb, C_v_amb)*(c_u-C_u_
 C = ones(2*M,1);
 
 
+
 % find solution of linearized system to initialize Newton-Raphson 
 % K = [ K_u , 0 ; 0 , K_v ]
 K = assemble_K( coordinates, elements3, G2_edges, ...
@@ -92,6 +94,7 @@ f = assemble_f( coordinates, G2_edges, ...
                          C_u_amb, C_v_amb, R_u, R_v, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
 
         
+
 
 % minus sign in front of second linearization in R_v is already accounted for
 
@@ -107,6 +110,7 @@ for n=1:2
     % K = [ K_u , 0 ; 0 , K_v ]
     K = assemble_K( coordinates, elements3, G2_edges, ...
                     s_ur, s_vr, s_uz, s_vz, r_u, r_v )
+
     % f = [ f_u ; f_v ]
     f = assemble_f( coordinates, G2_edges, ...
                     r_u, r_v, C_u_amb, C_v_amb ) ;
@@ -127,6 +131,7 @@ for n=1:2
     % check for convergence
     norm(P)
     if norm(P) < 10^(-8)
+
         disp("stop at iteration " + num2str(n) ) ;
         break
     end
@@ -139,6 +144,7 @@ show(elements3,[],coordinates(:, 2:3),C(1:M)); % full(C(1:M))
 title('oxygen')
 subplot(1, 2, 2)
 show(elements3,[],coordinates(:, 2:3),C(M+1:end));
+
 title('carbon dioxide')
 
 %%
@@ -169,6 +175,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         % sum of r-coordinates
         sum_r = sum(coordinates(t, 2), 1); 
         
+
         
         % for j different from i
         C_12 = 1/6 * 1/2/omega * [ (z(1)-z(3))*(z(3)-z(2)) ; (r(1)-r(3))*(r(3)-r(2))] ;
@@ -176,7 +183,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         C_13 = 1/6 * 1/2/omega * [ (z(1)-z(2))*(z(2)-z(3)) ; (r(1)-r(2))*(r(2)-r(3))] ;
         %
         K(t(1),   t(2))   = K(t(1),   t(2))   + [s_ur, s_uz] * C_12 * sum_r ;
-                
+
         K(t(2),   t(1))   = K(t(2),   t(1))   + [s_ur, s_uz] * C_12 * sum_r ;
         %
         K(t(2),   t(3))   = K(t(2),   t(3))   + [s_ur, s_uz] * C_23 * sum_r ;
@@ -198,8 +205,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         C_11 = 1/6 * 1/2/omega * [ (z(2)-z(3))^2 ; (r(2)-r(3))^2] ;
         C_22 = 1/6 * 1/2/omega * [ (z(1)-z(3))^2 ; (r(1)-r(3))^2] ;
         C_33 = 1/6 * 1/2/omega * [ (z(1)-z(2))^2 ; (r(1)-r(2))^2] ;
-        
-        %
+
         K(t(1),   t(1))   = K(t(1),   t(1))   + [s_ur, s_uz] * C_11 * sum_r ;
         K(t(2),   t(2))   = K(t(2),   t(2))   + [s_ur, s_uz] * C_22 * sum_r ;
         K(t(3),   t(3))   = K(t(3),   t(3))   + [s_ur, s_uz] * C_33 * sum_r ;
@@ -225,7 +231,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         parallel_term_1     = 1./12 * len * ( 3*r(e(1)) +   r(e(2)) ) ;
         parallel_term_2     = 1./12 * len * (   r(e(1)) + 3*r(e(2)) ) ;
         cross_term          = 1./12 * len * (   r(e(1)) +   r(e(2)) ) ;
-        
+
         % in K_u
         K( e(1),   e(1) )   = K( e(1), e(1) )     + r_u * parallel_term_1 ;
         K( e(1),   e(2) )   = K( e(1), e(2) )     + r_u * cross_term ;
@@ -250,6 +256,7 @@ function f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb )
     M = size(coordinates, 1) ;
     r = coordinates(:, 2) ;
     z = coordinates(:, 3) ;
+
     
     f = zeros( 2*M, 1 ) ;
     for e = G2_edges'
@@ -278,11 +285,13 @@ function H = assemble_H( coordinates, elements3, C, R_u, R_v )
     % extract useful variables
     M = size(coordinates, 1) ;
     r = coordinates(:, 2) ;
+
     
     H = zeros( 2*M, 1 ) ;
     for t = elements3'
         % area of element
         area = abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
+
         
         % in H_u
         H( t )   = H( t )   + 1/3*area * r(t) .* R_u(C(t), C(M+t)) ;
@@ -291,6 +300,7 @@ function H = assemble_H( coordinates, elements3, C, R_u, R_v )
         
     end
     H_= H
+
 end
 
 
@@ -301,12 +311,14 @@ function [H, l] = assemble_H_lin( coordinates, elements3, C_u_amb, C_v_amb, R_u,
     % extract useful variables
     M = size(coordinates, 1) ;
     r = coordinates(:, 2) ;
+
     
     H = zeros(2*M, 2*M) ;
     l = zeros(2*M, 1) ;
     for t = elements3'
         % area of element
         area = abs(det([ ones(1,3) ; coordinates(t, 2:3)' ])) / 2 ;
+
         
         % contribution of linearized R_u
         l(t)   = l(t)   + 1/3 * area * r(t) .* ( R_u(C_u_amb, C_v_amb) ...
@@ -340,6 +352,7 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
     M = size(coordinates, 1) ;
     r = coordinates(:, 2) ;
 
+
     J = zeros( 2*M, 2*M ) ;
     for i = 1:M
         % sum of areas of elements arount vertex i
@@ -355,12 +368,12 @@ function J = assemble_J( coordinates, elements3, C, K, dR_u_u, dR_u_v, dR_v_u, d
         J( i, i )     =  s/3. * r(i) * dR_u_u(C(i), C(M+i)) ;
         J( i, M+i )   =  s/3. * r(i) * dR_u_v(C(i), C(M+i)) ;
 
+
         % part derivative of H_v to C
         J( M+i, i )   = -s/3 * r(i) * dR_v_u(C(i), C(M+i)) ;
         J( M+i, M+i ) = -s/3 * r(i) * dR_v_v(C(i), C(M+i)) ;
         
 
-        
     end
     J = J + K ;
 end
