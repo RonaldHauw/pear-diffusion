@@ -16,14 +16,22 @@ for i = 1:length(sol_o2)
 end
 
 
+t = linspace(0, max(r_o2), 200); 
+ft_o2 = 0.5*(t.^2-1)+8.5; 
+ft_co2 =-0.5*(t.^2-1) + 0.0163; 
+
 figure()
 subplot(1, 2, 1)
 scatter(r_o2, c_o2)
+hold on
+plot(t, ft_o2)
 title('oxygen')
 xlabel('radius')
 ylabel('concentration')
 subplot(1, 2, 2)
 scatter(r_co2, c_co2)
+hold on
+plot(t, ft_co2)
 title('carbon dioxide')
 xlabel('radius')
 ylabel('concentration')

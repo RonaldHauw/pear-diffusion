@@ -45,34 +45,40 @@ namespace pear {
 
         d_type R_u(d_type C_u, d_type C_v){
             //return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
-            return sigma_u_*(C_u+exp(1)+C_u_amb_)+sigma_u_*(C_u+exp(1)+C_u_amb_)*(C_v+1-C_v_amb_);
+            //return sigma_u_*(C_u+exp(1)+C_u_amb_)+sigma_u_*(C_u+exp(1)+C_u_amb_)*(C_v+1-C_v_amb_);
+            return 3*sigma_u_;
         };
 
         d_type R_v(d_type C_u, d_type C_v){
             //return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
-            return sigma_v_;
+            //return sigma_v_;
+            return 3*sigma_v_;
         };
 
         // Respiration dynamics: derivatives
 
         d_type dR_u_u(d_type C_u, d_type C_v){
             //return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
-            return sigma_u_*(1+C_v+1-C_v_amb_);
+           //return sigma_u_*(1+C_v+1-C_v_amb_);
+            return 0.;
         };
 
         d_type dR_u_v(d_type C_u, d_type C_v){
             //return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
-            return sigma_u_*(C_u+exp(1)+C_u_amb_);
+            //return sigma_u_*(C_u+exp(1)+C_u_amb_);
+            return 0.;
         };
 
         d_type dR_v_u(d_type C_u, d_type C_v){
             //return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
-            return 0.0;
+            //return 0.0;
+            return 0.;
         };
 
         d_type dR_v_v(d_type C_u, d_type C_v){
             //return r_q_*dR_u_v(C_u, C_v);
-            return 0.0;
+            //return 0.0;
+            return 0.;
         };
 
         void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) { // checked with Matlab
@@ -85,6 +91,7 @@ namespace pear {
                 d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
+                area *= 2; // added by ronald
 
                 H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
@@ -110,6 +117,7 @@ namespace pear {
                         d_type r2 = grid_.node(nodes[1])[0]; d_type z2 = grid_.node(nodes[1])[1];
                         d_type r3 = grid_.node(nodes[2])[0]; d_type z3 = grid_.node(nodes[2])[1];
                         area += (r2 * z3 - r3 * z2) - (r1 * z3 - r3 * z1) + (r1 * z2 - z1 * r2);
+                        area *= 2; // added by ronald
 
                 };
 
@@ -124,8 +132,6 @@ namespace pear {
         };
 
         void suppress_nonlinearity(d_type alpha){
-            //if (alpha <= 0) {alpha_ = exp(alpha);}
-            //else { alpha_ = 1.; };
             alpha_ = alpha;
             std::cout<<"pear::respiration.suppress_nonlinearity(): alpha_ = "<<alpha_<<std::endl;
         };

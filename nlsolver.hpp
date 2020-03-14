@@ -30,7 +30,7 @@ namespace pear {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
 
-        int solve(int maxit = 10, d_type steplength = 1., d_type alpha = 0.){
+        int solve(int maxit = 10, int minit = 0, d_type steplength = 1., d_type alpha = 0.){
 
             std::cout<<"pear::nlsolver.solve(): allocating work memory: "<<std::endl;
             std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
@@ -86,8 +86,8 @@ namespace pear {
 
                     res = f3.norm();
 
-                    std::cout<<"iterations = "<<i<<"  newton residual = "<<res/f_.cons().norm()<<std::endl;
-                    if (res < 5e-19) {
+                    std::cout<<"iterations = "<<i<<"  newton residual = "<<res<<std::endl;
+                    if (res < 5e-19 && j > minit) {
                         break;
                     }
                 }

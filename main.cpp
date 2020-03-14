@@ -16,7 +16,6 @@ int export_solution(std::string const file_name, pear::grid<d_type> grid, std::v
         std::ofstream file;
         file.open(file_name+"_"+comp.name()+".txt");
         for (int n = 1; n < grid.nb_nodes()+1; n++){
-            std::cout<<n<<std::endl;
             file
             <<n
             <<" "<<grid.node(n)[0]
@@ -82,6 +81,7 @@ int main(int argc, char* argv[]) {
 
 
     int nl_maxit = 10;
+    int nl_minit = 0;
     int set_environment = 0;
     d_type steplength = 1.;
     d_type alpha = 1.;
@@ -129,6 +129,10 @@ int main(int argc, char* argv[]) {
             if (std::string(argv[i]) == "-maxit") {
                 nl_maxit = std::stoi(argv[i + 1]);
                 std::cout<<"Setting maximum nonlinear iterations to: "<<nl_maxit<<std::endl;
+            }
+            if (std::string(argv[i]) == "-minit") {
+                nl_minit = std::stoi(argv[i + 1]);
+                std::cout<<"Setting minimum nonlinear iterations to: "<<nl_minit<<std::endl;
             }
             if (std::string(argv[i]) == "-vmuref") {
                 v_mu_ref = std::stod(argv[i + 1]);
@@ -180,7 +184,7 @@ int main(int argc, char* argv[]) {
 
     // automatically deallocated pointers
 
-    pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,        grid.nb_nodes(),     1);
+    pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,               grid.nb_nodes(),     1);
     pear::component<d_type, vec_type> co2("CO_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
     o2.set_initial(c_u_amb);
     co2.set_initial(c_v_amb);
@@ -196,7 +200,7 @@ int main(int argc, char* argv[]) {
 
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
 
-    nlsolve.solve(nl_maxit, steplength, alpha);
+    nlsolve.solve(nl_maxit, nl_minit, steplength, alpha);
 
 
     int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});

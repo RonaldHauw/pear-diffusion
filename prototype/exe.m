@@ -3,9 +3,11 @@
 %   P   :   Vector of size 1xN containing the sampled points describing the
 %   boundary of the pear
 
-radius = 1.; 
+radius = 1; 
+grid_finess = 18; 
+pear_shape = 0.85; 
 
-x_zero = radius-0.85*radius;
+x_zero = radius-pear_shape*radius;
 a = - x_zero * (radius^2 - x_zero^2)^(-0.5);
 y_zero = sqrt(radius^2-x_zero^2);
 y_high = y_zero - a * x_zero;
@@ -27,7 +29,7 @@ axis equal;
 % Creation of the mesh
 model = createpde(1);
 geometryFromEdges(model,dl);
-mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',radius/20+radius/20*0.5,'Hmin',radius/20);
+mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',radius/grid_finess+radius/grid_finess*0.5,'Hmin',radius/grid_finess);
 pdeplot(model);
 
 
@@ -70,7 +72,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -minit 1
  
 % observation: if residuals keep decreasing uniformly, the plausible
 % solution is attained
@@ -92,5 +94,5 @@ subplot(1, 2, 2)
 show(elements3,[],coordinates,full(sol_co2(1:end, 4)));
 title('carbon dioxide')
 
-
+plot_radius
 
