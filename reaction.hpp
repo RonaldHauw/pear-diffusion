@@ -22,7 +22,8 @@ namespace pear {
         respiration(pear::component<d_type, vec_type> & co2,
                 pear::component<d_type, vec_type> & o2,
                 pear::grid<d_type> & grid,
-                std::vector<d_type> & param)
+                std::vector<d_type> & param,
+                int example_rhs)
                 : o2_(o2)
                 , co2_(co2)
                 , grid_(grid)
@@ -37,6 +38,7 @@ namespace pear {
                 , sigma_v_(param[7])
                 , C_u_amb_(param[8])
                 , C_v_amb_(param[9])
+                , example_rhs_(example_rhs)
         {
             std::cout<<"Respiration between O2 and CO2"<<std::endl;
         }
@@ -44,41 +46,79 @@ namespace pear {
         // Respiration dynamics: functions
 
         d_type R_u(d_type C_u, d_type C_v){
-            //return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
-            //return sigma_u_*(C_u+exp(1)+C_u_amb_)+sigma_u_*(C_u+exp(1)+C_u_amb_)*(C_v+1-C_v_amb_);
-            return 3*sigma_u_;
+            if (example_rhs_ == 1){
+                return 6*sigma_u_;
+            } else if (example_rhs_ == 2){
+                return 6*sigma_u_/(1+C_v);
+            } else if (example_rhs_ == 3){
+                return 20*sigma_u_*(1-C_v+C_v_amb_);
+            } else {
+                return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
+            }
+
         };
 
         d_type R_v(d_type C_u, d_type C_v){
-            //return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
-            //return sigma_v_;
-            return 3*sigma_v_;
+            if (example_rhs_ == 1) {
+                return 6 * sigma_v_;
+            } else if (example_rhs_ == 2){
+                return 6*sigma_v_/(1-C_u);
+            } else if (example_rhs_ == 3){
+                return 6 * sigma_v_;
+            } else {
+                return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
+            }
         };
 
         // Respiration dynamics: derivatives
 
         d_type dR_u_u(d_type C_u, d_type C_v){
-            //return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
-           //return sigma_u_*(1+C_v+1-C_v_amb_);
-            return 0.;
+           if (example_rhs_ == 1){
+               return 0.;
+           } else if (example_rhs_ == 2){
+               return 0.;
+           } else if (example_rhs_ == 3){
+               return 0.;
+           } else {
+               return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
+           }
+
         };
 
         d_type dR_u_v(d_type C_u, d_type C_v){
-            //return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
-            //return sigma_u_*(C_u+exp(1)+C_u_amb_);
-            return 0.;
+            if (example_rhs_ == 1){
+                return 0.;
+            } else if (example_rhs_ == 2){
+                return -6*sigma_u_/((1+C_v)*(1+C_v));
+            } else if (example_rhs_ == 3){
+                return -20*sigma_u_;
+            } else {
+                return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
+            }
         };
 
         d_type dR_v_u(d_type C_u, d_type C_v){
-            //return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
-            //return 0.0;
-            return 0.;
+            if (example_rhs_ == 1){
+                return 0.;
+            } else if (example_rhs_ == 2){
+                return 6*sigma_v_/((1-C_u)*(1-C_u));
+            } else if (example_rhs_ == 3){
+                return 0.;
+            } else {
+                return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
+            }
         };
 
         d_type dR_v_v(d_type C_u, d_type C_v){
-            //return r_q_*dR_u_v(C_u, C_v);
-            //return 0.0;
-            return 0.;
+            if (example_rhs_ == 1){
+                return 0.;
+            } else if (example_rhs_ == 2){
+                return 0.;
+            } else if (example_rhs_ == 3){
+                return 0.;
+            } else {
+                return r_q_*dR_u_v(C_u, C_v);
+            }
         };
 
         void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) { // checked with Matlab
@@ -91,7 +131,6 @@ namespace pear {
                 d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
-                area *= 2; // added by ronald
 
                 H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
@@ -117,7 +156,6 @@ namespace pear {
                         d_type r2 = grid_.node(nodes[1])[0]; d_type z2 = grid_.node(nodes[1])[1];
                         d_type r3 = grid_.node(nodes[2])[0]; d_type z3 = grid_.node(nodes[2])[1];
                         area += (r2 * z3 - r3 * z2) - (r1 * z3 - r3 * z1) + (r1 * z2 - z1 * r2);
-                        area *= 2; // added by ronald
 
                 };
 
@@ -125,9 +163,7 @@ namespace pear {
                 dH(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-              //  std::cout<<"dH(t-1, t-1) = "<<dH(t-1, t-1)<<" dH(t-1, t + N-1) =  "<<dH(t-1, t + grid_.nb_nodes() -1)<<"  dH(t + N -1, t-1) = "<<dH(t + grid_.nb_nodes() -1, t-1)<<std::endl;
             };
-            //std::cout<<"dH = \n"<<dH<<std::endl;
 
         };
 
@@ -141,6 +177,7 @@ namespace pear {
         pear::component<d_type, vec_type> & co2_;
         pear::grid<d_type> & grid_;
         d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_, alpha_, sigma_u_, sigma_v_, C_u_amb_, C_v_amb_;
+        int example_rhs_;
     };
 
 

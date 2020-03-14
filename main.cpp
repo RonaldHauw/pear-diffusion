@@ -82,6 +82,7 @@ int main(int argc, char* argv[]) {
 
     int nl_maxit = 10;
     int nl_minit = 0;
+    int example_rhs = 0;
     int set_environment = 0;
     d_type steplength = 1.;
     d_type alpha = 1.;
@@ -146,10 +147,19 @@ int main(int argc, char* argv[]) {
                 steplength = std::stod(argv[i + 1]);
                 std::cout<<"Settig steplength to: "<<steplength<<std::endl;
             }
-            if (std::string(argv[i]) == "-anl") {
+            if (std::string(argv[i]) == "-continuation") {
                 alpha = std::stod(argv[i + 1]);
                 std::cout<<"Adaptive nonlinearity: "<<alpha<<std::endl;
             }
+            if (std::string(argv[i]) == "-example_rhs") {
+                example_rhs = std::stoi(argv[i + 1]);
+                std::cout<<"Chosen example rhs: "<<example_rhs<<std::endl;
+                if (example_rhs != 0 ){
+                    sigma_v_z = sigma_v_r;
+                    sigma_u_z = sigma_u_r;
+                }
+            }
+
         }
 
     };
@@ -194,7 +204,7 @@ int main(int argc, char* argv[]) {
     pear::diffusion<d_type, vec_type, mat_type> diff_co2(co2, grid, diffusion_co2_param);
 
 
-    pear::respiration<d_type, vec_type, mat_type> resp_co2_o2(co2, o2, grid, respiration_param);
+    pear::respiration<d_type, vec_type, mat_type> resp_co2_o2(co2, o2, grid, respiration_param, example_rhs);
 
     pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, resp_co2_o2);
 

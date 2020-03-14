@@ -72,11 +72,8 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -minit 1
+!cd ../; ./pear_diffusion_2 -maxit 100  -continuation .5 -minit 1 -example_rhs 3
  
-% observation: if residuals keep decreasing uniformly, the plausible
-% solution is attained
-% observation:
 
 %% Plot the solution 
 sol_o2 = readmatrix('mesh/solution_O_2.txt'); 
