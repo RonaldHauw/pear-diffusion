@@ -15,12 +15,13 @@ int export_solution(std::string const file_name, pear::grid<d_type> grid, std::v
         pear::component<d_type, vec_type> comp = components[i];
         std::ofstream file;
         file.open(file_name+"_"+comp.name()+".txt");
-        for (int n = 0; n < grid.nb_nodes(); n++){
+        for (int n = 1; n < grid.nb_nodes()+1; n++){
+            std::cout<<n<<std::endl;
             file
             <<n
             <<" "<<grid.node(n)[0]
             <<" "<<grid.node(n)[1]
-            <<" "<<comp.cons()(n)
+            <<" "<<comp.cons()(n-1)
             <<std::endl;
         }
         file.close();
@@ -152,16 +153,18 @@ int main(int argc, char* argv[]) {
     if (set_environment == 0){std::cout<<"Orchard environment chosen"<<std::endl;};
 
 
-    // Respiration parameters
-    d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1. / T_ref - 1. / T));
-    d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1. / T_ref - 1. / T));
-    std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
+
 
     // Boundary parameters // remove last hard coded number changed to zero!
     d_type c_u_amb = p_atm * eta_u / (R_g * T);
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
     std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
     std::vector<d_type> diffusion_co2_param = {sigma_v_r, sigma_v_z, r_v, c_v_amb};
+
+    // Respiration parameters
+    d_type v_mu = v_mu_ref * exp(e_a_vmu_ref / R_g * (1. / T_ref - 1. / T));
+    d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1. / T_ref - 1. / T));
+    std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q, sigma_u_r, sigma_v_r, c_u_amb, c_v_amb};
 
     // allocate memory for the solution
     std::cout<<"pear::main(): allocating memory to store the solution"<<std::endl;

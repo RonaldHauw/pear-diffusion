@@ -33,6 +33,10 @@ namespace pear {
                 , k_mfu_(param[4])
                 , r_q_(param[5])
                 , alpha_(1.) // used to suppress nonlinearity
+                , sigma_u_(param[6])
+                , sigma_v_(param[7])
+                , C_u_amb_(param[8])
+                , C_v_amb_(param[9])
         {
             std::cout<<"Respiration between O2 and CO2"<<std::endl;
         }
@@ -40,29 +44,35 @@ namespace pear {
         // Respiration dynamics: functions
 
         d_type R_u(d_type C_u, d_type C_v){
-            return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
+            //return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
+            return sigma_u_*(C_u+exp(1)+C_u_amb_)+sigma_u_*(C_u+exp(1)+C_u_amb_)*(C_v+1-C_v_amb_);
         };
 
         d_type R_v(d_type C_u, d_type C_v){
-            return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
+            //return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
+            return sigma_v_;
         };
 
         // Respiration dynamics: derivatives
 
         d_type dR_u_u(d_type C_u, d_type C_v){
-            return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
+            //return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
+            return sigma_u_*(1+C_v+1-C_v_amb_);
         };
 
         d_type dR_u_v(d_type C_u, d_type C_v){
-            return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
+            //return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
+            return sigma_u_*(C_u+exp(1)+C_u_amb_);
         };
 
         d_type dR_v_u(d_type C_u, d_type C_v){
-            return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
+            //return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
+            return 0.0;
         };
 
         d_type dR_v_v(d_type C_u, d_type C_v){
-            return r_q_*dR_u_v(C_u, C_v);
+            //return r_q_*dR_u_v(C_u, C_v);
+            return 0.0;
         };
 
         void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) { // checked with Matlab
@@ -124,7 +134,7 @@ namespace pear {
         pear::component<d_type, vec_type> & o2_;
         pear::component<d_type, vec_type> & co2_;
         pear::grid<d_type> & grid_;
-        d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_, alpha_;
+        d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_, alpha_, sigma_u_, sigma_v_, C_u_amb_, C_v_amb_;
     };
 
 

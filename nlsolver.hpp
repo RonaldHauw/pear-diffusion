@@ -86,7 +86,7 @@ namespace pear {
 
                     res = f3.norm();
 
-                    std::cout<<"iterations = "<<i<<"  newton residual = "<<res<<std::endl;
+                    std::cout<<"iterations = "<<i<<"  newton residual = "<<res/f_.cons().norm()<<std::endl;
                     if (res < 5e-19) {
                         break;
                     }
