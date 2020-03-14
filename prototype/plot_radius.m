@@ -18,10 +18,10 @@ end
 
 t = linspace(0, max(r_o2), 200); 
 
-ft_o2 = (t.^2-1)+8.5;  % example 1
-ft_co2 = -(t.^2-1) + 0.0163;  % example 1 and example 3
+ft_o2 = (t.^2-radius^2)+8.5;  % example 1
+ft_co2 = -(t.^2-radius^2) + 0.0163;  % example 1 and example 3
 
-ft_o2 = t.^4 - 1 + 8.5; % example 3
+ft_o2 = t.^4 - radius^4 + 8.5; % example 3
 
 figure()
 subplot(1, 2, 1)

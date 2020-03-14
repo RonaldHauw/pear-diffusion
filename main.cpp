@@ -44,9 +44,6 @@ int main(int argc, char* argv[]) {
     d_type sigma_u_r = 2.8e-10;
     d_type sigma_u_z = 1.10e-9;
 
-    // to remove!
-    //sigma_u_r = sigma_u_r*1e10;
-    //sigma_u_z = sigma_u_z*1e10;
 
     d_type sigma_v_r = 2.32e-9;
     d_type sigma_v_z = 6.97e-9;

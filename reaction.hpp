@@ -48,10 +48,13 @@ namespace pear {
         d_type R_u(d_type C_u, d_type C_v){
             if (example_rhs_ == 1){
                 return 6*sigma_u_;
+
             } else if (example_rhs_ == 2){
                 return 6*sigma_u_/(1+C_v);
+
             } else if (example_rhs_ == 3){
                 return 20*sigma_u_*(1-C_v+C_v_amb_);
+
             } else {
                 return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
             }
@@ -61,10 +64,13 @@ namespace pear {
         d_type R_v(d_type C_u, d_type C_v){
             if (example_rhs_ == 1) {
                 return 6 * sigma_v_;
+
             } else if (example_rhs_ == 2){
                 return 6*sigma_v_/(1-C_u);
+
             } else if (example_rhs_ == 3){
                 return 6 * sigma_v_;
+
             } else {
                 return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
             }
@@ -75,10 +81,13 @@ namespace pear {
         d_type dR_u_u(d_type C_u, d_type C_v){
            if (example_rhs_ == 1){
                return 0.;
+
            } else if (example_rhs_ == 2){
                return 0.;
+
            } else if (example_rhs_ == 3){
                return 0.;
+
            } else {
                return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
            }
@@ -88,10 +97,13 @@ namespace pear {
         d_type dR_u_v(d_type C_u, d_type C_v){
             if (example_rhs_ == 1){
                 return 0.;
+
             } else if (example_rhs_ == 2){
                 return -6*sigma_u_/((1+C_v)*(1+C_v));
+
             } else if (example_rhs_ == 3){
                 return -20*sigma_u_;
+
             } else {
                 return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
             }
@@ -100,10 +112,13 @@ namespace pear {
         d_type dR_v_u(d_type C_u, d_type C_v){
             if (example_rhs_ == 1){
                 return 0.;
+
             } else if (example_rhs_ == 2){
                 return 6*sigma_v_/((1-C_u)*(1-C_u));
+
             } else if (example_rhs_ == 3){
                 return 0.;
+
             } else {
                 return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
             }
@@ -112,10 +127,13 @@ namespace pear {
         d_type dR_v_v(d_type C_u, d_type C_v){
             if (example_rhs_ == 1){
                 return 0.;
+
             } else if (example_rhs_ == 2){
                 return 0.;
+
             } else if (example_rhs_ == 3){
                 return 0.;
+
             } else {
                 return r_q_*dR_u_v(C_u, C_v);
             }
