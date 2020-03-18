@@ -51,8 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug
-
+CMAKE_BINARY_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -81,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/CMakeFiles /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles /Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -112,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named pear_diffusion
+# Target rules for targets named pear_diffusion_2
 
 # Build rule for target.
-pear_diffusion: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pear_diffusion
-.PHONY : pear_diffusion
+pear_diffusion_2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pear_diffusion_2
+.PHONY : pear_diffusion_2
 
 # fast build rule for target.
-pear_diffusion/fast:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/build
-.PHONY : pear_diffusion/fast
+pear_diffusion_2/fast:
+	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/build
+.PHONY : pear_diffusion_2/fast
 
 main.o: main.cpp.o
 
@@ -130,7 +129,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -139,7 +138,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -148,7 +147,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/pear_diffusion_2.dir/build.make CMakeFiles/pear_diffusion_2.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -159,7 +158,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... pear_diffusion"
+	@echo "... pear_diffusion_2"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

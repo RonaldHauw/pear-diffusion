@@ -20,64 +20,177 @@ namespace pear {
     class grid{
     public:
 
-
         /* constructor for grid
          *
-         * loads coordinates from a text file in the following format:
-         * int grid_number d_type x_coordinate d_type y_coordinate
+         * Loads coordinates from a text file in the following format:
+
+         * (int) grid_number //space// (d_type) x_coordinate //space// (d_type) y_coordinate
          *
          * for example:
          * 1 0.0 0.0
          * 2 0.5 0.5
          */
-        grid(const char * file_name)
+        grid(std::string file_name)
         : file_name_(file_name)
         {
-            // read file
-            std::ifstream myfile(file_name_); // read file
+            // NODES
 
-            d_type x, y; int n, N;
+            std::ifstream nodes_file(file_name_ + "_Nodes.txt");
+            d_type x, y; int n, N, n1, n2, n3;
+            if (nodes_file.is_open()){
+                // Count number of grid points to pre-allocate memory
+                N = 0; while(nodes_file>>n>>x>>y){N++;}; nb_nodes_ = N;
+                nodes_ = std::vector<d_type>(2*nb_nodes_);
 
-            if (myfile.is_open()){
-                // count number of grid points
-                N = 0;
-                while(myfile>>n>>x>>y){
-                    N++;
+                // Reopen
+                nodes_file.close();
+                std::ifstream nodes_file(file_name_+"_Nodes.txt");
+
+                // Save coordinates
+                while(nodes_file>>n>>x>>y){
+                    nodes_[2*(n-1)] = x;
+                    nodes_[2*(n-1)+1] = y;
+
                 }
-                N_ = N;
+                std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
 
-                grid_coordinates_ = std::vector<d_type>(2*N_);
+            }
+            else {std::cout << "Unable to open file, check the executable folder";}
 
-                // reopen
-                myfile.close();
-                std::ifstream myfile(file_name_);
-                // save coordinates
-                while(myfile>>n>>x>>y){
-                    grid_coordinates_[2*n] = x;
-                    grid_coordinates_[2*n+1] = y;
+            // ELEMENTS
+
+            std::ifstream elements_file(file_name_ + "_Elements.txt");
+            if (elements_file.is_open()){
+                // Count number of elements to pre-allocate memory
+                N = 0; while(elements_file>>n>>n1>>n2>>n3){N++;}; nb_elements_ = N;
+                elements_ = std::vector<int>(3*nb_elements_);
+                // Reopen
+                elements_file.close();
+                std::ifstream elements_file(file_name_+"_Elements.txt");
+
+                // Save coordinates
+                while(elements_file>>n>>n1>>n2>>n3){
+                    elements_[3*(n-1)] = n1;
+                    elements_[3*(n-1)+1] = n2;
+                    elements_[3*(n-1)+2] = n3;
                 }
+                std::cout<<"Grid elements loaded from: "<<file_name_<<" length: "<<nb_elements_<<std::endl;
+            }
+            else {std::cout << "Unable to open file, check the executable folder";}
 
-                std::cout<<"Grid loaded from: "<<file_name_<<" length: "<<N_<<std::endl;
+            // OUTER EDGES
+
+            std::ifstream outer_file(file_name_ + "_OuterEdges.txt");
+            if (outer_file.is_open()){
+                // Count number of outer edges to pre-allocate memory
+                N = 0; while(outer_file>>n>>n1>>n2){N++;}; nb_outer_edges_ = N;
+                outer_edges_ = std::vector<int>(2*nb_outer_edges_);
+                // Reopen
+                outer_file.close();
+                std::ifstream outer_file(file_name_+"_OuterEdges.txt");
+                // Save coordinates
+                while(outer_file>>n>>n1>>n2){
+                    outer_edges_[2*(n-1)] = n1;
+                    outer_edges_[2*(n-1)+1] = n2;
+                }
+                std::cout<<"Outer edges loaded from: "<<file_name_<<" length: "<<nb_outer_edges_<<std::endl;
             }
 
             else {std::cout << "Unable to open file, check the executable folder";}
-            // reorder grid points
 
+            // INNER EDGES
+
+            std::ifstream inner_file(file_name_ + "_InnerEdges.txt"); // read file
+            if (inner_file.is_open()){
+                // Count number of inner edges to pre-allocate memory
+                N = 0; while(inner_file>>n>>n1>>n2){N++;}; nb_inner_edges_ = N;
+                inner_edges_ = std::vector<int>(2*nb_inner_edges_);
+                // Reopen
+                inner_file.close();
+                std::ifstream inner_file(file_name_+"_OuterEdges.txt");
+                // Save coordinates
+                while(inner_file>>n>>n1>>n2){
+                    inner_edges_[2*(n-1)] = n1;
+                    inner_edges_[2*(n-1)+1] = n2;
+                }
+                std::cout<<"Inner edges loaded from: "<<file_name_<<" length: "<<nb_inner_edges_<<std::endl;
+            }
+            else {std::cout << "Unable to open file, check the executable folder";};
         }
 
-        void get_coords(d_type & x, d_type & y, int i){
-            x = grid_coordinates_(2*i);
-            y = grid_coordinates_(2*i+1);
+        std::vector<d_type> node(int i) const {
+            std::vector<d_type> node_coord(2);
+            node_coord[0] = nodes_[2*(i-1)];
+            node_coord[1] = nodes_[2*(i-1)+1];
+            return node_coord;
         }
 
-        int length(){
-            return N_;
+        std::vector<int> elements_for_node(int node) const {
+            std::vector<int> edge_nodes(15);         // Pre-allocation to upper-limit
+
+            int N = 0;                                  // Number of elements found
+            for (int i = 1; i < nb_elements_ + 1 ; i++) {   // Loop on all the elements
+
+                if (elements_[3*(i-1)] == node || elements_[3*(i-1)+1] == node || elements_[3*(i-1)+2] == node){
+                    ++N;                                                            // Update count
+                    if ( N > edge_nodes.size() ) { edge_nodes.resize(edge_nodes.size()*2); }        // Resize if necessary
+                    edge_nodes[N-1] = i;
+                }
+
+            }
+            edge_nodes.resize(N);                   // Final resize
+            return edge_nodes;
         }
+
+        std::vector<int> element(int i) const {
+            std::vector<int> elem_nodes(3);
+            elem_nodes[0] = elements_[3*(i-1)];
+            elem_nodes[1] = elements_[3*(i-1)+1];
+            elem_nodes[2] = elements_[3*(i-1)+2];
+            return elem_nodes;
+        }
+
+        std::vector<int> outer_edge(int i) const {
+            std::vector<int> edge_nodes(2);
+            edge_nodes[0] = outer_edges_[2*(i-1)];
+            edge_nodes[1] = outer_edges_[2*(i-1)+1];
+            return edge_nodes;
+        }
+
+        std::vector<int> inner_edge(int i) const {
+            std::vector<int> edge_nodes(2);
+            edge_nodes[0] = inner_edges_[2*(i-1)];
+            edge_nodes[1] = inner_edges_[2*(i-1)+1];
+            return edge_nodes;
+        }
+
+        int nb_elements() const {
+            return nb_elements_;
+        }
+
+        int nb_nodes() const {
+            return nb_nodes_;
+        }
+
+        int nb_outer_edges() const {
+            return nb_outer_edges_;
+        }
+
+        int nb_inner_edges() const {
+            return nb_inner_edges_;
+        }
+
 
     private:
         std::string file_name_;
-        std::vector<d_type> grid_coordinates_; //  length 2N_: x1 y1 x2 y2 x3 y3 for sequantial mem access
-        int N_; // nb of grid points
+        std::vector<d_type> nodes_; //  length 2N_: x1 y1 x2 y2 x3 y3 for sequential mem access
+        std::vector<int> inner_edges_;
+        std::vector<int> elements_;
+        std::vector<int> outer_edges_;
+        int nb_nodes_;
+        int nb_elements_;
+        int nb_outer_edges_;
+        int nb_inner_edges_;
 
     };
 
