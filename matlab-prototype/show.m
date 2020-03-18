@@ -16,12 +16,14 @@ function show(elements3,elements4,coordinates,u)
 %                  in $(HOME)/acf/fem2d_heat/ and
 %                  in $(HOME)/acf/fem2d_nonlinear/.
 
-trisurf(elements3,coordinates(:,1),coordinates(:,2),u','facecolor','interp')
+box on
 hold on
-trisurf(elements4,coordinates(:,1),coordinates(:,2),u','facecolor','interp')
+trisurf(elements3,coordinates(:,1),coordinates(:,2),u','facecolor','interp', 'linestyle', 'none')
+trisurf(elements4,coordinates(:,1),coordinates(:,2),u','facecolor','interp', 'linestyle', 'none')
 hold off
 view(0,90);
 axis equal
+grid off
 xlim( [min(coordinates(:, 1)), max(coordinates(:, 1))] )
 ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
 title('Solution of the Problem')
