@@ -1,5 +1,7 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/g++ -G "CodeBlocks - Unix Makefiles" /Users/Ag/Documents/MASTER1/Project/pear-diffusion
-CMake Error: Parse error in cache file /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeCache.txt on line 219. Offending entry: <<<<<<< Updated upstream
-CMake Error: Parse error in cache file /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeCache.txt on line 229. Offending entry: >>>>>>> Stashed changes
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/g++ -G "CodeBlocks - Unix Makefiles" /Users/ronald/Documents/S10/PRO/pear-diffusion-2
+CMake Error at CMakeLists.txt:6:
+  Parse error.  Expected a command name, got unquoted argument with text
+  "<<<<<<<".
+
+
 -- Configuring incomplete, errors occurred!
-See also "/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles/CMakeOutput.log".
