@@ -8,10 +8,10 @@
 #include "nlsolver.hpp"
 #include "eigen/Eigen/Dense"
 
-template<typename d_type, typename vec_type>
-int export_solution(std::string const file_name, pear::grid<d_type> grid, std::vector<pear::component<d_type, vec_type>> components){
+template<typename d_type, typename vec_type, typename mat_type>
+int export_solution(std::string const file_name, pear::grid<d_type, mat_type> grid, std::vector<pear::component<d_type, vec_type, mat_type>> components){
     for(int i = 0; i < components.size(); i++){
-        pear::component<d_type, vec_type> comp = components[i];
+        pear::component<d_type, vec_type, mat_type> comp = components[i];
         std::ofstream file;
         file.open(file_name+"_"+comp.name()+".txt");
         for (int n = 0; n < grid.nb_nodes(); n++){
@@ -32,21 +32,17 @@ int main(int argc, char* argv[]) {
 
     typedef double d_type; // change data type here
     typedef Eigen::Matrix<d_type, Eigen::Dynamic, 1> vec_type; // define vec_type here
-    typedef Eigen::Matrix<d_type, Eigen::Dynamic, Eigen::Dynamic> mat_type; // define mat_type here
+    // typedef Eigen::Matrix<d_type, Eigen::Dynamic, Eigen::Dynamic> mat_type; // define mat_type here
+    typedef Eigen::SparseMatrix<d_type> mat_type; // define mat_type here
 
     std::cout << "Ello ello ello, com estas?" << std::endl;
 
     std::string grid_name = "prototype/mesh/HCTmesh3";
-    pear::grid<d_type> grid(grid_name);
+    pear::grid<d_type, mat_type> grid(grid_name);
 
     // Diffusion parameters
     d_type sigma_u_r = 2.8e-10;
     d_type sigma_u_z = 1.10e-9;
-
-    // to remove!
-    //sigma_u_r = sigma_u_r*1e10;
-    //sigma_u_z = sigma_u_z*1e10;
-
     d_type sigma_v_r = 2.32e-9;
     d_type sigma_v_z = 6.97e-9;
 
@@ -61,13 +57,9 @@ int main(int argc, char* argv[]) {
     d_type k_mfu = 0.1149;
     d_type r_q = 0.97;
 
-
     // Boundary parameters
     d_type r_u = 7e-7;
     d_type r_v = 7.5e-7;
-
-    // to remove!
-    //r_u = r_u*1e7;
 
     d_type p_atm = 101300;
     d_type T_ref = 293.15;
@@ -123,6 +115,7 @@ int main(int argc, char* argv[]) {
             std::cout<<"OptimalCA environment chosen"<<std::endl;
             set_environment = 1;
         };
+
         if (argc - i > 1) { // at least two arguments remain
             if (std::string(argv[i]) == "-maxit") {
                 nl_maxit = std::stoi(argv[i + 1]);
@@ -144,6 +137,7 @@ int main(int argc, char* argv[]) {
                 alpha = std::stod(argv[i + 1]);
                 std::cout<<"Adaptive nonlinearity: "<<alpha<<std::endl;
             }
+            std::cout<<"What's up "<< i << std::endl;
         }
 
     };
@@ -169,15 +163,8 @@ int main(int argc, char* argv[]) {
     conc.resize(grid.nb_nodes()*2, 1);
     //conc.setZero();
 
-    // linearisatie
-    // sparseheid patroon
-    // niet homogene oplossing
-    // test juiste implementatie Jacobiaan met eindige differenties
-
-    // automatically deallocated pointers
-
-    pear::component<d_type, vec_type> o2("O_2",   grid, conc, 0,        grid.nb_nodes(),     1);
-    pear::component<d_type, vec_type> co2("CO_2", grid, conc, grid.nb_nodes(), grid.nb_nodes() * 2, 1);
+    pear::component<d_type, vec_type, mat_type> o2("O_2",   grid, conc, 1, 0);
+    pear::component<d_type, vec_type, mat_type> co2("CO_2", grid, conc, 1, 1);
     o2.set_initial(c_u_amb);
     co2.set_initial(c_v_amb);
 
@@ -190,13 +177,12 @@ int main(int argc, char* argv[]) {
 
     pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, resp_co2_o2);
 
-    pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation);
+    pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation, grid);
 
     nlsolve.solve(nl_maxit, steplength, alpha);
 
+    int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type, mat_type>>{o2, co2});
 
-    int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});
-
-    if (exp_flag == 1){std::cout<<"solutions exported"<<std::endl; }
+    if (exp_flag == 1){std::cout<<"Solutions exported"<<std::endl; }
 
 };

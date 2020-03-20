@@ -15,6 +15,8 @@
 #include "component.hpp"
 #include "rdc.hpp"
 #include "eigen/Eigen/Dense"
+#include "eigen/Eigen/SparseCore"
+#include "eigen/Eigen/SparseLU"
 
 
 namespace pear {
@@ -24,8 +26,9 @@ namespace pear {
     public:
 
 
-        nlsolver(f_type f)
+        nlsolver(f_type f, pear::grid<d_type, mat_type> & grid)
         :f_(f)
+        , grid_(grid)
         {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
@@ -36,10 +39,14 @@ namespace pear {
             std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
             std::cout<<"       - vec_type of size  "<<f_.size()<<std::endl;
             std::cout<<"       - mat_type of size ("<<f_.size()/2<<", "<<f_.size()/2<<")"<<std::endl;
-            mat_type workmat;
-            workmat.resize(f_.size()/2, f_.size()/2);
-            mat_type J; J.resize(f_.size(), f_.size());
-            mat_type J2; J2.resize(f_.size(), f_.size());
+
+            mat_type workmat(f_.size()/2, f_.size()/2);
+            mat_type J(f_.size(), f_.size());
+            mat_type J2(f_.size(), f_.size());
+
+            grid_.setSparsityPattern(J);
+            grid_.setSparsityPattern(J2);
+
             vec_type f; f.resize(f_.size(), 1);
             vec_type f2; f2.resize(f_.size(), 1);
             vec_type f3; f3.resize(f_.size(), 1);
@@ -48,16 +55,22 @@ namespace pear {
             f_.suppress_nonlinearity(cur_alpha);
 
             d_type res = 1.0;
+            Eigen::SparseLU<Eigen::SparseMatrix<double> > linsolver;
 
             for (int i = 0; i < 1./alpha; i++){
 
-
                 // prediction step
-                f_.f_react_only(f2, workmat);  // f stores H
+                f_.f_react_only(f2);  // f stores H
                 f_.J_diff_only(J); // J stores K
+                std::cout<<"J done"<<std::endl;
                 f_.J_react_only(J2); // J2 stores dHdc
+                std::cout<<"J2 done"<<std::endl;
                 J = J+cur_alpha*J2; // J stores dGammadc
-                f_.cons() = f_.cons() + alpha*J.fullPivLu().solve(f2);
+                J.makeCompressed();
+
+                if (i == 0){ linsolver.analyzePattern(J); }
+                linsolver.compute(J);
+                f_.cons() = f_.cons() + alpha*linsolver.solve(f2);
                 cur_alpha += alpha; // take a step
                 f_.suppress_nonlinearity(cur_alpha);
 
@@ -65,7 +78,11 @@ namespace pear {
 
                     f_.f(f, workmat);
                     f_.J(J);
-                    f2 = J.fullPivLu().solve(f);  // direction
+                    J.makeCompressed();
+
+                    if (i == 0){ linsolver.analyzePattern(J); }
+                    linsolver.compute(J);
+                    f2 = linsolver.solve(f2);  // direction
 
                     res = f.norm();
 
@@ -95,22 +112,10 @@ namespace pear {
             return 1;
         }
 
-// observation: CO2 keeps increasing in solution after O2 reaches zero
-// step length stabilizes
-// corresponds to Matlab
-// parsing
-//
-// boundary conditions violated
-// add C_amb?
-// dubbele randpunten zijn een issue
-
-
-
     private:
         f_type f_;
+        pear::grid<d_type, mat_type> & grid_;
     };
-
-
 
 }
 

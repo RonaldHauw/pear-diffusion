@@ -19,9 +19,9 @@ namespace pear {
     class respiration{
     public:
 
-        respiration(pear::component<d_type, vec_type> & co2,
-                pear::component<d_type, vec_type> & o2,
-                pear::grid<d_type> & grid,
+        respiration(pear::component<d_type, vec_type, mat_type> & co2,
+                pear::component<d_type, vec_type, mat_type> & o2,
+                pear::grid<d_type, mat_type> & grid,
                 std::vector<d_type> & param)
                 : o2_(o2)
                 , co2_(co2)
@@ -32,7 +32,7 @@ namespace pear {
                 , k_mv_(param[3])
                 , k_mfu_(param[4])
                 , r_q_(param[5])
-                , alpha_(1.) // used to suppress nonlinearity
+                , alpha_(1.) // To suppress non-linearity
         {
             std::cout<<"Respiration between O2 and CO2"<<std::endl;
         }
@@ -65,7 +65,7 @@ namespace pear {
             return r_q_*dR_u_v(C_u, C_v);
         };
 
-        void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) { // checked with Matlab
+        void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) {
             for (int t = 1; t < grid_.nb_elements()+1; t++) {
 
                 std::vector<int> elem_nodes = grid_.element(t);
@@ -103,13 +103,11 @@ namespace pear {
 
                 };
 
-                dH(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-              //  std::cout<<"dH(t-1, t-1) = "<<dH(t-1, t-1)<<" dH(t-1, t + N-1) =  "<<dH(t-1, t + grid_.nb_nodes() -1)<<"  dH(t + N -1, t-1) = "<<dH(t + grid_.nb_nodes() -1, t-1)<<std::endl;
+                dH.coeffRef(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
-            //std::cout<<"dH = \n"<<dH<<std::endl;
 
         };
 
@@ -121,9 +119,9 @@ namespace pear {
         };
 
     private:
-        pear::component<d_type, vec_type> & o2_;
-        pear::component<d_type, vec_type> & co2_;
-        pear::grid<d_type> & grid_;
+        pear::component<d_type, vec_type, mat_type> & o2_;
+        pear::component<d_type, vec_type, mat_type> & co2_;
+        pear::grid<d_type, mat_type> & grid_;
         d_type v_mu_, v_mfv_, k_mu_, k_mv_, k_mfu_, r_q_, alpha_;
     };
 

@@ -43,7 +43,7 @@ namespace pear {
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
         };
 
-        void f_react_only(vec_type & x, mat_type & workmat){
+        void f_react_only(vec_type & x){
 
             x.setZero();
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
@@ -51,29 +51,27 @@ namespace pear {
         };
 
         void J_diff_only(mat_type & Jmat){
-            Jmat.setZero();
-            diff_o2_.J(Jmat.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
-            diff_co2_.J(Jmat.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
+            // Jmat.setZero();
+            diff_o2_.J(Jmat);
+            diff_co2_.J(Jmat);
         };
 
         void J_react_only(mat_type & Jmat){
-            Jmat.setZero();
+            // Jmat.setZero();
             resp_.J(Jmat);
         };
 
 
-
         void J(mat_type & Jmat){
-            Jmat.setZero();
-            diff_o2_.J(Jmat.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
-            diff_co2_.J(Jmat.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
+            // Jmat.setZero();
+            diff_o2_.J(Jmat);
+            diff_co2_.J(Jmat);
             resp_.J(Jmat);
         };
 
         void suppress_nonlinearity(d_type alpha){
             resp_.suppress_nonlinearity(alpha);
         }
-
 
         Eigen::Ref<vec_type> cons(){
             return diff_o2_.cons_full();
