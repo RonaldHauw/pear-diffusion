@@ -20,7 +20,7 @@ namespace pear {
     template <typename d_type, typename mat_type>
     class grid{
 
-        typedef Eigen::Triplet<double> T;
+        typedef Eigen::Triplet<d_type> T;
 
     public:
 
@@ -58,19 +58,20 @@ namespace pear {
                     // Form sparsity pattern
                     n -= 1;
                     // Upper left block
-                    tripletList_.push_back(T(n,n,0));
+                    tripletList_.push_back(T(n,n,1.));
 
                     // Lower left block
-                    tripletList_.push_back(T(n+nb_nodes_,n,0));
+                    tripletList_.push_back(T(n+nb_nodes_,n,1.));
 
                     // Upper right block
-                    tripletList_.push_back(T(n,n+nb_nodes_,0));
+                    tripletList_.push_back(T(n,n+nb_nodes_,1.));
 
                     // Lower right block
-                    tripletList_.push_back(T(n+nb_nodes_,n+nb_nodes_,0));
+                    tripletList_.push_back(T(n+nb_nodes_,n+nb_nodes_,1.));
 
                 }
                 std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
+                nodes_file.close();
 
             }
             else {std::cout << "Unable to open file, check the executable folder";}
@@ -94,49 +95,60 @@ namespace pear {
                     elements_[3*(n-1)+2] = n3;
 
                     // Form sparsity pattern
-                    if (n1==154){                std::cout<<"Before Decrement "<<n1 <<std::endl;}
-                    if (n3==1){                std::cout<<"Before Decrement "<<n3 <<std::endl;}
                     n1 -= 1;
                     n2 -= 1;
                     n3 -= 1;
-                    if (n1==154){                std::cout<<"After Decrement "<<n1 <<std::endl;}
-                    if (n3==0){                std::cout<<"After Decrement "<< n3 <<std::endl;}
 
                     // Upper left block
-                    tripletList_.push_back(T(n1,n2,0.0));
-                    tripletList_.push_back(T(n2,n1,0.0));
-                    tripletList_.push_back(T(n1,n3,0.0));
-                    tripletList_.push_back(T(n3,n1,0.0));
-                    tripletList_.push_back(T(n2,n3,0.0));
-                    tripletList_.push_back(T(n3,n2,0.0));
+                    tripletList_.push_back(T(n1,n2,1.0));
+                    tripletList_.push_back(T(n2,n1,1.0));
+                    tripletList_.push_back(T(n1,n3,1.0));
+                    tripletList_.push_back(T(n3,n1,1.0));
+                    tripletList_.push_back(T(n2,n3,1.0));
+                    tripletList_.push_back(T(n3,n2,1.0));
+                    tripletList_.push_back(T(n1,n1,1.0));
+                    tripletList_.push_back(T(n2,n2,1.0));
+                    tripletList_.push_back(T(n3,n3,1.0));
+
 
                     // Lower left block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2,0.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1,0.0));
-                    tripletList_.push_back(T(n1+nb_nodes_,n3,0.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n1,0.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n3,0.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n2,0.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n3,1.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n1,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n3,1.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n2,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n1,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n2,1.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n3,1.0));
+
 
                     // Upper right block
-                    tripletList_.push_back(T(n1,n2+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n2,n1+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n1,n3+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n3,n1+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n2,n3+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n3,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n1,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1,n3+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n3,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2,n3+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n3,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n3,n3+nb_nodes_,1.0));
 
                     // Lower right block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n1+nb_nodes_,n3+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n1+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n3+nb_nodes_,0.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n3+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n3+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n3+nb_nodes_,1.0));
 
                 }
 
                 std::cout<<"Grid elements loaded from: "<<file_name_<<" length: "<<nb_elements_<<std::endl;
+                elements_file.close();
             }
             else {std::cout << "Unable to open file, check the executable folder";}
 
@@ -154,8 +166,34 @@ namespace pear {
                 while(outer_file>>n>>n1>>n2){
                     outer_edges_[2*(n-1)] = n1;
                     outer_edges_[2*(n-1)+1] = n2;
+
+                    n1 -= 1;
+                    n2 -= 1;
+
+                    // Upper left block
+                    tripletList_.push_back(T(n1,n2,1.0));
+                    tripletList_.push_back(T(n2,n1,1.0));
+
+                    // Lower left block
+                    tripletList_.push_back(T(n1+nb_nodes_,n2,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1,1.0));
+
+
+
+                    // Upper right block
+                    tripletList_.push_back(T(n1,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2,n1+nb_nodes_,1.0));
+
+
+                    // Lower right block
+                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,1.0));
+
+
+
                 }
                 std::cout<<"Outer edges loaded from: "<<file_name_<<" length: "<<nb_outer_edges_<<std::endl;
+                outer_file.close();
             }
 
             else {std::cout << "Unable to open file, check the executable folder";}
@@ -174,8 +212,31 @@ namespace pear {
                 while(inner_file>>n>>n1>>n2){
                     inner_edges_[2*(n-1)] = n1;
                     inner_edges_[2*(n-1)+1] = n2;
+
+                    n1 -= 1;
+                    n2 -= 1;
+
+                    // Upper left block
+                    tripletList_.push_back(T(n1,n2,1.0));
+                    tripletList_.push_back(T(n2,n1,1.0));
+
+                    // Lower left block
+                    tripletList_.push_back(T(n1+nb_nodes_,n2,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1,1.0));
+
+
+
+                    // Upper right block
+                    tripletList_.push_back(T(n1,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2,n1+nb_nodes_,1.0));
+
+
+                    // Lower right block
+                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,1.0));
                 }
                 std::cout<<"Inner edges loaded from: "<<file_name_<<" length: "<<nb_inner_edges_<<std::endl;
+                inner_file.close();
             }
             else {std::cout << "Unable to open file, check the executable folder";};
         }
@@ -244,9 +305,9 @@ namespace pear {
 
         void setSparsityPattern(mat_type & m) const {
 
-            for (int i = 0; i < tripletList_.size(); i++) {
-                std::cout<< tripletList_[i].row() << " , " << tripletList_[i].col() << " : " << tripletList_[i].value() <<std::endl;
-            }
+            //for (int i = 0; i < tripletList_.size(); i++) {
+              //  std::cout<< tripletList_[i].row() << " , " << tripletList_[i].col() << " : " << tripletList_[i].value() <<std::endl;
+            //}
             m.setFromTriplets(tripletList_.begin(), tripletList_.end());
         }
 

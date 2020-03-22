@@ -36,11 +36,20 @@ namespace pear {
         void f(vec_type & x, mat_type & workmat){
 
             x.setZero();
+            //workmat.setZero();
 
-            diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()), workmat);
-            diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()), workmat);
+            diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()));
+            diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
+            diff_o2_.J(workmat);
+            diff_co2_.J(workmat);
+
+            x = workmat*diff_o2_.cons_full() - x;
+
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
+
+
+
         };
 
         void f_react_only(vec_type & x){
