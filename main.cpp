@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Ello ello ello, com estas?" << std::endl;
 
-    std::string grid_name = "prototype/mesh/HCTmesh3";
+    std::string grid_name = "matlab-prototype/mesh/HCTmesh3";
     pear::grid<d_type> grid(grid_name);
 
     // Diffusion parameters
