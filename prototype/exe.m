@@ -3,8 +3,8 @@
 %   P   :   Vector of size 1xN containing the sampled points describing the
 %   boundary of the pear
 
-radius = .1;  % 1 for example solutions, 0.1 for real tests. 
-grid_finess = 15; % 10 for fast, 18 for accurate
+radius = 1;  % 1 for example solutions, 0.1 for real tests. 
+grid_finess = 25; % 10 for fast, 18 for accurate
 pear_shape = 0.85; % 0.1 for pear, % 0.85 for half circle 
 
 x_zero = radius-pear_shape*radius;
@@ -73,7 +73,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 %% Solve using C++
 % use Orchard for example rhs tests
 
-!cd ../; ./pear_diffusion_2 -maxit 100  -continuation .1 -ShelfLife
+!cd ../; ./pear_diffusion_2 -maxit 100  -continuation 1. -example_rhs 3
  
 
 %% Plot the solution 
