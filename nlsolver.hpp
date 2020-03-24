@@ -59,21 +59,14 @@ namespace pear {
             d_type res = 1.0;
             Eigen::SparseLU<Eigen::SparseMatrix<double> > linsolver;
 
-            std::cout<<"nlsolve: checkpoint 1"<<std::endl;
-
             for (int i = 0; i < 1./alpha; i++){
 
                 // prediction step
                 f_.f_react_only(f2);  // f stores H
-                std::cout<<"f2 done"<<std::endl;
                 f_.J_diff_only(J); // J stores K
-                std::cout<<"J done"<<std::endl;
                 f_.J_react_only(J2); // J2 stores dHdc
-                std::cout<<"J2 done"<<std::endl;
                 J = J+cur_alpha*J2; // J stores dGammadc
                 J.makeCompressed();
-
-                std::cout<<"nlsolve: checkpoint 2"<<std::endl;
 
                 if (i == 0){ linsolver.analyzePattern(J); }
                 linsolver.compute(J);
@@ -87,25 +80,18 @@ namespace pear {
 
                     grid_.setSparsityPattern(J);
                     grid_.setSparsityPattern(J2);
-                    std::cout<<"set sparsity pattern"<<std::endl;
                     f_.f(f, J2);
-                    std::cout<<"set f"<<std::endl;
                     f_.J(J);
-                    std::cout<<"set J"<<std::endl;
                     J.makeCompressed();
 
                     if (i == 0){ linsolver.analyzePattern(J); }
                     linsolver.compute(J);
                     f2 = linsolver.solve(f2);  // direction
 
-                    std::cout<<"nlsolve: checkpoint 4"<<std::endl;
-
                     res = f.norm();
 
                     steplength = 1.;
                     f = f_.cons(); // store current concentrations
-
-                    std::cout<<"nlsolve: checkpoint 5"<<std::endl;
 
                     for (int k = 0; k < 100; k++){
                         f_.cons() = f-steplength*f2;
