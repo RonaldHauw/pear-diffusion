@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
     nlsolve.solve(nl_maxit, steplength, alpha);
 
 
-    int exp_flag = export_solution("prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});
+    int exp_flag = export_solution("matlab-prototype/mesh/solution", grid, std::vector<pear::component<d_type, vec_type>>{o2, co2});
 
     if (exp_flag == 1){std::cout<<"solutions exported"<<std::endl; }
 

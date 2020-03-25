@@ -57,7 +57,7 @@ namespace pear {
                 f_.J_diff_only(J); // J stores K
                 f_.J_react_only(J2); // J2 stores dHdc
                 J = J+cur_alpha*J2; // J stores dGammadc
-                f_.cons() = f_.cons() + alpha*J.fullPivLu().solve(f2);
+                f_.cons() = f_.cons() + alpha*J.fullPivLu().solve(f2); //
                 cur_alpha += alpha; // take a step
                 f_.suppress_nonlinearity(cur_alpha);
 
