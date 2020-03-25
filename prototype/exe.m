@@ -73,7 +73,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 %% Solve using C++
 % use Orchard for example rhs tests
 
-!cd ../; ./pear_diffusion_2 -maxit 100  -continuation 1. -example_rhs 3
+!cd ../; ./pear_diffusion_2 -maxit 100  -continuation 1. -example_rhs 1
  
 
 %% Plot the solution 
