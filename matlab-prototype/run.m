@@ -6,7 +6,7 @@ clear all
 clc
 
 % choose 
-T_cel   = 25 ;      % degrees in celcius	
+T_cel   = 7 ;      % degrees in celcius	
 n_u     = 0.208 ;   % concentration O2  percentage in 0 < . < 1
 n_v     = 0.0 ;       % concentration CO2 percentage in 0 < . < 1
 %
@@ -41,7 +41,7 @@ G2_edges    = OuterBEdges( :, 2:end ) ;
 G2_nodes    = OuterBNodes' ;
 
 % parameters of homotopy continuation
-dt = 0.05 ;
+dt = 0.1 ;
 maxit = 50 ;
 
 % intiialize concentrations
@@ -119,7 +119,7 @@ end
 % %
 % C(1:M)      = 100 * C(1:M)     * mass_o2  / density ;
 % C(M+1:end)  = 100 * C(M+1:end) * mass_co2 / density ;
-%%
+
 figure('position', [300 100 450 400])
 subplot(1, 2, 1)
 show(elements3,[],coordinates,full( C(1:M) ), [0, 20], C_u_amb);
