@@ -1,14 +1,8 @@
 %% Group 11 - March 9th 2020
 % variables of diffusion-reaction system
 
-clear all
-
 % DECLARE PARAMETERS and functions
 % variable
-T_cel           = 20 ;      % degrees in celcius	
-n_u             = 0.208 ;   % concentration O2  percentage in 0 < . < 1
-n_v             = 0 ;       % concentration CO2 percentage in 0 < . < 1
-%
 s_ur            = 2.8e-10 ;
 s_uz            = 1.1e-9 ;
 s_vr            = 2.32e-9 ;

@@ -1,4 +1,4 @@
-function show(elements3,elements4,coordinates,u)
+function show(elements3,elements4,coordinates,u, clim, c_amb)
 %SHOW   Presents two-dimensional piecewise affine function graphically.
 %    SHOW(ELEMENTS3,ELEMENTS4,COORDINATES,U) presents a two-dimensional
 %    spline function graphically. ELEMENTS3 denotes a set of triangles
@@ -22,9 +22,23 @@ trisurf(elements3,coordinates(:,1),coordinates(:,2),u','facecolor','interp', 'li
 trisurf(elements4,coordinates(:,1),coordinates(:,2),u','facecolor','interp', 'linestyle', 'none')
 hold off
 view(0,90);
-axis equal
+% axis equal
 grid off
 xlim( [min(coordinates(:, 1)), max(coordinates(:, 1))] )
 ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
 title('Solution of the Problem')
-colorbar
+colormap(jet(128));
+
+% compute axis labels
+labels = { 0, 0; max(clim), max(clim); c_amb, 'C_{amb}' } ;
+labels = sortrows(labels, 1) ;
+
+if ~isempty( find( [labels{:, 2}]==c_amb ) )
+    idx = find( [labels{:, 2}]==c_amb );
+    labels(idx, :) = [] ;
+end
+
+caxis(clim);
+colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
+
+end
