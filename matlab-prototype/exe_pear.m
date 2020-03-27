@@ -16,6 +16,15 @@ x = pearpoints(y);
 p = polyshape(x,y);
 t = triangulation(p);
 
+% Visualisation of the domain
+plot(p, 'FaceColor', 'green', 'Facealpha', 0.1, 'LineWidth', 1.5);
+hold on;
+ylabel("Heigth (mm)", 'FontSize', 30);
+xlabel("Width (mm)", 'FontSize', 30);
+xlim([0 40]);
+ylim([0 90]);
+hold off;
+
 % Creation of the mesh
 model = createpde(1);
 geometryFromMesh(model,t.Points', t.ConnectivityList');

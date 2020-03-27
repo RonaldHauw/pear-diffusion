@@ -68,7 +68,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05 -ShelfLife
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05 -ShelfLife -vmuref 0. -vmfvref 0.
  
 % observation: if residuals keep decreasing uniformly, the plausible
 % solution is attained
