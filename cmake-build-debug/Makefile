@@ -53,7 +53,6 @@ CMAKE_SOURCE_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug
 
-
 #=============================================================================
 # Targets provided globally by CMake.
 
@@ -124,32 +123,32 @@ pear_diffusion/fast:
 	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/build
 .PHONY : pear_diffusion/fast
 
-main.o: main.cpp.o
+c++/main.o: c++/main.cpp.o
 
-.PHONY : main.o
+.PHONY : c++/main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.o
-.PHONY : main.cpp.o
+c++/main.cpp.o:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/c++/main.cpp.o
+.PHONY : c++/main.cpp.o
 
-main.i: main.cpp.i
+c++/main.i: c++/main.cpp.i
 
-.PHONY : main.i
+.PHONY : c++/main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.i
-.PHONY : main.cpp.i
+c++/main.cpp.i:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/c++/main.cpp.i
+.PHONY : c++/main.cpp.i
 
-main.s: main.cpp.s
+c++/main.s: c++/main.cpp.s
 
-.PHONY : main.s
+.PHONY : c++/main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/main.cpp.s
-.PHONY : main.cpp.s
+c++/main.cpp.s:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/c++/main.cpp.s
+.PHONY : c++/main.cpp.s
 
 # Help Target
 help:
@@ -160,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... pear_diffusion"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... c++/main.o"
+	@echo "... c++/main.i"
+	@echo "... c++/main.s"
 .PHONY : help
 
 

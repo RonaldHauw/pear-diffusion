@@ -1,4 +1,4 @@
-# Install script for directory: /Users/Ag/Documents/MASTER1/Project/pear-diffusion
+# Install script for directory: /Users/ronald/Documents/S10/PRO/pear-diffusion-2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
