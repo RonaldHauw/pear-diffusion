@@ -74,12 +74,12 @@ namespace pear {
                 cur_alpha += alpha; // take a step
                 f_.suppress_nonlinearity(cur_alpha);
 
-                std::cout<<"nlsolve: checkpoint 3"<<std::endl;
-
                 for (int j = 1; j < maxit; j++ ){
 
+                    f.setZero();
                     grid_.setSparsityPattern(J);
                     grid_.setSparsityPattern(J2);
+
                     f_.f(f, J2);
                     f_.J(J);
                     J.makeCompressed();

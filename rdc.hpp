@@ -35,8 +35,8 @@ namespace pear {
 
         void f(vec_type & x, mat_type & workmat){
 
-            x.setZero();
-            workmat.setZero();
+            //x.setZero();
+            //workmat.setZero();
 
             diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()));
             diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
@@ -54,28 +54,34 @@ namespace pear {
 
         void f_react_only(vec_type & x){
 
-            x.setZero();
+            //x.setZero();
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
         };
 
         void J_diff_only(mat_type & Jmat){
-            Jmat.setZero();
+            //Jmat.setZero();
             diff_o2_.J(Jmat);
             diff_co2_.J(Jmat);
         };
 
         void J_react_only(mat_type & Jmat){
-            Jmat.setZero();
+            //Jmat.setZero();
             resp_.J(Jmat);
         };
 
 
         void J(mat_type & Jmat){
-            Jmat.setZero();
+            std::cout<<"Before setZero()"<<std::endl;
+            //Jmat.setZero();
+            std::cout<<"After setZero()"<<std::endl;
+
             diff_o2_.J(Jmat);
+            std::cout<<"After diffusion 02"<<std::endl;
             diff_co2_.J(Jmat);
+            std::cout<<"After diffusion CO2"<<std::endl;
             resp_.J(Jmat);
+            std::cout<<"After respiration"<<std::endl;
         };
 
         void suppress_nonlinearity(d_type alpha){
