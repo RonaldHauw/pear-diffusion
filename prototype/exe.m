@@ -3,9 +3,15 @@
 %   P   :   Vector of size 1xN containing the sampled points describing the
 %   boundary of the pear
 
+<<<<<<< HEAD
 radius = .01;  % 1 for example solutions, 0.1 for real tests. 
 grid_finess = 6; % 10 for fast, 18 for accurate
 pear_shape = 0.85; % 0.1 for pear, % 0.85 for half circle 
+=======
+radius = 0.02;  % 1 for example solutions, 0.1 for real tests. 
+grid_finess = 8; % 10 for fast, 18 for accurate
+pear_shape = 0.1; % 0.1 for pear, % 0.85 for half circle 
+>>>>>>> master
 
 x_zero = radius-pear_shape*radius;
 a = - x_zero * (radius^2 - x_zero^2)^(-0.5);
@@ -14,7 +20,7 @@ y_high = y_zero - a * x_zero;
 
 % Creation of the domain
 R1 = [3,4,0, 0, -1, -1, -1 ,1, 1, -1]';
-C1 = [1,0,0,.01]';
+C1 = [1,0,0,radius]';
 P1 = [2, 3, 0, 0, x_zero, y_zero, y_high, y_zero]';
 C1 = [C1;zeros(length(R1) - length(C1),1)];
 P1 = [P1;zeros(length(R1) - length(P1),1)];
@@ -72,16 +78,31 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
+<<<<<<< HEAD
 !cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05 -OptimalCA
  
+=======
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl 1. -ShelfLife
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl 1. -Precooling
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -DisorderInducing
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -Refrigerator
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl .2 -ShelfLife
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.2 
+
+
+
+>>>>>>> master
 % observation: if residuals keep decreasing uniformly, the plausible
 % solution is attained
 % observation:
 
 %% Plot the solution 
-sol_o2 = readmatrix('mesh/solution_O_2.txt'); 
-sol_co2 = readmatrix('mesh/solution_CO_2.txt');
-
+%sol_o2 = readmatrix('mesh/solution_Orchard_O_2.txt'); 
+%sol_co2 = readmatrix('mesh/solution_Orchard_CO_2.txt');
+sol_o2 = readmatrix('mesh/solution_ShelfLife_O_2.txt'); 
+sol_co2 = readmatrix('mesh/solution_ShelfLife_CO_2.txt');
+%sol_o2 = readmatrix('mesh/solution_Precooling_O_2.txt'); 
+%sol_co2 = readmatrix('mesh/solution_Precooling_CO_2.txt');
 
 % graphic representation
 elements3   = Elements( : , 2:end ) ;

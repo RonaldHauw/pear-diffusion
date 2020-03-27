@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
+				<Option working_dir="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
+				<Option working_dir="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
+				<Option working_dir="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="pear_diffusion">
-				<Option output="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/pear_diffusion" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
+				<Option output="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/pear_diffusion" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -54,15 +54,15 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="pear_diffusion/fast">
-				<Option output="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/pear_diffusion" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug"/>
+				<Option output="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/pear_diffusion" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -77,17 +77,17 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 pear_diffusion/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/main.cpp">
+		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/main.cpp">
 			<Option target="pear_diffusion"/>
 		</Unit>
-		<Unit filename="/Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeLists.txt">
+		<Unit filename="/Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
