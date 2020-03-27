@@ -72,9 +72,9 @@ namespace pear {
                  //std::cout<<"node_1, node_2 "<<elem_nodes[0]-1<<" "<<elem_nodes[1]-1<<std::endl;
                  //std::cout<<"node_2, node_1 "<<elem_nodes[1]-1<<" "<<elem_nodes[0]-1<<std::endl;
 
+
                  K.coeffRef(elem_nodes[0]-1 + i, elem_nodes[1]-1 + i) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
                  K.coeffRef(elem_nodes[1]-1 + i, elem_nodes[0]-1 + i) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
-
 
 
                  //std::cout<<"node_2, node_3 "<<elem_nodes[1]-1<<" "<<elem_nodes[2]-1<<std::endl;

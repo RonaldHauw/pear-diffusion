@@ -81,11 +81,13 @@ namespace pear {
 
                 for (int j = 1; j < maxit; j++ ){
 
+                    f.setZero();
                     grid_.setSparsityPattern(J);
                     grid_.setSparsityPattern(J2);
-                    std::cout<<"set sparsity pattern"<<std::endl;
+
                     f_.f(f, J2);
                     f_.J(J);
+
 
                     linsolver.factorize(J);
                     f2 = linsolver.solve(f);  // direction

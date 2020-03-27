@@ -225,7 +225,6 @@ namespace pear {
                     tripletList_.push_back(T(n2+nb_nodes_,n1,0.0));
 
 
-
                     // Upper right block
                     tripletList_.push_back(T(n1,n2+nb_nodes_,0.0));
                     tripletList_.push_back(T(n2,n1+nb_nodes_,0.0));
