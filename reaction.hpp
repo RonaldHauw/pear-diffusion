@@ -10,7 +10,7 @@
 #include <chrono>
 #include <iterator>
 #include "grid.hpp"
-
+#include "c++/eigen/Eigen/Dense"
 
 namespace pear {
 
@@ -88,7 +88,7 @@ namespace pear {
             };
         };
 
-        void J(Eigen::Ref<mat_type> dH) { // checked with Matlab !
+        void J(mat_type & dH) { // checked with Matlab !
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
                 d_type area = 0.;
@@ -105,15 +105,13 @@ namespace pear {
 
                 dH.coeffRef(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH.coeffRef(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH.coeffRef(t + grid_.nb_nodes() -1, t-1)                        -= area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH.coeffRef(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    -= area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t + grid_.nb_nodes() -1, t-1)                        += -area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    += -area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
 
         };
 
         void suppress_nonlinearity(d_type alpha){
-            //if (alpha <= 0) {alpha_ = exp(alpha);}
-            //else { alpha_ = 1.; };
             alpha_ = alpha;
             std::cout<<"pear::respiration.suppress_nonlinearity(): alpha_ = "<<alpha_<<std::endl;
         };

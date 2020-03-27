@@ -16,9 +16,9 @@
 #include <chrono>
 #include <iterator>
 #include "grid.hpp"
-#include "eigen/Eigen/Dense"
-#include "eigen/Eigen/Eigen"
-#include "eigen/Eigen/Core"
+#include "c++/eigen/Eigen/Dense"
+#include "c++/eigen/Eigen/Eigen"
+#include "c++/eigen/Eigen/Core"
 
 
 namespace pear {

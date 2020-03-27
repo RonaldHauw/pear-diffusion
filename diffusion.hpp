@@ -10,6 +10,8 @@
 #include <chrono>
 #include <iterator>
 #include "grid.hpp"
+#include "c++/eigen/Eigen/Dense"
+
 
 namespace pear {
 
@@ -31,7 +33,7 @@ namespace pear {
          }
 
 
-         void J(Eigen::Ref<mat_type> K) const {
+         void J(mat_type & K) const {
 
              int i = comp_.start();
 
@@ -39,6 +41,7 @@ namespace pear {
 
              //K.setZero();
              for (int t = 1; t<grid_.nb_elements()+1; t++){
+
                  std::vector<int> elem_nodes = grid_.element(t);
 
                  d_type r1   = grid_.node(elem_nodes[0])[0];     d_type z1 = grid_.node(elem_nodes[0])[1];
@@ -66,28 +69,29 @@ namespace pear {
                  d_type C_33_1 = 1./omega * (z1-z2)*(z1-z2) / 12.;
                  d_type C_33_2 = 1./omega * (r1-r2)*(r1-r2) / 12.;
 
-                 std::cout<<"node_1, node_2 "<<elem_nodes[0]-1<<" "<<elem_nodes[1]-1<<std::endl;
-                 std::cout<<"node_2, node_1 "<<elem_nodes[1]-1<<" "<<elem_nodes[0]-1<<std::endl;
-
+                 //std::cout<<"node_1, node_2 "<<elem_nodes[0]-1<<" "<<elem_nodes[1]-1<<std::endl;
+                 //std::cout<<"node_2, node_1 "<<elem_nodes[1]-1<<" "<<elem_nodes[0]-1<<std::endl;
 
                  K.coeffRef(elem_nodes[0]-1 + i, elem_nodes[1]-1 + i) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
                  K.coeffRef(elem_nodes[1]-1 + i, elem_nodes[0]-1 + i) += (sigma_r_*C_12_1+sigma_z_*C_12_2) * sum_r;
 
-                 std::cout<<"node_2, node_3 "<<elem_nodes[1]-1<<" "<<elem_nodes[2]-1<<std::endl;
-                 std::cout<<"node_3, node_2 "<<elem_nodes[2]-1<<" "<<elem_nodes[1]-1<<std::endl;
+
+
+                 //std::cout<<"node_2, node_3 "<<elem_nodes[1]-1<<" "<<elem_nodes[2]-1<<std::endl;
+                 //std::cout<<"node_3, node_2 "<<elem_nodes[2]-1<<" "<<elem_nodes[1]-1<<std::endl;
 
                  K.coeffRef(elem_nodes[1]-1 + i, elem_nodes[2]-1 + i) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
                  K.coeffRef(elem_nodes[2]-1 + i, elem_nodes[1]-1 + i) += (sigma_r_*C_23_1+sigma_z_*C_23_2) * sum_r;
 
-                 std::cout<<"node_1, node_3 "<<elem_nodes[0]-1<<" "<<elem_nodes[2]-1<<std::endl;
-                 std::cout<<"node_3, node_1 "<<elem_nodes[2]-1<<" "<<elem_nodes[0]-1<<std::endl;
+                 //std::cout<<"node_1, node_3 "<<elem_nodes[0]-1<<" "<<elem_nodes[2]-1<<std::endl;
+                 //std::cout<<"node_3, node_1 "<<elem_nodes[2]-1<<" "<<elem_nodes[0]-1<<std::endl;
 
                  K.coeffRef(elem_nodes[0]-1 + i, elem_nodes[2]-1 + i) += (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
                  K.coeffRef(elem_nodes[2]-1 + i, elem_nodes[0]-1 + i) += (sigma_r_*C_13_1+sigma_z_*C_13_2) * sum_r;
 
-                 std::cout<<"node_1, node_1 "<<elem_nodes[0]-1<<" "<<elem_nodes[0]-1<<std::endl;
-                 std::cout<<"node_2, node_2 "<<elem_nodes[1]-1<<" "<<elem_nodes[1]-1<<std::endl;
-                 std::cout<<"node_3, node_3 "<<elem_nodes[2]-1<<" "<<elem_nodes[2]-1<<std::endl;
+                 //std::cout<<"node_1, node_1 "<<elem_nodes[0]-1<<" "<<elem_nodes[0]-1<<std::endl;
+                 //std::cout<<"node_2, node_2 "<<elem_nodes[1]-1<<" "<<elem_nodes[1]-1<<std::endl;
+                 //std::cout<<"node_3, node_3 "<<elem_nodes[2]-1<<" "<<elem_nodes[2]-1<<std::endl;
 
 
                  K.coeffRef(elem_nodes[0]-1 + i, elem_nodes[0]-1 + i) += (sigma_r_*C_11_1+sigma_z_*C_11_2) * sum_r;
@@ -109,16 +113,21 @@ namespace pear {
                  d_type parallel_term_2     = 1./12. * len * (   r1 + 3*r2 ) ;
                  d_type cross_term          = 1./12. * len * (   r1 +   r2 ) ;
 
-                 std::cout<<"enode_1, dnode_1 "<<edge_nodes[0]-1<<" "<<edge_nodes[0]-1<<std::endl;
-                 std::cout<<"enode_1, enode_2 "<<edge_nodes[0]-1<<" "<<edge_nodes[1]-1<<std::endl;
-                 std::cout<<"enode_2, enode_1 "<<edge_nodes[1]-1<<" "<<edge_nodes[0]-1<<std::endl;
-                 std::cout<<"enode_2, enode_2 "<<edge_nodes[1]-1<<" "<<edge_nodes[1]-1<<std::endl;
+                 //std::cout<<"enode_1, dnode_1 "<<edge_nodes[0]-1<<" "<<edge_nodes[0]-1<<std::endl;
+                 //std::cout<<"enode_1, enode_2 "<<edge_nodes[0]-1<<" "<<edge_nodes[1]-1<<std::endl;
+                 //std::cout<<"enode_2, enode_1 "<<edge_nodes[1]-1<<" "<<edge_nodes[0]-1<<std::endl;
+                 //std::cout<<"enode_2, enode_2 "<<edge_nodes[1]-1<<" "<<edge_nodes[1]-1<<std::endl;
 
 
-                 K.coeffRef( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;
-                 K.coeffRef( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term      ;
-                 K.coeffRef( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term      ;
-                 K.coeffRef( edge_nodes[1]-1, edge_nodes[1]-1 )  += r_ * parallel_term_2 ;
+                 K.coeffRef( edge_nodes[0]-1+i, edge_nodes[0]-1+i )  += r_ * parallel_term_1 ;
+                 K.coeffRef( edge_nodes[0]-1+i, edge_nodes[1]-1+i )  += r_ * cross_term      ;
+                 K.coeffRef( edge_nodes[1]-1+i, edge_nodes[0]-1+i )  += r_ * cross_term      ;
+                 K.coeffRef( edge_nodes[1]-1+i, edge_nodes[1]-1+i )  += r_ * parallel_term_2 ;
+
+                 //K.coeffRef( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;
+                 //K.coeffRef( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term      ;
+                 //K.coeffRef( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term      ;
+                 //K.coeffRef( edge_nodes[1]-1, edge_nodes[1]-1 )  += r_ * parallel_term_2 ;
 
              }
 
@@ -157,6 +166,10 @@ namespace pear {
              return comp_.nb_nodes();
          }
 
+         void setSparsityPattern(mat_type & m){
+             grid_.setSparsityPattern(m);
+         }
+
      private:
 
          pear::component<d_type, vec_type, mat_type> & comp_;
@@ -165,6 +178,7 @@ namespace pear {
          d_type r_;
          d_type C_amb_;
          pear::grid<d_type, mat_type> & grid_;
+
      };
 
 

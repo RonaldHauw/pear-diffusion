@@ -12,7 +12,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "eigen/Eigen/Eigen"
+#include "c++/eigen/Eigen/Eigen"
 
 
 namespace pear {
@@ -58,16 +58,16 @@ namespace pear {
                     // Form sparsity pattern
                     n -= 1;
                     // Upper left block
-                    tripletList_.push_back(T(n,n,1.));
+                    tripletList_.push_back(T(n,n,0.0));
 
                     // Lower left block
-                    tripletList_.push_back(T(n+nb_nodes_,n,1.));
+                    tripletList_.push_back(T(n+nb_nodes_,n,0.0));
 
                     // Upper right block
-                    tripletList_.push_back(T(n,n+nb_nodes_,1.));
+                    tripletList_.push_back(T(n,n+nb_nodes_,0.0));
 
                     // Lower right block
-                    tripletList_.push_back(T(n+nb_nodes_,n+nb_nodes_,1.));
+                    tripletList_.push_back(T(n+nb_nodes_,n+nb_nodes_,0.0));
 
                 }
                 std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
@@ -100,50 +100,50 @@ namespace pear {
                     n3 -= 1;
 
                     // Upper left block
-                    tripletList_.push_back(T(n1,n2,1.0));
-                    tripletList_.push_back(T(n2,n1,1.0));
-                    tripletList_.push_back(T(n1,n3,1.0));
-                    tripletList_.push_back(T(n3,n1,1.0));
-                    tripletList_.push_back(T(n2,n3,1.0));
-                    tripletList_.push_back(T(n3,n2,1.0));
-                    tripletList_.push_back(T(n1,n1,1.0));
-                    tripletList_.push_back(T(n2,n2,1.0));
-                    tripletList_.push_back(T(n3,n3,1.0));
+                    tripletList_.push_back(T(n1,n2,0.0));
+                    tripletList_.push_back(T(n2,n1,0.0));
+                    tripletList_.push_back(T(n1,n3,0.0));
+                    tripletList_.push_back(T(n3,n1,0.0));
+                    tripletList_.push_back(T(n2,n3,0.0));
+                    tripletList_.push_back(T(n3,n2,0.0));
+                    tripletList_.push_back(T(n1,n1,0.0));
+                    tripletList_.push_back(T(n2,n2,0.0));
+                    tripletList_.push_back(T(n3,n3,0.0));
 
 
                     // Lower left block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1,1.0));
-                    tripletList_.push_back(T(n1+nb_nodes_,n3,1.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n1,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n3,1.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n2,1.0));
-                    tripletList_.push_back(T(n1+nb_nodes_,n1,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n2,1.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n3,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1,0.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n3,0.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n1,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n3,0.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n2,0.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n1,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n2,0.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n3,0.0));
 
 
                     // Upper right block
-                    tripletList_.push_back(T(n1,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2,n1+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n1,n3+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n3,n1+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2,n3+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n3,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n1,n1+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n3,n3+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2,n1+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n1,n3+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n3,n1+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2,n3+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n3,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n1,n1+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n3,n3+nb_nodes_,0.0));
 
                     // Lower right block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n1+nb_nodes_,n3+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n1+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n3+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n1+nb_nodes_,n1+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n3+nb_nodes_,n3+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n3+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n1+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n3+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n1+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n3+nb_nodes_,n3+nb_nodes_,0.0));
 
                 }
 
@@ -171,23 +171,23 @@ namespace pear {
                     n2 -= 1;
 
                     // Upper left block
-                    tripletList_.push_back(T(n1,n2,1.0));
-                    tripletList_.push_back(T(n2,n1,1.0));
+                    tripletList_.push_back(T(n1,n2,0.0));
+                    tripletList_.push_back(T(n2,n1,0.0));
 
                     // Lower left block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1,0.0));
 
 
 
                     // Upper right block
-                    tripletList_.push_back(T(n1,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2,n1+nb_nodes_,0.0));
 
 
                     // Lower right block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,0.0));
 
 
 
@@ -207,7 +207,7 @@ namespace pear {
                 inner_edges_ = std::vector<int>(2*nb_inner_edges_);
                 // Reopen
                 inner_file.close();
-                std::ifstream inner_file(file_name_+"_OuterEdges.txt");
+                std::ifstream inner_file(file_name_+"_InnerEdges.txt");
                 // Save coordinates
                 while(inner_file>>n>>n1>>n2){
                     inner_edges_[2*(n-1)] = n1;
@@ -217,23 +217,23 @@ namespace pear {
                     n2 -= 1;
 
                     // Upper left block
-                    tripletList_.push_back(T(n1,n2,1.0));
-                    tripletList_.push_back(T(n2,n1,1.0));
+                    tripletList_.push_back(T(n1,n2,0.0));
+                    tripletList_.push_back(T(n2,n1,0.0));
 
                     // Lower left block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1,0.0));
 
 
 
                     // Upper right block
-                    tripletList_.push_back(T(n1,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2,n1+nb_nodes_,0.0));
 
 
                     // Lower right block
-                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,1.0));
-                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,1.0));
+                    tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,0.0));
+                    tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,0.0));
                 }
                 std::cout<<"Inner edges loaded from: "<<file_name_<<" length: "<<nb_inner_edges_<<std::endl;
                 inner_file.close();

@@ -4,7 +4,7 @@
 %   boundary of the pear
 
 radius = .01;  % 1 for example solutions, 0.1 for real tests. 
-grid_finess = 3; % 10 for fast, 18 for accurate
+grid_finess = 6; % 10 for fast, 18 for accurate
 pear_shape = 0.85; % 0.1 for pear, % 0.85 for half circle 
 
 x_zero = radius-pear_shape*radius;
@@ -72,7 +72,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
-!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05 -OptimalCA
  
 % observation: if residuals keep decreasing uniformly, the plausible
 % solution is attained

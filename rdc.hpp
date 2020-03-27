@@ -13,7 +13,7 @@
 #include "diffusion.hpp"
 #include "reaction.hpp"
 #include "component.hpp"
-#include "eigen/Eigen/Dense"
+#include "c++/eigen/Eigen/Dense"
 
 
 namespace pear {
@@ -36,7 +36,7 @@ namespace pear {
         void f(vec_type & x, mat_type & workmat){
 
             x.setZero();
-            //workmat.setZero();
+            diff_o2_.setSparsityPattern(workmat);
 
             diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()));
             diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
@@ -60,19 +60,19 @@ namespace pear {
         };
 
         void J_diff_only(mat_type & Jmat){
-            // Jmat.setZero();
+            diff_o2_.setSparsityPattern(Jmat);
             diff_o2_.J(Jmat);
             diff_co2_.J(Jmat);
         };
 
         void J_react_only(mat_type & Jmat){
-            // Jmat.setZero();
+            diff_o2_.setSparsityPattern(Jmat);
             resp_.J(Jmat);
         };
 
 
         void J(mat_type & Jmat){
-            // Jmat.setZero();
+            diff_o2_.setSparsityPattern(Jmat);
             diff_o2_.J(Jmat);
             diff_co2_.J(Jmat);
             resp_.J(Jmat);
@@ -95,6 +95,7 @@ namespace pear {
         pear::diffusion<d_type, vec_type, mat_type> diff_o2_;
         pear::diffusion<d_type, vec_type, mat_type> diff_co2_;
         pear::respiration<d_type, vec_type, mat_type> resp_;
+
     };
 
 

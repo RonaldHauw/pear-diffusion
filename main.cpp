@@ -6,7 +6,7 @@
 #include "rdc.hpp"
 #include <random>
 #include "nlsolver.hpp"
-#include "eigen/Eigen/Dense"
+#include "c++/eigen/Eigen/Dense"
 
 template<typename d_type, typename vec_type, typename mat_type>
 int export_solution(std::string const file_name, pear::grid<d_type, mat_type> grid, std::vector<pear::component<d_type, vec_type, mat_type>> components){
@@ -14,12 +14,12 @@ int export_solution(std::string const file_name, pear::grid<d_type, mat_type> gr
         pear::component<d_type, vec_type, mat_type> comp = components[i];
         std::ofstream file;
         file.open(file_name+"_"+comp.name()+".txt");
-        for (int n = 0; n < grid.nb_nodes(); n++){
+        for (int n = 1; n < grid.nb_nodes()+1; n++){
             file
             <<n
             <<" "<<grid.node(n)[0]
             <<" "<<grid.node(n)[1]
-            <<" "<<comp.cons()(n)
+            <<" "<<comp.cons()(n-1)
             <<std::endl;
         }
         file.close();
@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
 
     std::string grid_name = "prototype/mesh/HCTmesh3";
     pear::grid<d_type, mat_type> grid(grid_name);
+
 
     // Diffusion parameters
     d_type sigma_u_r = 2.8e-10;
