@@ -3,9 +3,15 @@
 %   P   :   Vector of size 1xN containing the sampled points describing the
 %   boundary of the pear
 
+<<<<<<< HEAD
+radius = .01;  % 1 for example solutions, 0.1 for real tests. 
+grid_finess = 6; % 10 for fast, 18 for accurate
+pear_shape = 0.85; % 0.1 for pear, % 0.85 for half circle 
+=======
 radius = 0.02;  % 1 for example solutions, 0.1 for real tests. 
 grid_finess = 8; % 10 for fast, 18 for accurate
 pear_shape = 0.1; % 0.1 for pear, % 0.85 for half circle 
+>>>>>>> master
 
 x_zero = radius-pear_shape*radius;
 a = - x_zero * (radius^2 - x_zero^2)^(-0.5);
@@ -72,6 +78,10 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 %% Solve using C++
 
+<<<<<<< HEAD
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05 -OptimalCA
+ 
+=======
 !cd ../; ./pear_diffusion_2 -maxit 100  -anl 1. -ShelfLife
 %!cd ../; ./pear_diffusion_2 -maxit 100  -anl 1. -Precooling
 %!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -DisorderInducing
@@ -81,6 +91,7 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 
 
 
+>>>>>>> master
 % observation: if residuals keep decreasing uniformly, the plausible
 % solution is attained
 % observation:

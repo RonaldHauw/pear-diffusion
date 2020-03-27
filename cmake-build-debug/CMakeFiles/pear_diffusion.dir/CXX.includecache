@@ -53,6 +53,8 @@ grid.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/grid.hpp
 component.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/component.hpp
+eigen/Eigen/Dense
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Dense
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Cholesky
 Core
@@ -1647,6 +1649,8 @@ string
 -
 sstream
 -
+eigen/Eigen/Eigen
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Eigen
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/main.cpp
 iostream
@@ -1667,6 +1671,8 @@ nlsolver.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/nlsolver.hpp
 eigen/Eigen/Dense
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Dense
+eigen/Eigen/Sparse
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Sparse
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/nlsolver.hpp
 cassert
@@ -1697,6 +1703,10 @@ rdc.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/rdc.hpp
 eigen/Eigen/Dense
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Dense
+eigen/Eigen/SparseCore
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/SparseCore
+eigen/Eigen/SparseLU
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/SparseLU
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/rdc.hpp
 cassert
@@ -1745,6 +1755,8 @@ iterator
 -
 grid.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/grid.hpp
+eigen/Eigen/Dense
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/eigen/Eigen/Dense
 component.hpp
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/c++/component.hpp
 diffusion.hpp

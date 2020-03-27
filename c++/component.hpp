@@ -23,17 +23,18 @@
 
 namespace pear {
 
-    template <typename d_type, typename vec_type>
+    template <typename d_type, typename vec_type, typename mat_type>
     class component{
     public:
 
-        component(std::string name, pear::grid<d_type> & grid, vec_type & c, int start, int stop, int stride)
+        component(std::string name, pear::grid<d_type, mat_type> & grid, vec_type & c, int stride, int index)
                 : name_(name)
                 , concentration_(c)
                 , grid_(grid)
-                , start_(start)
-                , stop_(stop)
+                , start_(index*grid.nb_nodes())
+                , stop_((index+1)*grid.nb_nodes())
                 , stride_(stride)
+                , index_(index)
         {
             std::cout<<"Initialised component: "<<name_<<std::endl;
         }
@@ -41,8 +42,6 @@ namespace pear {
         std::string name(){
             return name_;
         }
-
-
 
         Eigen::Ref<vec_type> cons()  {
             return concentration_.segment(start_, grid_.nb_nodes());
@@ -64,6 +63,10 @@ namespace pear {
             return grid_.nb_nodes();
         };
 
+        int start(){
+            return start_;
+        };
+
         void set_initial(d_type c_amb){
             this->cons().setOnes();
             this->cons() *= c_amb;
@@ -72,14 +75,12 @@ namespace pear {
     private:
         std::string name_;
         vec_type & concentration_;
-        pear::grid<d_type> & grid_;
+        pear::grid<d_type, mat_type> & grid_;
         int start_;
         int stop_;
         int stride_;
-
+        int index_;
     };
-
-
 
 }
 

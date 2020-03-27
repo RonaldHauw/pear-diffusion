@@ -30,7 +30,9 @@ title('Solution of the Problem')
 colormap(jet(128));
 
 % compute axis labels
-labels = { 0, 0; max(clim), max(clim); c_amb, 'C_{amb}' } ;
+labels = { 0, 0; min(clim), max(clim); c_amb, 'C_{amb}' } ;
+%labels = { 0, 0; 0, 0; c_amb, 'C_{amb}' } ;
+
 labels = sortrows(labels, 1) ;
 
 if ~isempty( find( [labels{:, 2}]==c_amb ) )

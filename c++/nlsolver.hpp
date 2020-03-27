@@ -15,6 +15,8 @@
 #include "component.hpp"
 #include "rdc.hpp"
 #include "eigen/Eigen/Dense"
+#include "eigen/Eigen/SparseCore"
+#include "eigen/Eigen/SparseLU"
 
 // todo: still two hyperparameters in the code (! )
 // todo: check dubbele randpunten
@@ -26,8 +28,9 @@ namespace pear {
     public:
 
 
-        nlsolver(f_type f)
+        nlsolver(f_type f, pear::grid<d_type, mat_type> & grid)
         :f_(f)
+        , grid_(grid)
         {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
@@ -38,10 +41,18 @@ namespace pear {
             std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
             std::cout<<"       - vec_type of size  "<<f_.size()<<std::endl;
             std::cout<<"       - mat_type of size ("<<f_.size()/2<<", "<<f_.size()/2<<")"<<std::endl;
-            mat_type workmat;
-            workmat.resize(f_.size()/2, f_.size()/2);
-            mat_type J; J.resize(f_.size(), f_.size());
-            mat_type J2; J2.resize(f_.size(), f_.size());
+
+            mat_type J(f_.size(), f_.size());
+            mat_type J2(f_.size(), f_.size());
+
+            J.reserve(f_.size()*16);
+            J2.reserve(f_.size()*16);
+
+
+            grid_.setSparsityPattern(J);
+            grid_.setSparsityPattern(J2);
+
+
             vec_type f; f.resize(f_.size(), 1);
             vec_type f2; f2.resize(f_.size(), 1);
             vec_type f3; f3.resize(f_.size(), 1);
@@ -50,24 +61,23 @@ namespace pear {
             f_.suppress_nonlinearity(cur_alpha);
 
             d_type res = 1.0;
+            Eigen::SparseLU<mat_type> linsolver;
+            linsolver.analyzePattern(J);
             int i = 0;
             while (cur_alpha < 1.){
                 i++;
-
-
                 // prediction step
-                f_.f_react_only(f2, workmat);  // f stores H
+                f_.f_react_only(f2);
                 f_.J(J);
-                f = J.fullPivLu().solve(-f2); // search direction
-
-                f2 = f_.cons(); // save concentrations
-
+                linsolver.factorize(J);
+                f = linsolver.solve(f2);
+                f2 = f_.cons();
                 // backtracking on prediction step length
                 steplength = 1.-cur_alpha;
                 for (int k = 0; k < 100; k++){
                     f_.cons() = f2+steplength*f; // take a test step
                     f_.suppress_nonlinearity(cur_alpha+steplength);
-                    f_.f(f3, workmat); // residual
+                    f_.f(f3, J2); // residual
                     if (f3.norm()>1e-11) { // if residual is small enough, keep step
                         steplength *= 0.5;
                     } else {
@@ -77,12 +87,18 @@ namespace pear {
                 }
                 cur_alpha += steplength;
 
-                // newton solver
+
                 for (int j = 1; j < maxit; j++ ){
 
-                    f_.f(f, workmat);
+                    grid_.setSparsityPattern(J);
+                    grid_.setSparsityPattern(J2);
+
+                    f_.f(f, J2);
                     f_.J(J);
-                    f2 = J.fullPivLu().solve(f);  // direction
+
+
+                    linsolver.factorize(J);
+                    f2 = linsolver.solve(f);  // direction
 
                     res = f.norm();
 
@@ -92,7 +108,7 @@ namespace pear {
                     // backtracking linesearch for residual decrease
                     for (int k = 0; k < 100; k++){
                         f_.cons() = f-steplength*f2;
-                        f_.f(f3, workmat); // residual
+                        f_.f(f3, J2); // residual
                         if (f3.norm()>res) {
                             steplength *= 0.5;
                         } else {
@@ -114,12 +130,10 @@ namespace pear {
         }
 
 
-
     private:
         f_type f_;
+        pear::grid<d_type, mat_type> & grid_;
     };
-
-
 
 }
 

@@ -35,45 +35,60 @@ namespace pear {
 
         void f(vec_type & x, mat_type & workmat){
 
-            x.setZero();
 
-            diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()), workmat);
-            diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()), workmat);
+            x.setZero();
+            diff_o2_.setSparsityPattern(workmat);
+
+
+            diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()));
+            diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
+            diff_o2_.J(workmat);
+            diff_co2_.J(workmat);
+
+            x = workmat*diff_o2_.cons_full() - x;
+
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
+
+
+
         };
 
-        void f_react_only(vec_type & x, mat_type & workmat){
+        void f_react_only(vec_type & x){
 
-            x.setZero();
+            //x.setZero();
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
         };
 
         void J_diff_only(mat_type & Jmat){
-            Jmat.setZero();
-            diff_o2_.J(Jmat.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
-            diff_co2_.J(Jmat.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
+            diff_o2_.setSparsityPattern(Jmat);
+
+            diff_o2_.J(Jmat);
+            diff_co2_.J(Jmat);
         };
 
         void J_react_only(mat_type & Jmat){
-            Jmat.setZero();
+            diff_o2_.setSparsityPattern(Jmat);
+
             resp_.J(Jmat);
         };
 
 
-
         void J(mat_type & Jmat){
-            Jmat.setZero();
-            diff_o2_.J(Jmat.block(diff_o2_.cons_start(), diff_o2_.cons_start(), diff_o2_.nb_nodes(), diff_o2_.nb_nodes()));
-            diff_co2_.J(Jmat.block(diff_co2_.cons_start(), diff_co2_.cons_start(), diff_co2_.nb_nodes(), diff_co2_.nb_nodes()));
+            diff_o2_.setSparsityPattern(Jmat);
+
+            diff_o2_.J(Jmat);
+            std::cout<<"After diffusion 02"<<std::endl;
+            diff_co2_.J(Jmat);
+            std::cout<<"After diffusion CO2"<<std::endl;
             resp_.J(Jmat);
+            std::cout<<"After respiration"<<std::endl;
         };
 
         void suppress_nonlinearity(d_type alpha){
             resp_.suppress_nonlinearity(alpha);
         }
-
 
         Eigen::Ref<vec_type> cons(){
             return diff_o2_.cons_full();
@@ -88,6 +103,7 @@ namespace pear {
         pear::diffusion<d_type, vec_type, mat_type> diff_o2_;
         pear::diffusion<d_type, vec_type, mat_type> diff_co2_;
         pear::respiration<d_type, vec_type, mat_type> resp_;
+
     };
 
 

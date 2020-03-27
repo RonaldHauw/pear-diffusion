@@ -20,9 +20,10 @@ elements3   = Elements( : , 2:end ) ;
 coordinates = Nodes(:, 2:end); 
 figure()
 subplot(1, 2, 1)
-show(elements3,[],coordinates,full(sol_o2(1:end, 4)));
+
+show(elements3,[],coordinates,full(sol_o2(:, 4)),[min(sol_o2(:, 4)), max(sol_o2(:, 4))], 0);
 title('oxygen')
 subplot(1, 2, 2)
-show(elements3,[],coordinates,full(sol_co2(1:end, 4)));
+show(elements3,[],coordinates,full(sol_co2(:, 4)),[min(sol_co2(:, 4)), max(sol_co2(:, 4))], 0 );
 title('carbon dioxide')
 
