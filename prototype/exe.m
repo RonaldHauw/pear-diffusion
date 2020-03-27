@@ -3,9 +3,21 @@
 %   P   :   Vector of size 1xN containing the sampled points describing the
 %   boundary of the pear
 
+<<<<<<< HEAD
 radius = 1;  % 1 for example solutions, 0.1 for real tests. 
 grid_finess = 25; % 10 for fast, 18 for accurate
 pear_shape = 0.85; % 0.1 for pear, % 0.85 for half circle 
+=======
+<<<<<<< HEAD
+radius = .01;  % 1 for example solutions, 0.1 for real tests. 
+grid_finess = 6; % 10 for fast, 18 for accurate
+pear_shape = 0.85; % 0.1 for pear, % 0.85 for half circle 
+=======
+radius = 0.02;  % 1 for example solutions, 0.1 for real tests. 
+grid_finess = 8; % 10 for fast, 18 for accurate
+pear_shape = 0.1; % 0.1 for pear, % 0.85 for half circle 
+>>>>>>> master
+>>>>>>> master
 
 x_zero = radius-pear_shape*radius;
 a = - x_zero * (radius^2 - x_zero^2)^(-0.5);
@@ -29,7 +41,11 @@ axis equal;
 % Creation of the mesh
 model = createpde(1);
 geometryFromEdges(model,dl);
+<<<<<<< HEAD
 mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',radius/grid_finess+radius/grid_finess*0.5,'Hmin',radius/grid_finess);
+=======
+mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',radius/grid_finess*1.5,'Hmin',radius/grid_finess);
+>>>>>>> master
 pdeplot(model);
 
 
@@ -73,13 +89,36 @@ writematrix(OuterBEdges,'mesh/HCTmesh3_OuterEdges.txt','delimiter', 'space');
 %% Solve using C++
 % use Orchard for example rhs tests
 
+<<<<<<< HEAD
 !cd ../; ./pear_diffusion_2 -maxit 100  -continuation 1. -example_rhs 1
  
+=======
+<<<<<<< HEAD
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.05 -OptimalCA
+ 
+=======
+!cd ../; ./pear_diffusion_2 -maxit 100  -anl 1. -ShelfLife
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl 1. -Precooling
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -DisorderInducing
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl .5 -Refrigerator
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl .2 -ShelfLife
+%!cd ../; ./pear_diffusion_2 -maxit 100  -anl 0.2 
+
+
+
+>>>>>>> master
+% observation: if residuals keep decreasing uniformly, the plausible
+% solution is attained
+% observation:
+>>>>>>> master
 
 %% Plot the solution 
-sol_o2 = readmatrix('mesh/solution_O_2.txt'); 
-sol_co2 = readmatrix('mesh/solution_CO_2.txt');
-
+%sol_o2 = readmatrix('mesh/solution_Orchard_O_2.txt'); 
+%sol_co2 = readmatrix('mesh/solution_Orchard_CO_2.txt');
+sol_o2 = readmatrix('mesh/solution_ShelfLife_O_2.txt'); 
+sol_co2 = readmatrix('mesh/solution_ShelfLife_CO_2.txt');
+%sol_o2 = readmatrix('mesh/solution_Precooling_O_2.txt'); 
+%sol_co2 = readmatrix('mesh/solution_Precooling_CO_2.txt');
 
 % graphic representation
 elements3   = Elements( : , 2:end ) ;
