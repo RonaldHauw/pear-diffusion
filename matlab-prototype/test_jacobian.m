@@ -1,9 +1,4 @@
-% @Author: OctaveOliviers
-% @Date:   2020-03-18 20:55:56
-% @Last Modified by:   OctaveOliviers
-% @Last Modified time: 2020-03-20 20:23:22
-
-%% Group 11 - March 12th 2020
+%% Group 11 - March 24th 2020
 % test correctness of Jacobian with finite difference approximation
 
 clear all
@@ -11,8 +6,9 @@ clear all
 % load variables of system
 load('workspace') ;
 % choose simple circular domain
-load meshes/HalfCircleMesh.mat
-load meshes/HalfCircleMesh_Data.mat
+addpath( '../grids' )
+load HalfCircleMesh.mat
+load HalfCircleMesh_Data.mat
 % shrink size of mesh
 coordinates = (mesh.Nodes'/15) ;
 elements3   = Elements( : , 2:end ) ;
@@ -53,18 +49,30 @@ for e = 1:E
     	end
     end
 
-    path(e) = max(max( J_appr - J_c )) ;
+    path(e) = norm( J_appr - J_c , inf) ;
 end
 
+
+% plot sparsity pattern of jacobian
+figure('position', [100 100 170 180])
+spy(J_c)
+xlabel('j index', 'fontsize', 16)
+ylabel('i index', 'fontsize', 16)
+title('Jacobian', 'fontsize', 16)
+xticks([])
+yticks([])
+axis equal
+
 % plot convergence
-figure
+figure('position', [100 100 400 300])
 box on
 hold on
+grid on
 plot(10.^(-1:-1:-E), path, 'k-', 'linewidth', 1) ;
 plot(10.^(-1:-1:-E), 10.^(-1:-1:-E), 'b--', 'linewidth', 1)
 hold off
-set(gca, 'XScale', 'log', 'YScale', 'log')
-legend('Empirical convergence rate', 'Expected convergence rate', 'location', 'best')
-title('Convergence of Finite difference approximaiton of the Jacobian')
-xlabel('Order of perturbation on C')
-ylabel({'Difference between', 'Jacobian and approximation'})
+set(gca, 'XScale', 'log', 'YScale', 'log', 'fontsize', 12)
+legend('Empirical convergence rate', 'Expected convergence rate', 'location', 'best', 'fontsize', 12)
+title({'The finite difference approximation', 'converges as expected'})
+xlabel('Order of perturbation \Delta_c')
+ylabel({'Error on the jacobian || J - A ||_{\infty}'})
