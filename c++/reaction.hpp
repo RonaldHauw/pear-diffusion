@@ -95,7 +95,7 @@ namespace pear {
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
                 d_type area = 0.;
-                for (int e = 1; e < elements.size()+1; e++) {
+                for (int e = 1; e < static_cast<signed int>(elements.size())+1; e++) {
 
                         std::vector<int> nodes = grid_.element(elements[e - 1]);
 

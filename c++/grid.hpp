@@ -255,7 +255,7 @@ namespace pear {
 
                 if (elements_[3*(i-1)] == node || elements_[3*(i-1)+1] == node || elements_[3*(i-1)+2] == node){
                     ++N;                                                            // Update count
-                    if ( N > edge_nodes.size() ) { edge_nodes.resize(edge_nodes.size()*2); }        // Resize if necessary
+                    if ( N > static_cast<signed int>(edge_nodes.size()) ) { edge_nodes.resize(edge_nodes.size()*2); }        // Resize if necessary
                     edge_nodes[N-1] = i;
                 }
 

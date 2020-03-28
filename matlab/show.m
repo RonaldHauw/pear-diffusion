@@ -29,18 +29,19 @@ ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
 title('Solution of the Problem')
 colormap(jet(128));
 
-% compute axis labels
-labels = { 0, 0; min(clim), max(clim); c_amb, 'C_{amb}' } ;
-%labels = { 0, 0; 0, 0; c_amb, 'C_{amb}' } ;
-
-labels = sortrows(labels, 1) ;
-
-if ~isempty( find( [labels{:, 2}]==c_amb ) )
-    idx = find( [labels{:, 2}]==c_amb );
-    labels(idx, :) = [] ;
-end
+% % compute axis labels
+% labels = { 0, 0; min(clim), max(clim); c_amb, 'C_{amb}' } ;
+% %labels = { 0, 0; 0, 0; c_amb, 'C_{amb}' } ;
+% 
+% labels = sortrows(labels, 1) ;
+% 
+% if ~isempty( find( [labels{:, 2}]==c_amb ) )
+%     idx = find( [labels{:, 2}]==c_amb );
+%     labels(idx, :) = [] ;
+% end
 
 caxis(clim);
-colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
+% colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
+colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
 
 end

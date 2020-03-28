@@ -6,7 +6,7 @@ clear all
 clc
 
 % choose 
-T_cel   = 7 ;      % degrees in celcius	
+T_cel   = 20 ;      % degrees in celcius	
 n_u     = 0.208 ;   % concentration O2  percentage in 0 < . < 1
 n_v     = 0.0 ;       % concentration CO2 percentage in 0 < . < 1
 %
@@ -17,12 +17,12 @@ load workspace.mat ;
 %
 % mfilepath=fileparts(which(mfilename));
 % addpath(fullfile(mfilepath,'../1-pear-diffusion'));
-addpath( '../grids' )
+% addpath( '../mesh' )
 % load HalfCircleMesh.mat
 % load HalfCircleMesh_Data.mat
 %
-load HCT_Mesh.mat
-load HCT_Mesh_Data.mat
+load mesh/HCT_Mesh.mat
+load mesh/HCT_Mesh_Data.mat
 %
 % load HCT_Fine_Mesh.mat
 % load HCT_Fine_Mesh_Data.mat
@@ -119,6 +119,8 @@ end
 % %
 % C(1:M)      = 100 * C(1:M)     * mass_o2  / density ;
 % C(M+1:end)  = 100 * C(M+1:end) * mass_co2 / density ;
+
+addpath( '../matlab' )
 
 figure('position', [300 100 450 400])
 subplot(1, 2, 1)

@@ -1,3 +1,9 @@
+/*
+* @Author: OctaveOliviers
+* @Date:   2020-03-28 08:41:48
+* @Last Modified by:   OctaveOliviers
+* @Last Modified time: 2020-03-28 09:27:23
+*/
 #include <iostream>
 #include "component.hpp"
 #include "diffusion.hpp"
@@ -11,7 +17,7 @@
 
 template<typename d_type, typename vec_type, typename mat_type>
 int export_solution(std::string const file_name, pear::grid<d_type, mat_type> grid, std::vector<pear::component<d_type, vec_type, mat_type>> components){
-    for(int i = 0; i < components.size(); i++){
+    for(int i = 0; i < static_cast<signed int>(components.size()); i++){
         pear::component<d_type, vec_type, mat_type> comp = components[i];
         std::ofstream file;
         file.open(file_name+"_"+comp.name()+".txt");
@@ -35,9 +41,6 @@ int main(int argc, char* argv[]) {
     typedef Eigen::Matrix<d_type, Eigen::Dynamic, 1> vec_type; // define vec_type here
     // typedef Eigen::Matrix<d_type, Eigen::Dynamic, Eigen::Dynamic> mat_type; // define mat_type here
     typedef Eigen::SparseMatrix<d_type> mat_type; // define mat_type here
-
-    std::cout << "Ello ello ello, com estas?" << std::endl;
-
 
     std::string grid_name = "data/meshes/HCTmesh3";
     pear::grid<d_type, mat_type> grid(grid_name);

@@ -18,12 +18,16 @@ addpath('matlab/')
 % graphic representation
 elements3   = Elements( : , 2:end ) ;
 coordinates = Nodes(:, 2:end); 
+
 figure()
 subplot(1, 2, 1)
 
-show(elements3,[],coordinates,full(sol_o2(:, 4)),[min(sol_o2(:, 4)), max(sol_o2(:, 4))], 0);
-title('oxygen')
+% show(elements3,[],coordinates,full(sol_o2(:, 4)), [0, max(sol_o2(:, 4))], 0 );
+show(elements3,[],coordinates,full(sol_o2(:, 4)), [0, 10], 0 );
+title('Oxygen Concentration')
+
 subplot(1, 2, 2)
-show(elements3,[],coordinates,full(sol_co2(:, 4)),[min(sol_co2(:, 4)), max(sol_co2(:, 4))], 0 );
-title('carbon dioxide')
+% show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, max(sol_co2(:, 4))], 0 );
+show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, 6], 0 );
+title('Carbon dioxide Concentration')
 
