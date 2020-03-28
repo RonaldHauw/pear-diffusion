@@ -80,7 +80,7 @@ namespace pear {
                 // backtracking on prediction step length
                 steplength = 1.-cur_alpha;
                 for (int k = 0; k < 6; k++){
-                    f_.cons() = f2+steplength*f; // take a test step
+                    f_.cons() = f2-steplength*f; // take a test step
                     f_.suppress_nonlinearity(cur_alpha+steplength);
                     f_.f(f3, J2); // residual
                     std::cout<<" f3 norm"<<f3.norm()<<std::endl;
