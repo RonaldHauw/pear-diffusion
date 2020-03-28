@@ -62,8 +62,11 @@ namespace pear {
 
             d_type res = 1.0;
             Eigen::SparseLU<mat_type> linsolver;
+            f_.J(J);
             linsolver.analyzePattern(J);
+
             int i = 0;
+
             while (cur_alpha < 1.){
                 i++;
                 // prediction step
@@ -71,13 +74,16 @@ namespace pear {
                 f_.J(J);
                 linsolver.factorize(J);
                 f = linsolver.solve(f2);
+                f3 = f2-J*f;
+                std::cout<<f3.norm()<<std::endl;
                 f2 = f_.cons();
                 // backtracking on prediction step length
                 steplength = 1.-cur_alpha;
-                for (int k = 0; k < 100; k++){
+                for (int k = 0; k < 6; k++){
                     f_.cons() = f2+steplength*f; // take a test step
                     f_.suppress_nonlinearity(cur_alpha+steplength);
                     f_.f(f3, J2); // residual
+                    std::cout<<" f3 norm"<<f3.norm()<<std::endl;
                     if (f3.norm()>1e-11) { // if residual is small enough, keep step
                         steplength *= 0.5;
                     } else {
@@ -89,9 +95,6 @@ namespace pear {
 
 
                 for (int j = 1; j < maxit; j++ ){
-
-                    grid_.setSparsityPattern(J);
-                    grid_.setSparsityPattern(J2);
 
                     f_.f(f, J2);
                     f_.J(J);

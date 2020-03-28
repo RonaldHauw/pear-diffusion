@@ -6,7 +6,7 @@ run('matlab/hct_grid.m')
 
 %% Solve using C++
 
-! ./pear_diffusion -maxit 100   -ShelfLife
+! ./pear_diffusion -maxit 10 -ShelfLife
 
 
 %% Plot the solution 

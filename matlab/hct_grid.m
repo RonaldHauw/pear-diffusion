@@ -4,7 +4,7 @@
 %   boundary of the pear
 
 radius = 0.02;  % 1 for example solutions, 0.1 for real tests. 
-grid_finess = 8; % 10 for fast, 18 for accurate
+grid_finess = 30; % 10 for fast, 18 for accurate
 pear_shape = 0.1; % 0.1 for pear, % 0.85 for half circle 
 
 x_zero = radius-pear_shape*radius;
