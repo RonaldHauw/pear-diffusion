@@ -6,9 +6,8 @@ clear all
 % load variables of system
 load('workspace') ;
 % choose simple circular domain
-addpath( '../grids' )
-load HalfCircleMesh.mat
-load HalfCircleMesh_Data.mat
+load mesh/HalfCircleMesh.mat
+load mesh/HalfCircleMesh_Data.mat
 % shrink size of mesh
 coordinates = (mesh.Nodes'/15) ;
 elements3   = Elements( : , 2:end ) ;
