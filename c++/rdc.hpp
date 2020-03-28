@@ -56,34 +56,19 @@ namespace pear {
 
         void f_react_only(vec_type & x){
 
-            //x.setZero();
+            x.setZero();
             resp_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()),
                     x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
         };
 
-        void J_diff_only(mat_type & Jmat){
-            diff_o2_.setSparsityPattern(Jmat);
-
-            diff_o2_.J(Jmat);
-            diff_co2_.J(Jmat);
-        };
-
-        void J_react_only(mat_type & Jmat){
-            diff_o2_.setSparsityPattern(Jmat);
-
-            resp_.J(Jmat);
-        };
 
 
         void J(mat_type & Jmat){
             diff_o2_.setSparsityPattern(Jmat);
 
             diff_o2_.J(Jmat);
-            std::cout<<"After diffusion 02"<<std::endl;
             diff_co2_.J(Jmat);
-            std::cout<<"After diffusion CO2"<<std::endl;
             resp_.J(Jmat);
-            std::cout<<"After respiration"<<std::endl;
         };
 
         void suppress_nonlinearity(d_type alpha){

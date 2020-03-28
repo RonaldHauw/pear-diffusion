@@ -106,8 +106,8 @@ namespace pear {
 
                 };
 
-                dH.coeffRef(t-1, t-1)                                            += area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
-                dH.coeffRef(t-1, t + grid_.nb_nodes() -1)                        += area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t-1, t-1)                                            +=  area * grid_.node(t)[0] * dR_u_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
+                dH.coeffRef(t-1, t + grid_.nb_nodes() -1)                        +=  area * grid_.node(t)[0] * dR_u_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH.coeffRef(t + grid_.nb_nodes() -1, t-1)                        += -area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH.coeffRef(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    += -area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
