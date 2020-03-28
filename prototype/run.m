@@ -6,7 +6,7 @@ clear all
 clc
 
 % choose 
-T_cel   = 20 ;      % degrees in celcius	
+T_cel   = -1 ;      % degrees in celcius	
 n_u     = 0.208 ;   % concentration O2  percentage in 0 < . < 1
 n_v     = 0.0 ;       % concentration CO2 percentage in 0 < . < 1
 %
