@@ -1,9 +1,3 @@
-/*
-* @Author: OctaveOliviers
-* @Date:   2020-03-28 08:41:48
-* @Last Modified by:   OctaveOliviers
-* @Last Modified time: 2020-03-28 09:27:23
-*/
 #include <iostream>
 #include "component.hpp"
 #include "diffusion.hpp"
