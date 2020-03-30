@@ -22,7 +22,15 @@ namespace pear {
     class rdc{
     public:
 
-        // dedicated constructor for the pear problem
+        /* Constructor for the equation
+         *
+         * ! Warning: extremely specific to the equation !
+         *
+         * IN:  - Two #diffusion# describing the diffusion model of each of the components O2 and C02
+         *      - A #reaction# describing the reaction model between the two components 02 and CO2
+         * OUT : the private variables corresponding to the above quantities
+         *
+         */
         rdc(pear::diffusion<d_type, vec_type, mat_type> diff_o2,
                 pear::diffusion<d_type, vec_type, mat_type> diff_co2,
                 pear::respiration<d_type, vec_type, mat_type> resp)

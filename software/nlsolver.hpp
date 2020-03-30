@@ -27,7 +27,12 @@ namespace pear {
     class nlsolver{
     public:
 
-
+        /* Contructor for the non-linear solver
+         *
+         * IN:  - A #rdc_equation# describing the non-linear equation to be solved
+         *      - A #grid# describing the mesh of the problem
+         * OUT :   the private variables  which correspond to the above mentioned quantities
+         */
         nlsolver(f_type f, pear::grid<d_type, mat_type> & grid)
         :f_(f)
         , grid_(grid)
@@ -35,6 +40,15 @@ namespace pear {
             std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
         }
 
+        /* Solutions the non-linear equation
+         *
+         * IN:      - A #int# describing the maximal number of iterations to be done. Default is 10.
+         *          - A #double# describing the step length to be taken. Default is 1.
+         *          - A #double# indicating the start value of alpha. Default is 0.
+         * OUT :    A #int#=1 describing the . Upon completion, the solutions are exported in a .txt file.
+         *              The residuals have been printed.
+         *
+         */
         int solve(int maxit = 10, d_type steplength = 1., d_type alpha = 0.){
 
             std::cout<<"pear::nlsolver.solve(): allocating work memory: "<<std::endl;

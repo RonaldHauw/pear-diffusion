@@ -24,15 +24,27 @@ namespace pear {
 
     public:
 
-        /* constructor for grid
+        /* Constructor for grid
          *
-         * Loads coordinates from a text file in the following format:
-
+         * Loads the mesh description and stores them in the datastructures compatible with later C++ use
+         *
+         * IN:      file directory with .txt files, in the format of the input described below
+         * OUT:     - 4 #vector#'s describing the nodes, edges and elements of the mesh
+         *          - 4 #scalar#'s describing the length of each of the above vectors
+         *          - 1 #TripletList# describing the sparsity pattern of the future matrices
+         *
+         * NODES : _Nodes.txt
          * (int) grid_number //space// (d_type) x_coordinate //space// (d_type) y_coordinate
          *
-         * for example:
-         * 1 0.0 0.0
-         * 2 0.5 0.5
+         * ELEMENTS : _Elements.txt
+         * (int) element_number //space// (int) first_node //space// (int) second_node //space// (int) third_node
+         *
+         * OUTER EDGES : _OuterEdges.txt
+         * (int) edge_number //space// (int) first_node //space// (int) second_node
+         *
+         * INNER EDGES : _InnerEdges.txt
+         * (int) edge_number //space// (int) first_node //space// (int) second_node
+         *
          */
         grid(std::string file_name)
         : file_name_(file_name)
@@ -240,6 +252,12 @@ namespace pear {
             else {std::cout << "Unable to open file, check the executable folder";};
         }
 
+        /* Coordinates of each node
+         *
+         * IN:      #int# describing the number of the node
+         * OUT:     #vector<double># (of length 2X1) describing the (x, y) coordinates of the node
+         *
+         */
         std::vector<d_type> node(int i) const {
             std::vector<d_type> node_coord(2);
             node_coord[0] = nodes_[2*(i-1)];
@@ -247,6 +265,12 @@ namespace pear {
             return node_coord;
         }
 
+        /* Elements associated to each node
+         *
+         * IN:      #int# describing the number of the node
+         * OUT:     #vector<int># (of variable length NX1) describing the elements to which the node belongs
+         *
+         */
         std::vector<int> elements_for_node(int node) const {
             std::vector<int> edge_nodes(15);         // Pre-allocation to upper-limit
 
@@ -264,6 +288,12 @@ namespace pear {
             return edge_nodes;
         }
 
+        /* Nodes of each element
+         *
+         * IN:      #int# describing the number of the element
+         * OUT:     #vector<int># (of length 3X1) describing the numbers of the nodes/vertices of each element
+         *
+         */
         std::vector<int> element(int i) const {
             std::vector<int> elem_nodes(3);
             elem_nodes[0] = elements_[3*(i-1)];
@@ -272,6 +302,12 @@ namespace pear {
             return elem_nodes;
         }
 
+        /* Nodes of each outer edge
+         *
+         * IN:      #int# describing the number of the outer edge
+         * OUT:     #vector<int># (of length 2X1) describing the numbers of the nodes/vertices of each edge
+         *
+         */
         std::vector<int> outer_edge(int i) const {
             std::vector<int> edge_nodes(2);
             edge_nodes[0] = outer_edges_[2*(i-1)];
@@ -279,6 +315,12 @@ namespace pear {
             return edge_nodes;
         }
 
+        /* Nodes of each inner edge
+         *
+         * IN:      #int# describing the number of the inner edge
+         * OUT:     #vector<int># (of length 2X1) describing the numbers of the nodes/vertices of each edge
+         *
+         */
         std::vector<int> inner_edge(int i) const {
             std::vector<int> edge_nodes(2);
             edge_nodes[0] = inner_edges_[2*(i-1)];
@@ -286,27 +328,22 @@ namespace pear {
             return edge_nodes;
         }
 
-        int nb_elements() const {
-            return nb_elements_;
-        }
+        int nb_elements() const {       return nb_elements_;}
+        int nb_nodes() const {          return nb_nodes_;}
+        int nb_outer_edges() const {    return nb_outer_edges_;}
+        int nb_inner_edges() const {    return nb_inner_edges_;}
 
-        int nb_nodes() const {
-            return nb_nodes_;
-        }
-
-        int nb_outer_edges() const {
-            return nb_outer_edges_;
-        }
-
-        int nb_inner_edges() const {
-            return nb_inner_edges_;
-        }
-
+        /* Sparsity pattern
+         *
+         * IN:      #sparse_matrix# to be patterned
+         * OUT:     void. Upon output, the #sparse_matrix# has been allocated the entries later required;
+         *              - the diagonal (each node to itself)
+         *              - neighbouring nodes in the same element
+         *              - neighbouring nodes on the same edge
+         *              Warning: the sparsity pattern depends on the quadrature rule
+         *
+         */
         void setSparsityPattern(mat_type & m) const {
-
-            //for (int i = 0; i < tripletList_.size(); i++) {
-              //  std::cout<< tripletList_[i].row() << " , " << tripletList_[i].col() << " : " << tripletList_[i].value() <<std::endl;
-            //}
             m.setFromTriplets(tripletList_.begin(), tripletList_.end());
         }
 

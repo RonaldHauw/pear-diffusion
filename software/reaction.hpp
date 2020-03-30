@@ -22,6 +22,15 @@ namespace pear {
     class respiration{
     public:
 
+        /* Constructor for respiration
+         *
+         * IN :    -Two #component#'s describing the components to react
+         *         -A #grid# describing the mesh of the problem
+         *         -A #vector# (of length 6X1) describing the different physical parameters necessary in the reaction
+         *                 model; v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q
+         * OUT :   the private variables  which correspond to the above mentioned quantities
+         *          - a start value alpha of 1, to suppress non-linearity
+         */
         respiration(pear::component<d_type, vec_type, mat_type> & co2,
                 pear::component<d_type, vec_type, mat_type> & o2,
                 pear::grid<d_type, mat_type> & grid,
@@ -35,39 +44,34 @@ namespace pear {
                 , k_mv_(param[3])
                 , k_mfu_(param[4])
                 , r_q_(param[5])
-                , alpha_(1.) // To suppress non-linearity
+                , alpha_(1.)
         {
             std::cout<<"Respiration between O2 and CO2"<<std::endl;
         }
 
         // Respiration dynamics: functions
-
         d_type R_u(d_type C_u, d_type C_v){
-            return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);
-        };
-
+            return alpha_*v_mu_*C_u/(k_mu_+C_u)/(1+C_v/k_mv_);};
         d_type R_v(d_type C_u, d_type C_v){
-            return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);
-        };
+            return r_q_*R_u(C_u, C_v) + alpha_*v_mfv_/(1+C_u/k_mfu_);};
 
         // Respiration dynamics: derivatives
-
         d_type dR_u_u(d_type C_u, d_type C_v){
-            return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));
-        };
-
+            return alpha_*v_mu_ / (k_mu_ + C_u) / (1. + C_v/k_mv_) * (1. - C_u/(k_mu_+C_u));};
         d_type dR_u_v(d_type C_u, d_type C_v){
-            return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);
-        };
-
+            return -1 / k_mv_ * alpha_*v_mu_ * C_u / (k_mu_ + C_u) / (1 + C_v/k_mv_) / (1 + C_v/k_mv_);};
         d_type dR_v_u(d_type C_u, d_type C_v){
-            return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);
-        };
-
+            return r_q_*dR_u_u(C_u, C_v) - 1/k_mfu_* alpha_*v_mfv_ /(1+C_u/k_mfu_) /(1+C_u/k_mfu_);};
         d_type dR_v_v(d_type C_u, d_type C_v){
-            return r_q_*dR_u_v(C_u, C_v);
-        };
+            return r_q_*dR_u_v(C_u, C_v);};
 
+        /* Function evaluation of the reaction model
+        *
+        * IN: Two #reference(vector)# describing the value of the reaction equation for each of the particular component
+        * OUT: void. Upon completion, the contribution from the reaction equation has been added to the #vector#'s
+        *                 referenced
+        *
+        */
         void f(Eigen::Ref<vec_type>  H_o2, Eigen::Ref<vec_type>  H_co2) {
             for (int t = 1; t < grid_.nb_elements()+1; t++) {
 
@@ -91,7 +95,14 @@ namespace pear {
             };
         };
 
-        void J(mat_type & dH) { // checked with Matlab !
+        /* Jacobian of the diffusion model
+        *
+        * IN: A #sparse_matrix# describing the Jacobian of the (non-linear) equation
+        * OUT: void. Upon completion, the contribution from the reaction to the Jacobian of the (non-linear) equation
+        *                 from this particular component (H_i) has been added to the #sparse_matrix#
+        *
+        */
+        void J(mat_type & dH) {
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
                 d_type area = 0.;

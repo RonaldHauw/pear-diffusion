@@ -20,7 +20,14 @@ namespace pear {
      class diffusion{
      public:
 
-
+        /* Constructor for diffusion
+         *
+         * IN :    -A #component# describing the component to be diffused
+         *         -A #grid# describing the mesh of the problem
+         *         -A #vector# (of length 4X1) describing the different physical parameters necessary in the diffusion
+         *                 model; sigma_r, sigma_z, r, c_amb
+         * OUT :   the private variables  which correspond to the above mentioned quantities
+         */
          diffusion(pear::component<d_type, vec_type, mat_type> & comp, pear::grid<d_type, mat_type> & grid, std::vector<d_type> param)
          : comp_(comp)
          , sigma_r_(param[0])
@@ -33,14 +40,41 @@ namespace pear {
              std::cout<<"  C_amb = "<<C_amb_<<"   r = "<<r_<<std::endl;
          }
 
+         /* Function evaluation of the diffusion model
+         *
+         * IN: A #reference(vector)# describing the value of the diffusion equation for this particular component
+         * OUT: void. Upon completion, the contribution from the diffusion equation has been added to the #vector#
+         *                 referenced
+         *
+         */
+         void f(Eigen::Ref<vec_type> f_vector) const{
 
+             // Outer boundary
+             for (int t = 1; t<grid_.nb_outer_edges()+1; t++) {
+                 std::vector<int> edge_nodes = grid_.outer_edge(t);
+
+                 d_type r1     = grid_.node(edge_nodes[0])[0];   d_type z1 = grid_.node(edge_nodes[0])[1];
+                 d_type r2     = grid_.node(edge_nodes[1])[0];   d_type z2 = grid_.node(edge_nodes[1])[1];
+                 d_type length = sqrt((r1-r2)*(r1-r2) + (z1-z2)*(z1-z2));
+
+                 f_vector( edge_nodes[0]-1 ) += r_ * C_amb_ * (2*r1+r2) * length / 6. ;
+                 f_vector( edge_nodes[1]-1 ) += r_ * C_amb_ * (r1+2*r2) * length / 6. ;
+
+             };
+             // Inner boundary: in case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
+         };
+
+         /* Jacobian of the diffusion model
+         *
+         * IN: A #sparse_matrix# describing the Jacobian of the (non-linear) equation
+         * OUT: void. Upon completion, the contribution from the diffusion to the Jacobian of the (non-linear) equation
+         *                 from this particular component (K_i) has been added to the #sparse_matrix#
+         *
+         */
          void J(mat_type & K) const {
 
              int i = comp_.start();
 
-             //Eigen::Ref<mat_type> K = K_global.block(comp_.nb_nodes()+1, comp_.nb_nodes()+1, comp_.cons_start(), comp_.cons_start());
-
-             //K.setZero();
              for (int t = 1; t<grid_.nb_elements()+1; t++){
 
                  std::vector<int> elem_nodes = grid_.element(t);
@@ -104,34 +138,7 @@ namespace pear {
                  K.coeffRef( edge_nodes[1]-1+i, edge_nodes[0]-1+i )  += r_ * cross_term      ;
                  K.coeffRef( edge_nodes[1]-1+i, edge_nodes[1]-1+i )  += r_ * parallel_term_2 ;
 
-                 //K.coeffRef( edge_nodes[0]-1, edge_nodes[0]-1 )  += r_ * parallel_term_1 ;
-                 //K.coeffRef( edge_nodes[0]-1, edge_nodes[1]-1 )  += r_ * cross_term      ;
-                 //K.coeffRef( edge_nodes[1]-1, edge_nodes[0]-1 )  += r_ * cross_term      ;
-                 //K.coeffRef( edge_nodes[1]-1, edge_nodes[1]-1 )  += r_ * parallel_term_2 ;
-
              }
-
-         };
-
-         void f(Eigen::Ref<vec_type> f_vector) const{
-
-             // Outer boundary
-             for (int t = 1; t<grid_.nb_outer_edges()+1; t++) {
-                 std::vector<int> edge_nodes = grid_.outer_edge(t);
-
-                 d_type r1     = grid_.node(edge_nodes[0])[0];   d_type z1 = grid_.node(edge_nodes[0])[1];
-                 d_type r2     = grid_.node(edge_nodes[1])[0];   d_type z2 = grid_.node(edge_nodes[1])[1];
-                 d_type length = sqrt((r1-r2)*(r1-r2) + (z1-z2)*(z1-z2));
-
-                 f_vector( edge_nodes[0]-1 ) += r_ * C_amb_ * (2*r1+r2) * length / 6. ;
-                 f_vector( edge_nodes[1]-1 ) += r_ * C_amb_ * (r1+2*r2) * length / 6. ;
-
-             };
-
-             // Inner boundary: in case of non-trivial Neumann conditions on the inner booundary, insert similar loop here
-
-             // Add the matrix vector product
-             //f_vector =  K*comp_.cons() - f_vector;
 
          };
 

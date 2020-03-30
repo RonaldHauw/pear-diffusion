@@ -27,6 +27,20 @@ namespace pear {
     class component{
     public:
 
+
+        /* Constructor for component
+         *
+         * IN :     - A #string# describing the name of the component
+         *          - A #grid# describing the mesh common to all components
+         *          - A #vector# describing the concentrations of the component on all grid points
+         *          - A #int# describing the stride in the total concentration vector between the concentrations for
+         *                  one and the same component
+         *          - a #int# describing the index of the component in the ordering of the total concentration vector
+         * OUT :    The private variables associated to the above mentioned quantities and..
+         *          - a #int# describing the first entry in the total concentration vector of this component
+         *          - a #int# describing the last entry in the total concentration vector of this component
+         *
+         */
         component(std::string name, pear::grid<d_type, mat_type> & grid, vec_type & c, int stride, int index)
                 : name_(name)
                 , concentration_(c)
@@ -39,38 +53,21 @@ namespace pear {
             std::cout<<"Initialised component: "<<name_<<std::endl;
         }
 
-        std::string name(){
-            return name_;
-        }
+        std::string name(){                 return name_; }
+        Eigen::Ref<vec_type> cons()  {      return concentration_.segment(start_, grid_.nb_nodes());}
+        Eigen::Ref<vec_type> cons_full()  { return concentration_;}
+        d_type & concentration(int i){      return concentration_(start_ + (i-1)*stride_);}
+        void set_initial(d_type c_amb){     this->cons().setOnes();
+                                            this->cons() *= c_amb;}
 
-        Eigen::Ref<vec_type> cons()  {
-            return concentration_.segment(start_, grid_.nb_nodes());
-        }
-
-        Eigen::Ref<vec_type> cons_full()  {
-            return concentration_;
-        }
-
-        int cons_start(){ return start_; };
-        int cons_stop(){ return stop_; };
-        int cons_stride(){ return stride_; };
-
-        d_type & concentration(int i){
-            return concentration_(start_ + (i-1)*stride_);
-        }
-
-        int nb_nodes(){
-            return grid_.nb_nodes();
-        };
+        int cons_start(){   return start_; };
+        int cons_stop(){    return stop_; };
+        int cons_stride(){  return stride_; };
+        int nb_nodes(){     return grid_.nb_nodes();};
 
         int start(){
             return start_;
         };
-
-        void set_initial(d_type c_amb){
-            this->cons().setOnes();
-            this->cons() *= c_amb;
-        }
 
     private:
         std::string name_;
