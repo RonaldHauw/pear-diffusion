@@ -41,6 +41,14 @@ namespace pear {
                     std::cout<<"Reaction diffusion equation composed."<<std::endl;
                 }
 
+        /* Construction of the function
+        *
+        * IN: - A #vector# describing the evaluation of the (non-linear) equation at each gridpoint
+        *     - A #sparse_matrix# to be used as intermediate workspace in the algebraic computations
+        * OUT: void. Upon completion, the #vector# has been re-initialised (as the memory is recycled) and
+        *              contains the diffusion of each of the components as well as the existing reactions between them
+        *
+        */
         void f(vec_type & x, mat_type & workmat){
 
 
@@ -62,6 +70,13 @@ namespace pear {
 
         };
 
+        /* Construction of the function
+        *
+        * IN: A #vector# describing the evaluation of the (!) reaction (!) equation at each gridpoint
+        * OUT: void. Upon completion, the #vector# has been re-initialised (as the memory is recycled) and
+        *              contains the existing reactions between components, ignoring the diffusion model
+        *
+        */
         void f_react_only(vec_type & x){
 
             x.setZero();
@@ -70,7 +85,13 @@ namespace pear {
         };
 
 
-
+        /* Construction of the Jacobian
+        *
+        * IN: A #sparse_matrix# describing the Jacobian of the (non-linear) equation
+        * OUT: void. Upon completion, the #sparse_matrix# has been re-initialised (as the memory is recycled) and
+        *              contains the diffusion of each of the components as well as the existing reactions between them
+        *
+        */
         void J(mat_type & Jmat){
             diff_o2_.setSparsityPattern(Jmat);
 
@@ -79,17 +100,9 @@ namespace pear {
             resp_.J(Jmat);
         };
 
-        void suppress_nonlinearity(d_type alpha){
-            resp_.suppress_nonlinearity(alpha);
-        }
-
-        Eigen::Ref<vec_type> cons(){
-            return diff_o2_.cons_full();
-        }
-
-        int size(){
-            return diff_o2_.nb_nodes()+diff_co2_.nb_nodes();
-        }
+        void suppress_nonlinearity(d_type alpha){   resp_.suppress_nonlinearity(alpha);}
+        Eigen::Ref<vec_type> cons(){                return diff_o2_.cons_full();}
+        int size(){                                 return diff_o2_.nb_nodes()+diff_co2_.nb_nodes();}
 
 
     private:
@@ -99,11 +112,6 @@ namespace pear {
 
     };
 
-
-
 }
-
-
-
 
 #endif
