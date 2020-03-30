@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2
+CMAKE_SOURCE_DIR = /Users/Ag/Documents/MASTER1/Project/pear-diffusion
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/CMakeFiles /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ronald/Documents/S10/PRO/pear-diffusion-2/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/Ag/Documents/MASTER1/Project/pear-diffusion/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,32 +123,32 @@ pear_diffusion/fast:
 	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/build
 .PHONY : pear_diffusion/fast
 
-c++/main.o: c++/main.cpp.o
+software/main.o: software/main.cpp.o
 
-.PHONY : c++/main.o
+.PHONY : software/main.o
 
 # target to build an object file
-c++/main.cpp.o:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/c++/main.cpp.o
-.PHONY : c++/main.cpp.o
+software/main.cpp.o:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/software/main.cpp.o
+.PHONY : software/main.cpp.o
 
-c++/main.i: c++/main.cpp.i
+software/main.i: software/main.cpp.i
 
-.PHONY : c++/main.i
+.PHONY : software/main.i
 
 # target to preprocess a source file
-c++/main.cpp.i:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/c++/main.cpp.i
-.PHONY : c++/main.cpp.i
+software/main.cpp.i:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/software/main.cpp.i
+.PHONY : software/main.cpp.i
 
-c++/main.s: c++/main.cpp.s
+software/main.s: software/main.cpp.s
 
-.PHONY : c++/main.s
+.PHONY : software/main.s
 
 # target to generate assembly for a file
-c++/main.cpp.s:
-	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/c++/main.cpp.s
-.PHONY : c++/main.cpp.s
+software/main.cpp.s:
+	$(MAKE) -f CMakeFiles/pear_diffusion.dir/build.make CMakeFiles/pear_diffusion.dir/software/main.cpp.s
+.PHONY : software/main.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... pear_diffusion"
-	@echo "... c++/main.o"
-	@echo "... c++/main.i"
-	@echo "... c++/main.s"
+	@echo "... software/main.o"
+	@echo "... software/main.i"
+	@echo "... software/main.s"
 .PHONY : help
 
 

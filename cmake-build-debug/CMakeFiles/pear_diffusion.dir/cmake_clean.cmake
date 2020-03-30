@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/pear_diffusion.dir/c++/main.cpp.o"
+  "CMakeFiles/pear_diffusion.dir/software/main.cpp.o"
   "pear_diffusion"
   "pear_diffusion.pdb"
 )
