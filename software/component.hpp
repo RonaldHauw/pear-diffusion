@@ -50,7 +50,6 @@ namespace pear {
                 , stride_(stride)
                 , index_(index)
         {
-            std::cout<<"Initialised component: "<<name_<<std::endl;
         }
 
         std::string name(){                 return name_; }

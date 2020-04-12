@@ -49,6 +49,9 @@ namespace pear {
         grid(std::string file_name)
         : file_name_(file_name)
         {
+
+            std::cout<<"//GRID//"<<std::endl;
+
             // NODES
 
             std::ifstream nodes_file(file_name_ + "_Nodes.txt");
@@ -82,7 +85,7 @@ namespace pear {
                     tripletList_.push_back(T(n+nb_nodes_,n+nb_nodes_,0.0));
 
                 }
-                std::cout<<"Grid nodes loaded from: "<<file_name_<<" length: "<<nb_nodes_<<std::endl;
+                std::cout<<"        "<<nb_nodes_<<" nodes loaded from: "<<file_name_<<std::endl;
                 nodes_file.close();
 
             }
@@ -158,8 +161,7 @@ namespace pear {
                     tripletList_.push_back(T(n3+nb_nodes_,n3+nb_nodes_,0.0));
 
                 }
-
-                std::cout<<"Grid elements loaded from: "<<file_name_<<" length: "<<nb_elements_<<std::endl;
+                std::cout<<"        "<<nb_elements_<<" elements loaded from: "<<file_name_<<std::endl;
                 elements_file.close();
             }
             else {std::cout << "Unable to open file, check the executable folder";}
@@ -204,7 +206,7 @@ namespace pear {
 
 
                 }
-                std::cout<<"Outer edges loaded from: "<<file_name_<<" length: "<<nb_outer_edges_<<std::endl;
+                std::cout<<"        "<<nb_outer_edges_<<" outer edges loaded from: "<<file_name_<<std::endl;
                 outer_file.close();
             }
 
@@ -246,7 +248,7 @@ namespace pear {
                     tripletList_.push_back(T(n1+nb_nodes_,n2+nb_nodes_,0.0));
                     tripletList_.push_back(T(n2+nb_nodes_,n1+nb_nodes_,0.0));
                 }
-                std::cout<<"Inner edges loaded from: "<<file_name_<<" length: "<<nb_inner_edges_<<std::endl;
+                std::cout<<"        "<<nb_inner_edges_<<" inner edges loaded from: "<<file_name_<<std::endl;
                 inner_file.close();
             }
             else {std::cout << "Unable to open file, check the executable folder";};
@@ -258,7 +260,7 @@ namespace pear {
          * OUT:     #vector<double># (of length 2X1) describing the (x, y) coordinates of the node
          *
          */
-        std::vector<d_type> node(int i) const {
+        std::vector<d_type> node(int i) const{
             std::vector<d_type> node_coord(2);
             node_coord[0] = nodes_[2*(i-1)];
             node_coord[1] = nodes_[2*(i-1)+1];
@@ -271,7 +273,7 @@ namespace pear {
          * OUT:     #vector<int># (of variable length NX1) describing the elements to which the node belongs
          *
          */
-        std::vector<int> elements_for_node(int node) const {
+        std::vector<int> elements_for_node(int node) const{
             std::vector<int> edge_nodes(15);         // Pre-allocation to upper-limit
 
             int N = 0;                                  // Number of elements found
@@ -294,7 +296,7 @@ namespace pear {
          * OUT:     #vector<int># (of length 3X1) describing the numbers of the nodes/vertices of each element
          *
          */
-        std::vector<int> element(int i) const {
+        std::vector<int> element(int i) const{
             std::vector<int> elem_nodes(3);
             elem_nodes[0] = elements_[3*(i-1)];
             elem_nodes[1] = elements_[3*(i-1)+1];
@@ -308,7 +310,7 @@ namespace pear {
          * OUT:     #vector<int># (of length 2X1) describing the numbers of the nodes/vertices of each edge
          *
          */
-        std::vector<int> outer_edge(int i) const {
+        std::vector<int> outer_edge(int i) const{
             std::vector<int> edge_nodes(2);
             edge_nodes[0] = outer_edges_[2*(i-1)];
             edge_nodes[1] = outer_edges_[2*(i-1)+1];
@@ -321,7 +323,7 @@ namespace pear {
          * OUT:     #vector<int># (of length 2X1) describing the numbers of the nodes/vertices of each edge
          *
          */
-        std::vector<int> inner_edge(int i) const {
+        std::vector<int> inner_edge(int i) const{
             std::vector<int> edge_nodes(2);
             edge_nodes[0] = inner_edges_[2*(i-1)];
             edge_nodes[1] = inner_edges_[2*(i-1)+1];

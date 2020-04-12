@@ -46,7 +46,7 @@ namespace pear {
                 , r_q_(param[5])
                 , alpha_(1.)
         {
-            std::cout<<"Respiration between O2 and CO2"<<std::endl;
+            std::cout<<"// RESPIRATION //"<<std::endl<<"        Between O2 and CO2"<<std::endl;
         }
 
         // Respiration dynamics: functions
@@ -127,7 +127,6 @@ namespace pear {
 
         void suppress_nonlinearity(d_type alpha){
             alpha_ = alpha;
-            std::cout<<"pear::respiration.suppress_nonlinearity(): alpha_ = "<<alpha_<<std::endl;
         };
 
     private:

@@ -38,7 +38,6 @@ namespace pear {
                 , diff_co2_(diff_co2)
                 , resp_(resp)
                 {
-                    std::cout<<"Reaction diffusion equation composed."<<std::endl;
                 }
 
         /* Construction of the function

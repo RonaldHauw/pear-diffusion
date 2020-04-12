@@ -1,7 +1,7 @@
 # !/bin/bash
 # ./compile.sh
 
-echo "starting command line compilation with flags -Wall and -O3"
+echo "Starting command line compilation with flags -Wall and -O3"
 #echo " - component.hpp"
 #g++ -c ../component.hpp
 #echo " - grid.hpp"
@@ -22,13 +22,13 @@ g++ -Wall -std=c++17 -O3    software/component.hpp \
                             software/reaction.hpp \
                             software/nlsolver.hpp \
                             software/main.cpp
-echo "compilatioin succeeded"
+echo "Compilation succeeded"
 cp a.out pear_diffusion
-echo "executable named pear_diffusion in main folder"
+echo "Executable named pear_diffusion in main folder"
 rm a.out    software/component.hpp.gch \
-            software/diffusion.hpp.gch \
+            software/diffusion.hgpp.gch \
             software/grid.hpp.gch \
             software/nlsolver.hpp.gch \
             software/rdc.hpp.gch \
             software/reaction.hpp.gch
-echo "cleanup done"
+echo "Cleanup done"

@@ -75,12 +75,15 @@ int main(int argc, char* argv[]) {
     d_type steplength = 1.;
     d_type alpha = 1.;
     std::string setting = "Orchard";
+
+    std::cout<<"//PARAMETERS//"<<std::endl;
+
     for (int i = 0; i <argc; i++) {
         if (std::string(argv[i]) == "-ShelfLife" && set_environment == 0) {
             T = 293.15; // 20 degrees Celsius
             eta_u = 20.8e-2;
             eta_v = 0;
-            std::cout<<"Shelflife environment chosen"<<std::endl;
+            std::cout<<"        Shelflife environment chosen"<<std::endl;
             set_environment = 1;
             setting = "ShelfLife";
         };
@@ -89,7 +92,7 @@ int main(int argc, char* argv[]) {
             T = 280.15; // 7 degrees Celsius
             eta_u = 20.8e-2;
             eta_v = 0;
-            std::cout<<"Refrigerator environment chosen"<<std::endl;
+            std::cout<<"        Refrigerator environment chosen"<<std::endl;
             set_environment = 1;
             setting = "Refrigerator";
 
@@ -99,7 +102,7 @@ int main(int argc, char* argv[]) {
             T = 272.15; // -1 degrees Celsius
             eta_u = 20.8e-2;
             eta_v = 0;
-            std::cout<<"Precooling environment chosen"<<std::endl;
+            std::cout<<"        Precooling environment chosen"<<std::endl;
             set_environment = 1;
             setting = "Precooling";
 
@@ -109,7 +112,7 @@ int main(int argc, char* argv[]) {
             T = 272.15; // -1 degrees Celsius
             eta_u = 2e-2;
             eta_v = 5e-2;
-            std::cout<<"DisorderInducing environment chosen"<<std::endl;
+            std::cout<<"        DisorderInducing environment chosen"<<std::endl;
             set_environment = 1;
             setting = "DisorderInducing";
 
@@ -119,7 +122,7 @@ int main(int argc, char* argv[]) {
             T = 272.15; // -1 degrees Celsius
             eta_u = 2e-2;
             eta_v = 0.7e-2;
-            std::cout<<"OptimalCA environment chosen"<<std::endl;
+            std::cout<<"        OptimalCA environment chosen"<<std::endl;
             set_environment = 1;
             setting = "OptimalCA";
 
@@ -128,30 +131,29 @@ int main(int argc, char* argv[]) {
         if (argc - i > 1) { // at least two arguments remain
             if (std::string(argv[i]) == "-maxit") {
                 nl_maxit = std::stoi(argv[i + 1]);
-                std::cout<<"Setting maximum nonlinear iterations to: "<<nl_maxit<<std::endl;
+                std::cout<<"        Setting maximum nonlinear iterations to: "<<nl_maxit<<std::endl;
             }
             if (std::string(argv[i]) == "-vmuref") {
                 v_mu_ref = std::stod(argv[i + 1]);
-                std::cout<<"Settig v_mu_ref to: "<<v_mu_ref<<std::endl;
+                std::cout<<"        Settig v_mu_ref to: "<<v_mu_ref<<std::endl;
             }
             if (std::string(argv[i]) == "-vmfvref") {
                 v_mfv_ref = std::stod(argv[i + 1]);
-                std::cout<<"Settig v_mfv_ref to: "<<v_mfv_ref<<std::endl;
+                std::cout<<"        Settig v_mfv_ref to: "<<v_mfv_ref<<std::endl;
             }
             if (std::string(argv[i]) == "-steplength") {
                 steplength = std::stod(argv[i + 1]);
-                std::cout<<"Settig steplength to: "<<steplength<<std::endl;
+                std::cout<<"        Settig steplength to: "<<steplength<<std::endl;
             }
             if (std::string(argv[i]) == "-anl") {
                 alpha = std::stod(argv[i + 1]);
-                std::cout<<"Adaptive nonlinearity: "<<alpha<<std::endl;
+                std::cout<<"        Adaptive nonlinearity: "<<alpha<<std::endl;
             }
-            std::cout<<"What's up "<< i << std::endl;
         }
 
     };
 
-    if (set_environment == 0){std::cout<<"Orchard environment chosen"<<std::endl;};
+    if (set_environment == 0){std::cout<<"      Orchard environment chosen"<<std::endl;};
 
 
     // Respiration parameters
@@ -159,15 +161,13 @@ int main(int argc, char* argv[]) {
     d_type v_mfv = v_mfv_ref * exp(e_a_vmfv_ref / R_g * (1. / T_ref - 1. / T));
     std::vector<d_type> respiration_param = {v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q};
 
-    // Boundary parameters // remove last hard coded number changed to zero!
+    // Boundary parameters
     d_type c_u_amb = p_atm * eta_u / (R_g * T);
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
     std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
     std::vector<d_type> diffusion_co2_param = {sigma_v_r, sigma_v_z, r_v, c_v_amb};
 
-    // allocate memory for the solution
-    std::cout<<"pear::main(): allocating memory to store the solution"<<std::endl;
-    std::cout<<"       - vec_type of size "<<grid.nb_nodes()*2<<std::endl;
+    // Allocate memory for the solution
     vec_type conc;
     conc.resize(grid.nb_nodes()*2, 1);
     //conc.setZero();
@@ -192,6 +192,6 @@ int main(int argc, char* argv[]) {
 
     int exp_flag = export_solution("data/solutions/solution_"+setting, grid, std::vector<pear::component<d_type, vec_type, mat_type> >{o2, co2});
 
-    if (exp_flag == 1){std::cout<<"solutions exported"<<std::endl; }
+    if (exp_flag == 1){std::cout<<"//END//"<<std::endl<<"      Solutions exported"<<std::endl; }
 
 };

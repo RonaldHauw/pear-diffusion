@@ -37,7 +37,7 @@ namespace pear {
         :f_(f)
         , grid_(grid)
         {
-            std::cout<<"Non-linear solver coupled with abstract function."<<std::endl;
+            std::cout<<"//NON-LINEAR//"<<std::endl;
         }
 
         /* Solutions the non-linear equation
@@ -51,94 +51,91 @@ namespace pear {
          */
         int solve(int maxit = 10, d_type steplength = 1., d_type alpha = 0.){
 
-            std::cout<<"pear::nlsolver.solve(): allocating work memory: "<<std::endl;
-            std::cout<<"       - mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
-            std::cout<<"       - vec_type of size  "<<f_.size()<<std::endl;
-            std::cout<<"       - mat_type of size ("<<f_.size()/2<<", "<<f_.size()/2<<")"<<std::endl;
+            std::cout<<"        Working memory allocated: "<<std::endl;
+            std::cout<<"            mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
+            std::cout<<"            vec_type of size  "<<f_.size()<<std::endl;
+            std::cout<<"            mat_type of size ("<<f_.size()/2<<", "<<f_.size()/2<<")"<<std::endl;
 
+            // Initialisation system
             mat_type J(f_.size(), f_.size());
-            mat_type J2(f_.size(), f_.size());
+            mat_type J_work(f_.size(), f_.size());
 
-            J.reserve(f_.size()*16);
-            J2.reserve(f_.size()*16);
-
+            J.reserve(f_.size()*16);        // ! Presumption! Highly unlikely that a node has more than 16 neighbours
+            J_work.reserve(f_.size()*16);
 
             grid_.setSparsityPattern(J);
-            grid_.setSparsityPattern(J2);
+            grid_.setSparsityPattern(J_work);
 
+            vec_type direction; direction.resize(f_.size(), 1);
+            vec_type residual; residual.resize(f_.size(), 1);
+            vec_type workvec; workvec.resize(f_.size(), 1);
 
-            vec_type f; f.resize(f_.size(), 1);
-            vec_type f2; f2.resize(f_.size(), 1);
-            vec_type f3; f3.resize(f_.size(), 1);
-
+            //Initialisation homotopy continuation
             d_type cur_alpha = 0.0;
             f_.suppress_nonlinearity(cur_alpha);
 
+            // Initialisation non-linear solver
             d_type res = 1.0;
             Eigen::SparseLU<mat_type> linsolver;
-            f_.J(J);
             linsolver.analyzePattern(J);
-
             int i = 0;
 
+            std::cout<<"        Homotopy progress --> "<<100*(cur_alpha)<<"%"<<std::endl;
+            // Homotopy continuation
             while (cur_alpha < 1.){
                 i++;
-                // prediction step
-                f_.f_react_only(f2);
+
+                // Direction of prediction
+                f_.f_react_only(workvec);
                 f_.J(J);
                 linsolver.factorize(J);
-                f = linsolver.solve(f2);
-                f3 = f2-J*f;
-                std::cout<<f3.norm()<<std::endl;
-                f2 = f_.cons();
-                // backtracking on prediction step length
+                direction = linsolver.solve(workvec);
+                //residual = workvec-J*direction;
+                //std::cout<<residual.norm()<<std::endl;
+                workvec = f_.cons();
+
+                // Backtracking on prediction step length
                 steplength = 1.-cur_alpha;
                 for (int k = 0; k < 6; k++){
-                    f_.cons() = f2-steplength*f; // take a test step
+                    f_.cons() = workvec-steplength*direction;        // Try a test step...
                     f_.suppress_nonlinearity(cur_alpha+steplength);
-                    f_.f(f3, J2); // residual
-                    std::cout<<" f3 norm"<<f3.norm()<<std::endl;
-                    if (f3.norm()>1e-11) { // if residual is small enough, keep step
+                    f_.f(residual, J_work);                              // ... compute the residual ...
+                    //std::cout<<" f3 norm"<<residual.norm()<<std::endl;
+                    if (residual.norm()>1e-11) {                     // ... if the residual remains too large, halve the steplength
                         steplength *= 0.5;
                     } else {
-                        std::cout<<"prediction steplength = "<<steplength<<std::endl;
+                        std::cout<<"                          --> "<<round(100*(cur_alpha+steplength))<<"%";
                         break;
                     }
                 }
                 cur_alpha += steplength;
 
-
                 for (int j = 1; j < maxit; j++ ){
 
-                    f_.f(f, J2);
+                    f_.f(workvec, J_work);
                     f_.J(J);
 
-
                     linsolver.factorize(J);
-                    f2 = linsolver.solve(f);  // direction
-
-                    res = f.norm();
+                    direction = linsolver.solve(workvec);
+                    res = direction.norm();
 
                     steplength = 1.;
-                    f = f_.cons(); // store current concentrations
-
-                    // backtracking linesearch for residual decrease
+                    workvec = f_.cons();
+                    // Backtracking on line-search step length
                     for (int k = 0; k < 100; k++){
-                        f_.cons() = f-steplength*f2;
-                        f_.f(f3, J2); // residual
-                        if (f3.norm()>res) {
+                        f_.cons() = workvec-steplength*direction;
+                        f_.f(residual, J_work);
+                        if (residual.norm()>res) {
                             steplength *= 0.5;
                         } else {
-                            std::cout<<"steplength = "<<steplength<<std::endl;
+                            //std::cout<<" steplength = "<<steplength<<std::endl;
                             break;
                         }
                     }
 
-
-                    res = f3.norm();
-
-                    std::cout<<"iterations = "<<i<<"  newton residual = "<<res<<std::endl;
-                    if (res < 5e-19) {
+                    //std::cout<<"iterations = "<<i<<"  newton residual = "<<residual.norm()<<std::endl;
+                    if (residual.norm() < 5e-19) {
+                        std::cout<<"        with "<<i<<" Newton iterations until a residual norm of"<<residual.norm()<<std::endl;
                         break;
                     }
                 }

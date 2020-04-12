@@ -36,8 +36,9 @@ namespace pear {
          , C_amb_(param[3])
          , grid_(grid)
          {
-             std::cout<<"Component: "<<comp_.name()<<" will diffuse with sigma_r = "<<sigma_r_<< " and sigma_z = " <<sigma_z_<< std::endl;
-             std::cout<<"  C_amb = "<<C_amb_<<"   r = "<<r_<<std::endl;
+             std::cout<<"//DIFFUSION//"<<std::endl;
+             std::cout<<"       "<<comp_.name()<<" will diffuse with sigma_r = "<<sigma_r_<< " and sigma_z = " <<sigma_z_<< std::endl;
+             std::cout<<"       "<<"C_amb = "<<C_amb_<<"   r = "<<r_<<std::endl;
          }
 
          /* Function evaluation of the diffusion model
