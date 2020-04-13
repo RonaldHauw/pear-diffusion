@@ -2,7 +2,7 @@ Year: 2019-2020
 Project: pear
 Author 1: Ronald, Hauwaerts
 Author 2: Octave, Oliviers
-Author 3: Agathe, van Lamsweerde (if you have 2 authors leave out this line)
+Author 3: Agathe, van Lamsweerde
 Needed libraries:
 * library name, url, C++ or Fortran, if C++: header-only?, where to put it (don't include big libraries in your zip/tgz file)
 * ...
