@@ -90,8 +90,6 @@ namespace pear {
                 f_.J(J);
                 linsolver.factorize(J);
                 direction = linsolver.solve(workvec);
-                //residual = workvec-J*direction;
-                //std::cout<<residual.norm()<<std::endl;
                 workvec = f_.cons();
 
                 // Backtracking on prediction step length
@@ -99,8 +97,7 @@ namespace pear {
                 for (int k = 0; k < 6; k++){
                     f_.cons() = workvec-steplength*direction;        // Try a test step...
                     f_.suppress_nonlinearity(cur_alpha+steplength);
-                    f_.f(residual, J_work);                              // ... compute the residual ...
-                    //std::cout<<" f3 norm"<<residual.norm()<<std::endl;
+                    f_.f(residual, J_work);                          // ... compute the residual ...
                     if (residual.norm()>1e-11) {                     // ... if the residual remains too large, halve the steplength
                         steplength *= 0.5;
                     } else {
@@ -128,12 +125,10 @@ namespace pear {
                         if (residual.norm()>res) {
                             steplength *= 0.5;
                         } else {
-                            //std::cout<<" steplength = "<<steplength<<std::endl;
                             break;
                         }
                     }
 
-                    //std::cout<<"iterations = "<<i<<"  newton residual = "<<residual.norm()<<std::endl;
                     if (residual.norm() < 5e-19) {
                         std::cout<<"        with "<<i<<" Newton iterations until a residual norm of"<<residual.norm()<<std::endl;
                         break;
