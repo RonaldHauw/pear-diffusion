@@ -16,7 +16,7 @@ function H = assemble_H( coordinates, elements3, C, R_u, R_v )
         % area of element
         area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
         
-        % quadrature points in each vertex
+%         % quadrature points in each vertex
 %         H( t )   = H( t )   + 1/3 * area .* r .* R_u(C(t), C(M+t)) ;
 %         H( M+t ) = H( M+t ) - 1/3 * area .* r .* R_v(C(t), C(M+t)) ;
         

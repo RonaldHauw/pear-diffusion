@@ -11,7 +11,7 @@ function J = assemble_J( coordinates, elements3, C, dR_u_u, dR_u_v, dR_v_u, dR_v
 
     J = zeros( 2*M, 2*M ) ;
 
-    % quadrature points in each vertex
+%     % quadrature points in each vertex
 %     for i = 1:M
 %         % sum of areas of elements arount vertex i
 %         T = elements3(any(elements3==i, 2), :) ;
