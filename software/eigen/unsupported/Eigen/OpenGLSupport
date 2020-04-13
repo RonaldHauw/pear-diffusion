@@ -13,7 +13,7 @@
 #include "../../Eigen/Geometry"
 
 #if defined(__APPLE_CC__)
-  #include <OpenGL/OpenGL.h>
+  #include <OpenGL/gl.h>
 #else
   #include <GL/gl.h>
 #endif

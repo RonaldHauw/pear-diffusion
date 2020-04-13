@@ -24,10 +24,10 @@ subplot(1, 2, 1)
 
 % show(elements3,[],coordinates,full(sol_o2(:, 4)), [0, max(sol_o2(:, 4))], 0 );
 show(elements3,[],coordinates,full(sol_o2(:, 4)), [0, 10], 0 );
-title('Oxygen Concentration')
+title('Oxygen concentration [mpl/m³]')
 
 subplot(1, 2, 2)
 % show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, max(sol_co2(:, 4))], 0 );
-show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, 6], 0 );
-title('Carbon dioxide Concentration')
+show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, 5], 0 );
+title('Carbon dioxide concentration [mpl/m³]')
 

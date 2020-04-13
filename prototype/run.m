@@ -78,9 +78,7 @@ function run( varargin )
         error( "Did not understand which simulation to run. Run 'help run' for more information." )
     end
     %
-    disp( "Run simulation with T_cel = " + num2str(T_cel) )
-    disp( "	            n_u   = " + num2str(n_u) )
-    disp( "	            n_v   = " + num2str(n_v) )
+    disp( "Run simulation with T_cel = " + num2str(T_cel) + ", n_u = " + num2str(n_u)+ ", n_v = " + num2str(n_v) )
     disp( "	" )
     
     
@@ -107,7 +105,7 @@ function run( varargin )
     
     %% Solve FEM model
     % parameters of homotopy continuation
-    dt = 0.1 ;
+    dt = 0.05 ;
     maxit = 50 ;
 
     % intialize concentrations
@@ -117,10 +115,15 @@ function run( varargin )
     % f = [ f_u ; f_v ]
     f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb ) ;
 
+    % keep track of progress
+    fprintf( '        %12s \n', 'converged at' ) ;
+    fprintf( '%3s     %10s      %8s \n','t',  'iteration', 'residual' ) ;
+    fprintf( ' ----   ------------    -------- \n') ;
+          
     % perform hopotopy continuation
     for t = 0:dt:1
 
-        fprintf( '%3s %3.2f : ','t =',t ) ;
+        fprintf( ' %3.2f',t ) ;
         
         % prediction step
         % nonlinearity H = [ H_u(C) ; H_v(C) ]
@@ -149,7 +152,7 @@ function run( varargin )
 
             % check for convergence
             if norm(P) < 10^(-12)
-                fprintf( '%10s %2d %8s %6.2e\r\n', 'stopped at itr.', n, 'with resid.', norm(P) ) ;
+                fprintf( '       %2d          %6.2e\n', n, norm(P) ) ;
                 break
             end
 
@@ -176,7 +179,7 @@ function run( varargin )
             
             % check for convergence
             if n == maxit
-                fprintf( '%10s\r\n', 'reached maximum number of iterations') ;
+                fprintf( '    %8s       %6.2e\n', 'maximum', norm(P) ) ;
                 break
             end
         end

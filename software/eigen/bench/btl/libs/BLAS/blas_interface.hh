@@ -20,7 +20,7 @@
 #ifndef blas_PRODUIT_MATRICE_VECTEUR_HH
 #define blas_PRODUIT_MATRICE_VECTEUR_HH
 
-#include "c_interface_base.h"
+#include <c_interface_base.h>
 #include <complex>
 extern "C"
 {
