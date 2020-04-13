@@ -1,5 +1,5 @@
 %% Group 11 - April 13th 2020
-% Finite element method for two-dimensional reaction-diffusion system.
+% Solve reaction-diffusion system with finite element method in C++.
 
 %% Compile the C++ code if executable does not exist
 if ~ isfile('./pear_diffusion')

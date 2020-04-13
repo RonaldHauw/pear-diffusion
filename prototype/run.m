@@ -1,5 +1,5 @@
 %% Group 11 - April 13th 2020
-% Finite element method for two-dimensional reaction-diffusion system.
+% Solve reaction-diffusion system with finite element method in Matlab.
 %
 % Either run simulation by name as
 %     >> run( name )
@@ -33,34 +33,58 @@ function run( varargin )
         
         switch lower(name)
             case 'orchard'
+                % parameters of simulation
                 T_cel = 25 ;
                 n_u   = 0.208 ;
                 n_v   = 0.0004 ;
+                % parameters for homotopy continuation
+                dt    = 0.05 ;
+                maxit = 50 ;
             
             case 'shelf life'
+                % parameters of simulation
                 T_cel = 20 ;
                 n_u   = 0.208 ;
                 n_v   = 0 ;
+                % parameters for homotopy continuation
+                dt    = 0.05 ;
+                maxit = 50 ;
                 
             case 'refrigerator'
+                % parameters of simulation
                 T_cel = 7 ;
                 n_u   = 0.208 ;
                 n_v   = 0 ;
+                % parameters for homotopy continuation
+                dt    = 0.2 ;
+                maxit = 10 ;
                 
             case 'precooling'
+                % parameters of simulation
                 T_cel = -1 ;
                 n_u   = 0.208 ;
                 n_v   = 0 ;
+                % parameters for homotopy continuation
+                dt    = 0.2 ;
+                maxit = 10 ;;
                 
             case 'disorder inducing'
+                % parameters of simulation
                 T_cel = -1 ;
                 n_u   = 0.02 ;
                 n_v   = 0.05 ;
+                % parameters for homotopy continuation
+                dt    = 0.2 ;
+                maxit = 10 ;
                 
             case 'optimal ca'
+                % parameters of simulation
                 T_cel = -1 ;
                 n_u   = 0.02 ;
                 n_v   = 0.007 ;
+                % parameters for homotopy continuation
+                dt    = 0.2 ;
+                maxit = 10 ;
                 
             otherwise
                 error( "Did not understand which simulation to run. Run 'help run' for more information." )
@@ -106,9 +130,7 @@ function run( varargin )
     
     %% Solve FEM model
     % parameters of homotopy continuation
-    dt = 0.1 ;
-    maxit = 50 ;
-
+    
     % intialize concentrations
     C = zeros(2*M, 1) ;
     % K = [ K_u , 0 ; 0 , K_v ]
@@ -120,7 +142,8 @@ function run( varargin )
     fprintf( '        %12s \n', 'converged at' ) ;
     fprintf( '%3s     %10s      %8s \n','t',  'iteration', 'residual' ) ;
     fprintf( ' ----   ------------    -------- \n') ;
-          
+    
+    tic
     % perform hopotopy continuation
     for t = 0:dt:1
 
@@ -185,7 +208,7 @@ function run( varargin )
             end
         end
     end
-
+    toc
 
     %% Show oxygen and carbon dioxide solutions
     addpath( '../matlab' )
