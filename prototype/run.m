@@ -22,7 +22,7 @@ function run( varargin )
 
     %% Read input
     if ( nargin < 2 )
-        % run default simulation 'precooling'
+        % run default simulation 'refrigerator'
         if ( nargin == 0 )
             name = 'refrigerator' ;
         
@@ -88,10 +88,11 @@ function run( varargin )
 
     
     %% Load domain
-    load mesh/HCT_Mesh_Data.mat
+    addpath('../data/meshes/')
+    load mesh/HCTmesh3.mat
+    load mesh/HCTmesh3_Data.mat
     %
-    coordinates = Nodes(:, 2:3)/50 ;
-    % coordinates = mesh.Nodes'/50 ;
+    coordinates = Nodes(:, 2:3) ;
     elements3   = Elements( : , 2:end ) ;
     % number of vertices
     M           = size(coordinates, 1) ;
@@ -105,7 +106,7 @@ function run( varargin )
     
     %% Solve FEM model
     % parameters of homotopy continuation
-    dt = 0.05 ;
+    dt = 0.1 ;
     maxit = 50 ;
 
     % intialize concentrations
@@ -188,16 +189,6 @@ function run( varargin )
 
     %% Show oxygen and carbon dioxide solutions
     addpath( '../matlab' )
-    %
-    figure('position', [300 100 450 400])
-    subplot(1, 2, 1)
-    show(elements3,[],coordinates,full( C(1:M) ), [0, 10], C_u_amb);
-    title('Oxygen [mol/m³]', 'FontSize', 10)
-    %
-    subplot(1, 2, 2)
-    show(elements3,[],coordinates,full( C(M+1:end) ), [0, 5], C_v_amb);
-    title('Carbon dioxide [mol/m³]', 'FontSize', 10)
-    %
-    sgtitle( join(['Simulated ', name]), 'FontSize', 12 )
-    
+    show( C, name, elements3, coordinates, [C_u_amb, C_v_amb] )
+        
 end

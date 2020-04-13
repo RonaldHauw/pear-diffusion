@@ -1,11 +1,15 @@
-%% Compile the C++ code
-%! ./compile.sh
+%% Group 11 - April 13th 2020
+% Finite element method for two-dimensional reaction-diffusion system.
+
+%% Compile the C++ code if executable does not exist
+if ~ isfile('./pear_diffusion')
+    ! ./compile.sh
+end
 
 %% Initialise the mesh grid
 run('matlab/hct_grid.m')
 
 %% Solve using C++
-
 ! ./pear_diffusion -maxit 100 -ShelfLife
 
 
@@ -19,15 +23,4 @@ addpath('matlab/')
 elements3   = Elements( : , 2:end ) ;
 coordinates = Nodes(:, 2:end); 
 
-figure()
-subplot(1, 2, 1)
-
-% show(elements3,[],coordinates,full(sol_o2(:, 4)), [0, max(sol_o2(:, 4))], 0 );
-show(elements3,[],coordinates,full(sol_o2(:, 4)), [0, 10], 0 );
-title('Oxygen concentration [mpl/m³]')
-
-subplot(1, 2, 2)
-% show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, max(sol_co2(:, 4))], 0 );
-show(elements3,[],coordinates,full(sol_co2(:, 4)), [0, 5], 0 );
-title('Carbon dioxide concentration [mpl/m³]')
-
+show( [sol_o2(:, 4); sol_co2(:, 4)], 'shelf life', elements3, coordinates, [0, 0] )
