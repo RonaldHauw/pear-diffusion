@@ -11,7 +11,7 @@
 % where T_cel is the temperature in degrees Celsius, and n_u and n_v are the 
 % oxygen and carbon dioxide concentrations as a fraction between 0 and 1,
 %
-% or run default 'orchard' simulation ( T_cel = 25, n_u = 0.208, n_v = 0.0004 )
+% or run default 'refrigerator' simulation ( T_cel = 7, n_u = 0.208, n_v = 0 )
 %    >> run
 %
 % Inspired on https://www.math.hu-berlin.de/~cc/cc_homepage/download/1999-AJ_CC_FS-50_Lines_of_Matlab.pdf
@@ -85,12 +85,11 @@ function run( varargin )
     
     
     %% Create worspace
-    
     workspace ;
     load workspace.mat ;
 
-    %% Load domain
     
+    %% Load domain
     load mesh/HCT_Mesh_Data.mat
     %
     coordinates = Nodes(:, 2:3)/50 ;
@@ -107,7 +106,6 @@ function run( varargin )
 
     
     %% Solve FEM model
-    
     % parameters of homotopy continuation
     dt = 0.1 ;
     maxit = 50 ;
@@ -186,17 +184,16 @@ function run( varargin )
 
 
     %% Show oxygen and carbon dioxide solutions
-    
     addpath( '../matlab' )
     %
     figure('position', [300 100 450 400])
     subplot(1, 2, 1)
     show(elements3,[],coordinates,full( C(1:M) ), [0, 10], C_u_amb);
-    title('O_2 concentration [mol/m³]', 'FontSize', 10)
+    title('Oxygen [mol/m³]', 'FontSize', 10)
     %
     subplot(1, 2, 2)
     show(elements3,[],coordinates,full( C(M+1:end) ), [0, 5], C_v_amb);
-    title('CO_2 concentration [mol/m³]', 'FontSize', 10)
+    title('Carbon dioxide [mol/m³]', 'FontSize', 10)
     %
     sgtitle( join(['Simulated ', name]), 'FontSize', 12 )
     
