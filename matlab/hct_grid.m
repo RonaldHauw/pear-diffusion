@@ -62,8 +62,7 @@ end
 
 %% Export the data
 
-save('../data/meshes/HCTmesh3', 'Nodes', 'Elements'); 
-save('../data/meshes/HCTmesh3_Data', 'InnerBNodes', 'OuterBNodes', 'InnerBEdges', 'OuterBEdges'); 
+save('../data/meshes/HCTmesh3', 'Nodes', 'Elements', 'InnerBEdges', 'OuterBEdges'); 
 
 writematrix(Nodes,'../data/meshes/HCTmesh3_Nodes.txt','delimiter', 'space');
 writematrix(Elements,'../data/meshes/HCTmesh3_Elements.txt','delimiter', 'space');
