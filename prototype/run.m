@@ -18,7 +18,7 @@
 
 
 function run( varargin )
-    clc
+%     clc
 
     %% Read input
     if ( nargin < 2 )
@@ -102,8 +102,8 @@ function run( varargin )
         error( "Did not understand which simulation to run. Run 'help run' for more information." )
     end
     %
-    disp( "Run simulation with T_cel = " + num2str(T_cel) + ", n_u = " + num2str(n_u)+ ", n_v = " + num2str(n_v) )
-    disp( "	" )
+    disp( "Simulate with T_cel = " + num2str(T_cel) + ", n_u = " + num2str(n_u)+ ", n_v = " + num2str(n_v) )
+    disp( " " )
     
     
     %% Create worspace
@@ -115,7 +115,6 @@ function run( varargin )
     addpath('../data/meshes/')
     load HCTmesh3.mat
 
-    %
     coordinates = Nodes(:, 2:3) ;
     elements3   = Elements( : , 2:end ) ;
     % number of vertices
@@ -176,6 +175,8 @@ function run( varargin )
 
             % check for convergence
             if norm(P) < 10^(-12)
+                cond( ( K + t*J ) )
+                
                 fprintf( '       %2d          %6.2e\n', n, norm(P) ) ;
                 break
             end
