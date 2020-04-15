@@ -19,7 +19,7 @@ function run_software( varargin )
 
     
     %% Compile the C++ code if executable does not exist
-    if ~ isfile('./pear_diffusion')
+    if ~ isfile('pear_diffusion')
         ! ./util/compile.sh
     end
     

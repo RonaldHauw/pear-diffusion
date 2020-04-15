@@ -26,7 +26,7 @@ echo "Compilation succeeded"
 cp a.out pear_diffusion
 echo "Executable named pear_diffusion in main folder"
 rm a.out    software/component.hpp.gch \
-            software/diffusion.hgpp.gch \
+            software/diffusion.hpp.gch \
             software/grid.hpp.gch \
             software/nlsolver.hpp.gch \
             software/rdc.hpp.gch \
