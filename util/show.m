@@ -16,7 +16,7 @@
 %    i'th row the value of the spline function at the i'th node.
 
 
-function show( sol, name, elements3, coordinates, c_amb )
+function show( sol, name, elements3, coordinates, varargin )
 
     % extract useful parameters
     M = length(sol)/2 ;
@@ -42,23 +42,11 @@ function show( sol, name, elements3, coordinates, c_amb )
     ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
     colormap(c_map);
 
-    % % compute axis labels
-    % labels = { 0, 0; min(clim), max(clim); c_amb(1), 'C_{amb}' } ;
-    % %labels = { 0, 0; 0, 0; c_amb(1), 'C_{amb}' } ;
-    % 
-    % labels = sortrows(labels, 1) ;
-    % 
-    % if ~isempty( find( [labels{:, 2}]==c_amb(1) ) )
-    %     idx = find( [labels{:, 2}]==c_amb(1) );
-    %     labels(idx, :) = [] ;
-    % end
-
     caxis(clim);
-    % colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
     colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
-    title('Oxygen [mol/m³]', 'FontSize', 10)
-    xlabel('Radius [m]')
-    ylabel('Height [m]')
+    title({'Oxygen', '[mol/m³]'}, 'FontSize', 11)
+    xlabel('Radius [m]', 'FontSize', 10)
+    ylabel('Height [m]', 'FontSize', 10)
     
     % visualize carbon dioxide concentration
     clim = [0, 10] ;
@@ -74,23 +62,15 @@ function show( sol, name, elements3, coordinates, c_amb )
     ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
     colormap(c_map);
 
-    % % compute axis labels
-    % labels = { 0, 0; min(clim), max(clim); c_amb(1), 'C_{amb}' } ;
-    % %labels = { 0, 0; 0, 0; c_amb(1), 'C_{amb}' } ;
-    % 
-    % labels = sortrows(labels, 1) ;
-    % 
-    % if ~isempty( find( [labels{:, 2}]==c_amb(1) ) )
-    %     idx = find( [labels{:, 2}]==c_amb(1) );
-    %     labels(idx, :) = [] ;
-    % end
-
     caxis(clim);
-    % colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
     colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
-    title('Carbon dioxide [mol/m³]', 'FontSize', 10)
-    xlabel('Radius [m]')
-    ylabel('Height [m]')
+    title({'Carbon dioxide', '[mol/m³]'}, 'FontSize', 11)
+    xlabel('Radius [m]', 'FontSize', 10)
+    ylabel('Height [m]', 'FontSize', 10)
     
-    sgtitle( join(['Simulated ', name]), 'FontSize', 12 )
+    if (nargin==4)
+        sgtitle( name, 'FontSize', 12 )
+    else
+        sgtitle( {name, join([num2str(100*varargin{2}), "% O_{2}, ", num2str(100*varargin{3}), "% CO_{2}" " at ", num2str(varargin{1}), "°C"])}, 'FontSize', 12 )
+    end
 end
