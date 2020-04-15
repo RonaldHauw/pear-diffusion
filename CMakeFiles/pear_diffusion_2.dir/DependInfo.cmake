@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/ronald/Documents/S10/PRO/pear-diffusion-2/main.cpp" "/Users/ronald/Documents/S10/PRO/pear-diffusion-2/CMakeFiles/pear_diffusion_2.dir/main.cpp.o"
+  "/Users/Ag/Documents/MASTER1/Project/pear-diffusion/main.cpp" "/Users/Ag/Documents/MASTER1/Project/pear-diffusion/CMakeFiles/pear_diffusion_2.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

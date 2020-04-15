@@ -5,30 +5,41 @@
 %   Approximates the outline of a half-pear with a polynomial of the sixth
 %   order
 
+
+%% Creation of the domain
+
 radius = .01;  % 1 for example solutions, 0.1 for real tests. 
 grid_precision = 3; % 10 for fast, 18 for accurate
 pear_height = 84.3; 
 pear_n_points = 30;
 
-% Creation of the domain
 y = linspace(0, pear_height, pear_n_points);
 x = pearpoints(y);
+
+y = y./2000;
+x = x./2000;
+
+% [x,y] = click;
+% x = x/7; y = y/7;
+% x = x - x(1); y(end) = y(end-1); y = y-y(end);
+
 p = polyshape(x,y);
 t = triangulation(p);
 
-% Visualisation of the domain
 plot(p, 'FaceColor', 'green', 'Facealpha', 0.1, 'LineWidth', 1.5);
 hold on;
 ylabel("Heigth (mm)", 'FontSize', 30);
 xlabel("Width (mm)", 'FontSize', 30);
-xlim([0 40]);
-ylim([0 90]);
+% xlim([0 40]);
+% ylim([0 90]);
+axis equal
 hold off;
 
-% Creation of the mesh
+%% Creation of the mesh
+
 model = createpde(1);
 geometryFromMesh(model,t.Points', t.ConnectivityList');
-mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',radius/grid_precision*1.5,'Hmin',radius/grid_precision);
+mesh = generateMesh(model, 'GeometricOrder', 'linear','Hmax',0.0015,'Hmin',0.0008);
 pdeplot(model);
     
 clear radius grid_precision pear_height pear_n_points x y p t; 
@@ -105,6 +116,38 @@ function [y] = pearpoints(x)
 
 y = 4.11348 * x - 0.253106 * power(x,2) + 0.00929318 * x.^3 - 0.00019599 * x.^4 +2.08296 * 10.^(-6) * x.^5 - 8.59684 * 10.^(-9) * x.^6;
 
+end
+
+function [x,y] = click
+
+	% initialiseer figuur
+
+    img = imread('pear.png');
+    
+	figure(1); clf
+    hold on;
+    imagesc([0 0.5], [0 1], flipud(img));
+	axis([0 0.5 0 1]);
+	axis equal
+	title('Click left to draw polyline, click right to terminate')
+	hold on;
+
+	% herhaal tot andere dan linkermuisknop ingedrukt
+	x = []; y = [];
+	while(1)
+		[px,py,button] = ginput(1);
+		if( button ~= 1 )
+			break;
+		else
+			x = [x px] ; y = [y py];
+			if( length(x) > 1 )
+				plot(x([end-1 end]),y([end-1 end]),'b-');
+			end
+			plot(px,py,'+');
+		end
+	end
+
+	hold off;
 end
 
 
