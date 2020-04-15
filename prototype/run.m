@@ -22,89 +22,8 @@ function run( varargin )
     clc
 
     %% Read input
-    if ( nargin < 2 )
-        % run default simulation 'refrigerator'
-        if ( nargin == 0 )
-            name = 'refrigerator' ;
-        
-        % run simulation specified by name
-        elseif ( nargin == 1 )
-            name = varargin{1} ;
-        end
-        
-        switch lower(name)
-            case 'orchard'
-                % parameters of simulation
-                T_cel = 25 ;
-                n_u   = 0.208 ;
-                n_v   = 0.0004 ;
-                % parameters for homotopy continuation
-                dt    = 0.01 ;
-                maxit = 10 ;
-            
-            case 'shelf life'
-                % parameters of simulation
-                T_cel = 20 ;
-                n_u   = 0.208 ;
-                n_v   = 0 ;
-                % parameters for homotopy continuation
-                dt    = 0.025 ;
-                maxit = 10 ;
-                
-            case 'refrigerator'
-                % parameters of simulation
-                T_cel = 7 ;
-                n_u   = 0.208 ;
-                n_v   = 0 ;
-                % parameters for homotopy continuation
-                dt    = 0.1 ;
-                maxit = 10 ;
-                
-            case 'precooling'
-                % parameters of simulation
-                T_cel = -1 ;
-                n_u   = 0.208 ;
-                n_v   = 0 ;
-                % parameters for homotopy continuation
-                dt    = 1 ;
-                maxit = 10 ;
-                
-            case 'disorder inducing'
-                % parameters of simulation
-                T_cel = -1 ;
-                n_u   = 0.02 ;
-                n_v   = 0.05 ;
-                % parameters for homotopy continuation
-                dt    = 0.2 ;
-                maxit = 10 ;
-                
-            case 'optimal ca'
-                % parameters of simulation
-                T_cel = -1 ;
-                n_u   = 0.02 ;
-                n_v   = 0.007 ;
-                % parameters for homotopy continuation
-                dt    = 0.1 ;
-                maxit = 10 ;
-                
-            otherwise
-                error( "Did not understand which simulation to run. Run 'help run' for more information." )
-        end
-        
-    % run simulation specified by parameters    
-    elseif ( nargin == 3 )
-        T_cel = varargin{1} ;
-        n_u   = varargin{2} ;
-        n_v   = varargin{3} ;
-        
-        % store parameters of simulation
-        name = join(['conditions : ', num2str(100*n_u), '% O_2, ', num2str(100*n_v), '% CO_2, and ', num2str(T_cel), '°C' ]) ;
-    else
-        error( "Did not understand which simulation to run. Run 'help run' for more information." )
-    end
-    %
-    disp( "Simulate with T_cel = " + num2str(T_cel) + ", n_u = " + num2str(n_u)+ ", n_v = " + num2str(n_v) )
-    disp( " " )
+    addpath('../util/')
+    [T_cel, n_u, n_v, name] = read_input( varargin{:} ) ;
     
     
     %% Create worspace
@@ -129,7 +48,6 @@ function run( varargin )
 
     
     %% Solve FEM model
-    % parameters of homotopy continuation
     
     % intialize concentrations
     C = zeros(2*M, 1) ;
@@ -145,10 +63,16 @@ function run( varargin )
     
     tic
     % perform hopotopy continuation
-    for t = 0:dt:1
-
-        fprintf( ' %3.2f',t ) ;
-        
+%     for t = 0:dt:1
+    t  = 0 ;
+    dt = 1 ;
+    maxit = 10 ;
+    while t < 1
+        % update homotopy continuation
+        t = t + dt ;
+        % store current concentrations if need to restart this step
+        C_hold = C ;
+            
         % prediction step
         % nonlinearity H = [ H_u(C) ; H_v(C) ]
         H       = assemble_H( coordinates, elements3, C, R_u, R_v ) ;
@@ -157,7 +81,7 @@ function run( varargin )
         % update concentrations with forward euler
         dC_dt   = ( K + t*J ) \ ( -H ) ;
         C       = C + dt * dC_dt ;
-
+        
         % correction step with Newton method
         for n=1:maxit
 
@@ -175,38 +99,48 @@ function run( varargin )
             P = ( K + t*J ) \ G ;
 
             % check for convergence
-            if norm(P) < 10^(-12)                
-                fprintf( '       %2d          %6.2e\n', n, norm(P) ) ;
+            if norm(P) < 10^(-10)
+                fprintf( ' %3.2f    %2d          %6.2e\n', t, n, norm(P) ) ;
+                n = 0 ;
                 break
             end
 
             % backtracking
             b = 1 ;
-            for k = 1:50
+            for k = 1:10
                 % store proposed new concentrations
                 temp = C - b*P ;
 
-                % recompute Variational
+                % recompute variational
                 H = assemble_H( coordinates, elements3, temp, R_u, R_v ) ;
                 res = K*temp - f + t*H ;
 
-                % check if new concentrations indeed reduce the Variational
+                % check if new concentrations indeed reduce the variational
                 if ( norm(res) > norm(G) )
                     b = b/2 ;
                 else
                     break
                 end
             end
-
+        
             % update estimate for concentrations
             C = C - b*P;
-            
-            % check for convergence
-            if n == maxit
-                fprintf( '    %8s       %6.2e\n', 'maximum', norm(P) ) ;
-                break
-            end
         end
+        
+        % if solver did not converge
+        if n == maxit
+            % reset homotopy parameter
+            t = t - dt ;
+            % reset concentrations to beginning of this step
+            C = C_hold ;
+            % reduce step size
+            dt = min(dt/2, 1-t) ;
+            % skip remaining of while-loop
+            continue
+        end
+        
+        % reset stepsize to large value
+        dt = 2*dt ;
     end
     toc
 
@@ -218,8 +152,8 @@ function run( varargin )
     addpath( '../util' )
     
     % show solutions
-    show( C, name, elements3, coordinates, [C_u_amb, C_v_amb] )
+    show( C, name, elements3, coordinates, T_cel, n_u, n_v )
         
     % show residuals
-    % show( res, 'residuals', elements3, coordinates, [C_u_amb, C_v_amb] )
+    % show( res, 'residuals', elements3, coordinates )
 end

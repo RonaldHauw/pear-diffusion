@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     // typedef Eigen::Matrix<d_type, Eigen::Dynamic, Eigen::Dynamic> mat_type; // define mat_type here
     typedef Eigen::SparseMatrix<d_type> mat_type; // define mat_type here
 
-    std::string grid_name = "data/meshes/HCTmesh3";
+    std::string grid_name = "data/meshes/double_circle";
     pear::grid<d_type, mat_type> grid(grid_name);
 
     // Diffusion parameters
