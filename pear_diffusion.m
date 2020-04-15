@@ -17,7 +17,7 @@ run('matlab/hct_grid.m')
 sol_o2 = readmatrix('data/solutions/solution_ShelfLife_O_2.txt'); 
 sol_co2 = readmatrix('data/solutions/solution_ShelfLife_CO_2.txt');
 
-addpath('matlab/') 
+addpath('util/') 
 
 % graphic representation
 elements3   = Elements( : , 2:end ) ;

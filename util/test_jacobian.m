@@ -1,15 +1,27 @@
 %% Group 11 - March 24th 2020
 % test correctness of Jacobian with finite difference approximation
 
+clc
 clear all
 
-% load variables of system
-load('workspace') ;
-% choose simple circular domain
-load mesh/HalfCircleMesh.mat
-load mesh/HalfCircleMesh_Data.mat
-% shrink size of mesh
-coordinates = (mesh.Nodes'/15) ;
+disp("Test finite difference approximation of Jacobians.")
+
+
+%% Create worspace
+addpath('../prototype/')
+
+T_cel = 7 ;
+n_u   = 0.208 ;
+n_v   = 0 ;
+
+workspace ;
+load workspace.mat ;
+
+%% Load domain
+addpath('../data/meshes/')
+load double_circle_rough.mat
+
+coordinates = Nodes(:, 2:3) ;
 elements3   = Elements( : , 2:end ) ;
 % number of vertices
 M           = size(coordinates, 1) ;
@@ -27,6 +39,7 @@ J_c = assemble_J( coordinates, elements3, C, dR_u_u, dR_u_v, dR_v_u, dR_v_v ) ;
 % J = @(C) [ 2*C(2) , 2*C(1) ; 0 , 2*C(2) ; exp(C(1)) , 0 ] ;
 % J_c = J(C) ;
 % H_c = H(C) ;
+
 
 % maximal exponent
 E = 16 ; path = zeros(1, E) ;

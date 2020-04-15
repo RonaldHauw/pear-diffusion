@@ -21,6 +21,10 @@ function show( sol, name, elements3, coordinates, c_amb )
     % extract useful parameters
     M = length(sol)/2 ;
     
+    % build color map
+    c_map = jet(256) ;
+    c_map = c_map(50:200, :) ;
+    
     % create figure box
     figure('position', [300 100 450 400])
     
@@ -36,7 +40,7 @@ function show( sol, name, elements3, coordinates, c_amb )
     grid off
     xlim( [min(coordinates(:, 1)), max(coordinates(:, 1))] )
     ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
-    colormap(jet(128));
+    colormap(c_map);
 
     % % compute axis labels
     % labels = { 0, 0; min(clim), max(clim); c_amb(1), 'C_{amb}' } ;
@@ -53,10 +57,11 @@ function show( sol, name, elements3, coordinates, c_amb )
     % colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
     colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
     title('Oxygen [mol/m³]', 'FontSize', 10)
-    
+    xlabel('Radius [m]')
+    ylabel('Height [m]')
     
     % visualize carbon dioxide concentration
-    clim = [0, 5] ;
+    clim = [0, 10] ;
     
     subplot(1, 2, 2)
     box on
@@ -67,7 +72,7 @@ function show( sol, name, elements3, coordinates, c_amb )
     grid off
     xlim( [min(coordinates(:, 1)), max(coordinates(:, 1))] )
     ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
-    colormap(jet(128));
+    colormap(c_map);
 
     % % compute axis labels
     % labels = { 0, 0; min(clim), max(clim); c_amb(1), 'C_{amb}' } ;
@@ -84,6 +89,8 @@ function show( sol, name, elements3, coordinates, c_amb )
     % colorbar('YTick', [labels{:, 1}], 'YTickLabel', [labels{:, 2}], 'FontSize', 10)
     colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
     title('Carbon dioxide [mol/m³]', 'FontSize', 10)
+    xlabel('Radius [m]')
+    ylabel('Height [m]')
     
     sgtitle( join(['Simulated ', name]), 'FontSize', 12 )
 end

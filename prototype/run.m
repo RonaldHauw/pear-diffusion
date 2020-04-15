@@ -1,4 +1,5 @@
 %% Group 11 - April 13th 2020
+%
 % Solve reaction-diffusion system with finite element method in Matlab.
 %
 % Either run simulation by name as
@@ -18,7 +19,7 @@
 
 
 function run( varargin )
-%     clc
+    clc
 
     %% Read input
     if ( nargin < 2 )
@@ -38,8 +39,8 @@ function run( varargin )
                 n_u   = 0.208 ;
                 n_v   = 0.0004 ;
                 % parameters for homotopy continuation
-                dt    = 0.05 ;
-                maxit = 50 ;
+                dt    = 0.01 ;
+                maxit = 10 ;
             
             case 'shelf life'
                 % parameters of simulation
@@ -47,8 +48,8 @@ function run( varargin )
                 n_u   = 0.208 ;
                 n_v   = 0 ;
                 % parameters for homotopy continuation
-                dt    = 0.05 ;
-                maxit = 50 ;
+                dt    = 0.025 ;
+                maxit = 10 ;
                 
             case 'refrigerator'
                 % parameters of simulation
@@ -56,7 +57,7 @@ function run( varargin )
                 n_u   = 0.208 ;
                 n_v   = 0 ;
                 % parameters for homotopy continuation
-                dt    = 0.2 ;
+                dt    = 0.1 ;
                 maxit = 10 ;
                 
             case 'precooling'
@@ -65,8 +66,8 @@ function run( varargin )
                 n_u   = 0.208 ;
                 n_v   = 0 ;
                 % parameters for homotopy continuation
-                dt    = 0.2 ;
-                maxit = 10 ;;
+                dt    = 1 ;
+                maxit = 10 ;
                 
             case 'disorder inducing'
                 % parameters of simulation
@@ -83,7 +84,7 @@ function run( varargin )
                 n_u   = 0.02 ;
                 n_v   = 0.007 ;
                 % parameters for homotopy continuation
-                dt    = 0.2 ;
+                dt    = 0.1 ;
                 maxit = 10 ;
                 
             otherwise
@@ -113,8 +114,8 @@ function run( varargin )
     
     %% Load domain
     addpath('../data/meshes/')
-    load HCTmesh3.mat
-
+    load double_circle.mat
+    
     coordinates = Nodes(:, 2:3) ;
     elements3   = Elements( : , 2:end ) ;
     % number of vertices
@@ -174,9 +175,7 @@ function run( varargin )
             P = ( K + t*J ) \ G ;
 
             % check for convergence
-            if norm(P) < 10^(-12)
-                cond( ( K + t*J ) )
-                
+            if norm(P) < 10^(-12)                
                 fprintf( '       %2d          %6.2e\n', n, norm(P) ) ;
                 break
             end
@@ -211,8 +210,16 @@ function run( varargin )
     end
     toc
 
+    %% Compute residuals of nonlinear system
+    res = K*C - f + H ;
+
+    
     %% Show oxygen and carbon dioxide solutions
-    addpath( '../matlab' )
+    addpath( '../util' )
+    
+    % show solutions
     show( C, name, elements3, coordinates, [C_u_amb, C_v_amb] )
         
+    % show residuals
+    % show( res, 'residuals', elements3, coordinates, [C_u_amb, C_v_amb] )
 end
