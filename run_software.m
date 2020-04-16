@@ -39,10 +39,8 @@ function run_software( varargin )
         sim = 'OptimalCA' ;
     end
     
-    echo on
     command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim);
     system(command);
-    echo off
 
     %% Plot the solution
     path = 'data/solutions/solution_' ;
