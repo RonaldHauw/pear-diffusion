@@ -40,8 +40,9 @@ function run_software( varargin )
     end
     
     echo on
-    command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim);
-    system(command);
+    command = strcat('pear_diffusion', '-maxit 100', '-', sim)
+    system('pear_diffusion -maxit 100 -')
+%     ! ./pear_diffusion -sim -maxit 100
     echo off
 
     %% Plot the solution

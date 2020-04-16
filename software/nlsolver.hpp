@@ -101,11 +101,11 @@ namespace pear {
                     if (residual.norm()>1e-11) {                     // ... if the residual remains too large, halve the steplength
                         steplength *= 0.5;
                     } else {
-                        std::cout<<"                          --> "<<round(100*(cur_alpha+steplength))<<"%";
                         break;
                     }
                 }
                 cur_alpha += steplength;
+                std::cout<<"                          --> "<<round(100*cur_alpha)<<"%"<<std::endl;
 
                 for (int j = 1; j < maxit; j++ ){
 
@@ -130,7 +130,7 @@ namespace pear {
                     }
 
                     if (residual.norm() < 5e-19) {
-                        std::cout<<"        with "<<i<<" Newton iterations until a residual norm of"<<residual.norm()<<std::endl;
+                        //std::cout<<"        with "<<i<<" Newton iterations until a residual norm of "<<residual.norm()<<std::endl;
                         break;
                     }
                 }
