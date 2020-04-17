@@ -3,11 +3,17 @@
 %   P   :   Vector of size 1xN containing the sampled points describing the
 %   boundary of the pear
 
+function nothing = pear_grid(varargin)
+    
+    if nargin == 1
+        grid_precision = varargin{1}; 
+    else
+        grid_precision = 20; 
+    end
 
     %% Creation of the domain
-
     radius = .01;  % 1 for example solutions, 0.1 for real tests. 
-    grid_precision = 40; % 10 for fast, 18 for accurate
+    %grid_precision = precision; %40; % 10 for fast, 18 for accurate
     pear_height = 84.3; 
     pear_n_points = 30;
 
@@ -67,7 +73,7 @@
 
     %% Export the data
 
-    path = '../data/meshes/' ;
+    path = 'data/meshes/' ;
     name = 'pear' ;
 
     save( strcat(path, name), 'Nodes', 'Elements', 'InnerBEdges', 'OuterBEdges' ); 
@@ -76,7 +82,8 @@
     writematrix( Elements,    strcat(path, name, '_Elements.txt'),   'delimiter', 'space');
     writematrix( InnerBEdges, strcat(path, name, '_InnerEdges.txt'), 'delimiter', 'space');
     writematrix( OuterBEdges, strcat(path, name, '_OuterEdges.txt'), 'delimiter', 'space');
-
+    nothing = true; 
+end
     %% Function describing the points along the boundary of a Conference pear
 
     function [y] = pearpoints(x)

@@ -21,7 +21,7 @@ function [T_cel, n_u, n_v, name] = read_input( varargin )
                 n_v   = 0.0004 ;
                 name  = "Orchard conditions" ; 
             
-            case {'shelf life', 'sl'}
+            case {'shelf life', 'sl', 'shelflife'}
                 % parameters of simulation
                 T_cel = 20 ;
                 n_u   = 0.208 ;
@@ -42,14 +42,14 @@ function [T_cel, n_u, n_v, name] = read_input( varargin )
                 n_v   = 0 ;
                 name  = "Precooling conditions" ;
                 
-            case {'disorder inducing', 'di'}
+            case {'disorder inducing', 'di', 'disorderinducing'}
                 % parameters of simulation
                 T_cel = -1 ;
                 n_u   = 0.02 ;
                 n_v   = 0.05 ;
                 name  = "Disorder inducing conditions" ;
                 
-            case {'optimal ca', 'oca'}
+            case {'optimal ca', 'oca', 'optimalca'}
                 % parameters of simulation
                 T_cel = -1 ;
                 n_u   = 0.02 ;
