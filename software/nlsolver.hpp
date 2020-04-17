@@ -50,7 +50,7 @@ namespace pear {
          *              The residuals have been printed.
          *
          */
-        int solve(int maxit = 10, d_type steplength = 1., d_type res_pred = 1e-11, d_type res_new = 5e-19){
+        int solve(int maxit = 10, d_type steplength = 1., d_type res_pred = 1e-14, d_type res_new = 5e-16){
 
             std::cout<<"        Working memory allocated: "<<f_.size()*2*16+f_.size()*3<<" elements of d_type:"<<std::endl;
             std::cout<<"           - 2 times a mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
@@ -121,7 +121,7 @@ namespace pear {
                     linsolver.factorize(J);
                     direction = linsolver.solve(residual);  // direction
 
-                    res = residual.norm();
+                    res = residual.norm()/f_.cons().norm();
 
                     steplength = 1.;
                     workvec = f_.cons(); // store current concentrations
@@ -137,9 +137,11 @@ namespace pear {
                         }
                     }
 
-                    res = residual.norm();
+                    res = residual.norm()/f_.cons().norm();
 
                     if (res < res_new) {
+                        display_progress( cur_alpha,  residual.norm()/f_.cons().norm(),  res_new, res_pred);
+
                         break;
                     }
                 }
@@ -154,7 +156,7 @@ namespace pear {
             d_type hom_progress = cur_alpha;
             d_type newton_progress = (-log(res_pred)+log(newton_res))/(-log(res_pred)+log(res_new));
             //std::cout<<"\\u1b[1F"<<"\\u1B[0K"<<"\rhomotopy: [";
-            std::cout<<'\\u1b[1F'<<"\rhomotopy: [";
+            std::cout<<"\rhomotopy: [";
 
             d_type hom_pos = bar_width * hom_progress;
             for (int k = 0; k < bar_width; k++){
