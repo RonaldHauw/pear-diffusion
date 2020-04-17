@@ -1709,6 +1709,8 @@ eigen/Eigen/SparseCore
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/software/eigen/Eigen/SparseCore
 eigen/Eigen/SparseLU
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/software/eigen/Eigen/SparseLU
+eigen/Eigen/IterativeLinearSolvers
+/Users/ronald/Documents/S10/PRO/pear-diffusion-2/software/eigen/Eigen/IterativeLinearSolvers
 
 /Users/ronald/Documents/S10/PRO/pear-diffusion-2/software/rdc.hpp
 cassert

@@ -154,7 +154,7 @@ namespace pear {
             d_type hom_progress = cur_alpha;
             d_type newton_progress = (-log(res_pred)+log(newton_res))/(-log(res_pred)+log(res_new));
             //std::cout<<"\\u1b[1F"<<"\\u1B[0K"<<"\rhomotopy: [";
-            std::cout<<"\\u1b[1F"<<"homotopy: [";
+            std::cout<<'\\u1b[1F'<<"\rhomotopy: [";
 
             d_type hom_pos = bar_width * hom_progress;
             for (int k = 0; k < bar_width; k++){
