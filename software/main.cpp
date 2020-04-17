@@ -8,6 +8,7 @@
 #include "nlsolver.hpp"
 #include "eigen/Eigen/Dense"
 #include "eigen/Eigen/Sparse"
+#include <complex>
 
 template<typename d_type, typename vec_type, typename mat_type>
 int export_solution(std::string const file_name, pear::grid<d_type, mat_type> grid, std::vector<pear::component<d_type, vec_type, mat_type>> components){
@@ -73,7 +74,8 @@ int main(int argc, char* argv[]) {
     int nl_maxit = 10;
     int set_environment = 0;
     d_type steplength = 1.;
-    d_type alpha = 1.;
+    d_type res_pred = 1e-11;
+    d_type res_new = 5e-19;
     std::string setting = "Orchard";
 
     std::cout<<"//PARAMETERS//"<<std::endl;
@@ -145,9 +147,13 @@ int main(int argc, char* argv[]) {
                 steplength = std::stod(argv[i + 1]);
                 std::cout<<"        Settig steplength to: "<<steplength<<std::endl;
             }
-            if (std::string(argv[i]) == "-anl") {
-                alpha = std::stod(argv[i + 1]);
-                std::cout<<"        Adaptive nonlinearity: "<<alpha<<std::endl;
+            if (std::string(argv[i]) == "-res_pred") {
+                res_pred = std::stod(argv[i + 1]);
+                std::cout<<"        Prediction residual threshold: "<<res_pred<<std::endl;
+            }
+            if (std::string(argv[i]) == "-res_new") {
+                res_new = std::stod(argv[i + 1]);
+                std::cout<<"        Newton residual threshold: "<<res_new<<std::endl;
             }
         }
 
@@ -188,7 +194,7 @@ int main(int argc, char* argv[]) {
 
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation, grid);
 
-    nlsolve.solve(nl_maxit, steplength, alpha);
+    nlsolve.solve(nl_maxit, steplength, res_pred, res_new);
 
     int exp_flag = export_solution("data/solutions/solution_"+setting, grid, std::vector<pear::component<d_type, vec_type, mat_type> >{o2, co2});
 

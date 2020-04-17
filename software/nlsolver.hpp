@@ -17,9 +17,10 @@
 #include "eigen/Eigen/Dense"
 #include "eigen/Eigen/SparseCore"
 #include "eigen/Eigen/SparseLU"
+#include "eigen/Eigen/IterativeLinearSolvers"
 
-// todo: still two hyperparameters in the code (! )
-// todo: check dubbele randpunten
+
+
 
 namespace pear {
 
@@ -49,95 +50,135 @@ namespace pear {
          *              The residuals have been printed.
          *
          */
-        int solve(int maxit = 10, d_type steplength = 1., d_type alpha = 0.){
+        int solve(int maxit = 10, d_type steplength = 1., d_type res_pred = 1e-11, d_type res_new = 5e-19){
 
-            std::cout<<"        Working memory allocated: "<<std::endl;
-            std::cout<<"            mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
-            std::cout<<"            vec_type of size  "<<f_.size()<<std::endl;
-            std::cout<<"            mat_type of size ("<<f_.size()/2<<", "<<f_.size()/2<<")"<<std::endl;
+            std::cout<<"        Working memory allocated: "<<f_.size()*2*16+f_.size()*3<<" elements of d_type:"<<std::endl;
+            std::cout<<"           - 2 times a mat_type of size ("<<f_.size()<<", "<<f_.size()<<")"<<std::endl;
+            std::cout<<"             of which 16 elements per row are preallocated;"<<std::endl;
+            std::cout<<"           - 3 times a vec_type of size "<<f_.size()<<";"<<std::endl;
 
-            // Initialisation system
+            std::cout<<"// START SOLVE //"<<std::endl;
+
             mat_type J(f_.size(), f_.size());
             mat_type J_work(f_.size(), f_.size());
 
-            J.reserve(f_.size()*16);        // ! Presumption! Highly unlikely that a node has more than 16 neighbours
+            J.reserve(f_.size()*16);
             J_work.reserve(f_.size()*16);
+
 
             grid_.setSparsityPattern(J);
             grid_.setSparsityPattern(J_work);
 
+
+            vec_type workvec; workvec.resize(f_.size(), 1);
             vec_type direction; direction.resize(f_.size(), 1);
             vec_type residual; residual.resize(f_.size(), 1);
-            vec_type workvec; workvec.resize(f_.size(), 1);
 
-            //Initialisation homotopy continuation
             d_type cur_alpha = 0.0;
             f_.suppress_nonlinearity(cur_alpha);
 
-            // Initialisation non-linear solver
             d_type res = 1.0;
             Eigen::SparseLU<mat_type> linsolver;
+            f_.J(J);
             linsolver.analyzePattern(J);
+
             int i = 0;
 
-            std::cout<<"        Homotopy progress --> "<<100*(cur_alpha)<<"%"<<std::endl;
-            // Homotopy continuation
             while (cur_alpha < 1.){
                 i++;
 
                 // Direction of prediction
-                f_.f_react_only(workvec);
+                f_.f_react_only(residual);
                 f_.J(J);
                 linsolver.factorize(J);
-                direction = linsolver.solve(workvec);
-                workvec = f_.cons();
+                direction = linsolver.solve(residual);
+
 
                 // Backtracking on prediction step length
+                workvec = f_.cons();
                 steplength = 1.-cur_alpha;
                 for (int k = 0; k < 6; k++){
-                    f_.cons() = workvec-steplength*direction;        // Try a test step...
+                    f_.cons() = workvec-steplength*direction;           // take a test step
                     f_.suppress_nonlinearity(cur_alpha+steplength);
-                    f_.f(residual, J_work);                          // ... compute the residual ...
-                    if (residual.norm()>1e-11) {                     // ... if the residual remains too large, halve the steplength
+                    f_.f(residual, J_work);                             // residual
+                    if (residual.norm()/f_.cons().norm()>res_pred) {    // if residual is small enough, keep step
                         steplength *= 0.5;
                     } else {
                         break;
                     }
                 }
+
+
                 cur_alpha += steplength;
-                std::cout<<"                          --> "<<round(100*cur_alpha)<<"%"<<std::endl;
 
                 for (int j = 1; j < maxit; j++ ){
 
-                    f_.f(workvec, J_work);
+                    display_progress( cur_alpha,  residual.norm()/f_.cons().norm(),  res_new, res_pred);
+
+                    f_.f(residual, J_work);
                     f_.J(J);
 
                     linsolver.factorize(J);
-                    direction = linsolver.solve(workvec);
-                    res = direction.norm();
+                    direction = linsolver.solve(residual);  // direction
+
+                    res = residual.norm();
 
                     steplength = 1.;
-                    workvec = f_.cons();
-                    // Backtracking on line-search step length
+                    workvec = f_.cons(); // store current concentrations
+
+                    // backtracking linesearch for residual decrease
                     for (int k = 0; k < 100; k++){
                         f_.cons() = workvec-steplength*direction;
-                        f_.f(residual, J_work);
-                        if (residual.norm()>res) {
+                        f_.f(residual, J_work); // residual
+                        if (residual.norm()/f_.cons().norm()>res) {
                             steplength *= 0.5;
                         } else {
                             break;
                         }
                     }
 
-                    if (residual.norm() < 5e-19) {
-                        //std::cout<<"        with "<<i<<" Newton iterations until a residual norm of "<<residual.norm()<<std::endl;
+                    res = residual.norm();
+
+                    if (res < res_new) {
                         break;
                     }
                 }
             }
+            std::cout<<std::endl;
             return 1;
         }
 
+
+        void display_progress(d_type cur_alpha, d_type newton_res, d_type res_new, d_type res_pred){
+            int bar_width = 20;
+            d_type hom_progress = cur_alpha;
+            d_type newton_progress = (-log(res_pred)+log(newton_res))/(-log(res_pred)+log(res_new));
+            //std::cout<<"\\u1b[1F"<<"\\u1B[0K"<<"\rhomotopy: [";
+            std::cout<<"\\u1b[1F"<<"homotopy: [";
+
+            d_type hom_pos = bar_width * hom_progress;
+            for (int k = 0; k < bar_width; k++){
+                if (k<hom_pos) {
+                    std::cout << "=";
+                } else {
+                    std::cout << " ";
+                }
+            }
+            std::cout<<"] "<< std::setw(4)<< round(hom_progress*100) << "%     newton: [";
+
+            d_type new_pos = bar_width * newton_progress;
+            for (int k = 0; k < bar_width; k++){
+                if (k<new_pos) {
+                    std::cout << "=";
+                } else {
+                    std::cout << " ";
+                }
+            }
+            int newton_perc = 100;
+            if (round(newton_progress*100) < 100){newton_perc = round(newton_progress*100);};
+            std::cout<<"] "<<std::setw(4)<< newton_perc<<"%";
+            fflush(stdout);
+        }
 
     private:
         f_type f_;

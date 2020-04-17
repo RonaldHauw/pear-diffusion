@@ -7,7 +7,7 @@
     %% Creation of the domain
 
     radius = .01;  % 1 for example solutions, 0.1 for real tests. 
-    grid_precision = 18; % 10 for fast, 18 for accurate
+    grid_precision = 15; % 10 for fast, 18 for accurate
     pear_height = 84.3; 
     pear_n_points = 30;
 
