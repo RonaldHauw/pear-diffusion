@@ -74,8 +74,8 @@ int main(int argc, char* argv[]) {
     int nl_maxit = 10;
     int set_environment = 0;
     d_type steplength = 1.;
-    d_type res_pred = 1e-14;
-    d_type res_new = 5e-16;
+    d_type res_pred = 5e-15;
+    d_type res_new = 1e-16;
     std::string setting = "Orchard";
 
     std::cout<<"//PARAMETERS//"<<std::endl;

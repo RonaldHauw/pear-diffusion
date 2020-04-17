@@ -7,7 +7,7 @@
     %% Creation of the domain
 
     radius = .01;  % 1 for example solutions, 0.1 for real tests. 
-    grid_precision = 20; % 10 for fast, 18 for accurate
+    grid_precision = 40; % 10 for fast, 18 for accurate
     pear_height = 84.3; 
     pear_n_points = 30;
 
@@ -45,15 +45,15 @@
     OuterBNodes = findNodes(mesh,'region','Edge',[2]);
 
 
-    figure
-    pdemesh(model,'NodeLabels','on')
-    hold on
-    plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
+    %figure
+    %pdemesh(model,'NodeLabels','on')
+    %hold on
+    %plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
 
-    figure
-    pdemesh(model,'NodeLabels','on')
-    hold on
-    plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
+    %figure
+    %pdemesh(model,'NodeLabels','on')
+    %hold on
+    %plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
 
     OuterBEdges = zeros(size(OuterBNodes, 2)-1, 3);
     for i = 1:size(OuterBNodes, 2)-1
