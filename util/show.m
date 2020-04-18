@@ -44,12 +44,12 @@ function show( sol, name, elements3, coordinates, varargin )
 
     caxis(clim);
     colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
-    title({'Oxygen', '[mol/mÂ³]'}, 'FontSize', 11)
+    title({'Oxygen', '[mol/m³]'}, 'FontSize', 11)
     xlabel('Radius [m]', 'FontSize', 10)
     ylabel('Height [m]', 'FontSize', 10)
     
     % visualize carbon dioxide concentration
-    clim = [0, 10] ;
+    clim = [0, 15] ;
     
     subplot(1, 2, 2)
     box on
@@ -64,13 +64,13 @@ function show( sol, name, elements3, coordinates, varargin )
 
     caxis(clim);
     colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
-    title({'Carbon dioxide', '[mol/mÂ³]'}, 'FontSize', 11)
+    title({'Carbon dioxide', '[mol/m³]'}, 'FontSize', 11)
     xlabel('Radius [m]', 'FontSize', 10)
     ylabel('Height [m]', 'FontSize', 10)
     
     if (nargin==4)
         sgtitle( name, 'FontSize', 12 )
     else
-        sgtitle( {name, join([num2str(100*varargin{2}), "% O_{2}, ", num2str(100*varargin{3}), "% CO_{2}" " at ", num2str(varargin{1}), "Â°C"])}, 'FontSize', 12 )
+        sgtitle( {name, join([num2str(100*varargin{2}), "% O_{2}, ", num2str(100*varargin{3}), "% CO_{2}" " at ", num2str(varargin{1}), "°C"])}, 'FontSize', 12 )
     end
 end
