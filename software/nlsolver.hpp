@@ -166,7 +166,7 @@ namespace pear {
                     std::cout << " ";
                 }
             }
-            std::cout<<"] "<< std::setw(4)<< round(hom_progress*100) << "%     newton: [";
+            std::cout<<"] "<< round(hom_progress*100) << "%     newton: [";
 
             d_type new_pos = bar_width * newton_progress;
             for (int k = 0; k < bar_width; k++){
@@ -178,7 +178,7 @@ namespace pear {
             }
             int newton_perc = 100;
             if (round(newton_progress*100) < 100){newton_perc = round(newton_progress*100);};
-            std::cout<<"] "<<std::setw(4)<< newton_perc<<"%";
+            std::cout<<"] "<< newton_perc<<"%";
             fflush(stdout);
         }
 

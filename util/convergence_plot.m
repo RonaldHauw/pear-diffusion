@@ -1,5 +1,5 @@
 %% Select data points 
-grid_finesses = linspace(1, 50, 50);
+grid_finesses = linspace(101, 500, 499);
 condition = 'OptimalCA'; 
 
 %% Make the grid and collect the data
