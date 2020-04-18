@@ -111,6 +111,7 @@ namespace pear {
 
                 cur_alpha += steplength;
 
+
                 for (int j = 1; j < maxit; j++ ){
 
                     display_progress( cur_alpha,  residual.norm()/f_.cons().norm(),  res_new, res_pred);
@@ -127,7 +128,7 @@ namespace pear {
                     workvec = f_.cons(); // store current concentrations
 
                     // backtracking linesearch for residual decrease
-                    for (int k = 0; k < 100; k++){
+                    for (int k = 0; k < 6; k++){
                         f_.cons() = workvec-steplength*direction;
                         f_.f(residual, J_work); // residual
                         if (residual.norm()/f_.cons().norm()>res) {

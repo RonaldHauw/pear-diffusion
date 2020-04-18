@@ -39,7 +39,7 @@ function run_software( varargin )
         sim = 'OptimalCA' ;
     end
     
-    command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim, ' -res_pred 5e-15', ' -res_new 1e-16');
+    command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim, ' -res_pred 6e-15', ' -res_new 1e-17');
     system(command);
 
     %% Plot the solution

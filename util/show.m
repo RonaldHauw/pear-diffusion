@@ -30,7 +30,7 @@ function show( sol, name, elements3, coordinates, varargin )
     
     % visualize oxygen concentration
     clim = [0, 10] ;
-    
+    %clim = [0, 0.01] ;
     subplot(1, 2, 1)
     box on
     hold on

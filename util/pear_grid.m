@@ -8,7 +8,7 @@ function nothing = pear_grid(varargin)
     if nargin == 1
         grid_precision = varargin{1}; 
     else
-        grid_precision = 20; 
+        grid_precision = 10; 
     end
 
     %% Creation of the domain

@@ -81,8 +81,14 @@ namespace pear {
                 d_type r2 = grid_.node(elem_nodes[1])[0];   d_type z2 = grid_.node(elem_nodes[1])[1];
                 d_type r3 = grid_.node(elem_nodes[2])[0];   d_type z3 = grid_.node(elem_nodes[2])[1];
 
+                d_type rm = (r1+r2+r3) / 3.;
+                d_type co2m = (o2_.concentration(elem_nodes[0])+o2_.concentration(elem_nodes[1])+o2_.concentration(elem_nodes[2]))/3.;
+                d_type cco2m = (co2_.concentration(elem_nodes[0])+co2_.concentration(elem_nodes[1])+co2_.concentration(elem_nodes[2]))/3.;
+
+
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
 
+                /*
                 H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_o2(elem_nodes[2]-1) += r3 * R_u(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
@@ -91,6 +97,15 @@ namespace pear {
                 H_co2(elem_nodes[0]-1) -= r1 * R_v(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_co2(elem_nodes[1]-1) -= r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_co2(elem_nodes[2]-1) -= r3 * R_v(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
+                */
+                H_o2(elem_nodes[0]-1) += rm * R_u(co2m, cco2m) * area / 6. ;
+                H_o2(elem_nodes[1]-1) += rm * R_u(co2m, cco2m) * area / 6. ;
+                H_o2(elem_nodes[2]-1) += rm * R_u(co2m, cco2m) * area / 6. ;
+
+
+                H_co2(elem_nodes[0]-1) -= rm * R_v(co2m, cco2m) * area / 6. ;
+                H_co2(elem_nodes[1]-1) -= rm * R_v(co2m, cco2m) * area / 6. ;
+                H_co2(elem_nodes[2]-1) -= rm * R_v(co2m, cco2m) * area / 6. ;
 
             };
         };
@@ -103,6 +118,24 @@ namespace pear {
         *
         */
         void J(mat_type & dH) {
+
+            /*    % one quadrature point in the center of element t
+                    %    for t = elements3'
+
+                    %        area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
+
+                    %        J(t, t)     = J(t, t)     + area/9 * mean(r(t)) * dR_u_u( mean(C(t)), mean(C(M+t)) ) ;
+                    %        J(t, M+t)   = J(t, M+t)   + area/9 * mean(r(t)) * dR_u_v( mean(C(t)), mean(C(M+t)) ) ;
+
+                    %        J(M+t, t)   = J(M+t, t)   - area/9 * mean(r(t)) * dR_v_u( mean(C(t)), mean(C(M+t)) ) ;
+                    %        J(M+t, M+t) = J(M+t, M+t) - area/9 * mean(r(t)) * dR_v_v( mean(C(t)), mean(C(M+t)) ) ;
+
+                     %   end
+             *
+             *
+             *
+             *
+
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
                 d_type area = 0.;
@@ -122,6 +155,45 @@ namespace pear {
                 dH.coeffRef(t + grid_.nb_nodes() -1, t-1)                        += -area * grid_.node(t)[0] * dR_v_u(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
                 dH.coeffRef(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    += -area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
+             */
+            for (int t = 1; t<grid_.nb_elements()+1; t++) {
+
+                std::vector<int> elem_nodes = grid_.element(t);
+
+                d_type r1 = grid_.node(elem_nodes[0])[0];
+                d_type z1 = grid_.node(elem_nodes[0])[1];
+                d_type r2 = grid_.node(elem_nodes[1])[0];
+                d_type z2 = grid_.node(elem_nodes[1])[1];
+                d_type r3 = grid_.node(elem_nodes[2])[0];
+                d_type z3 = grid_.node(elem_nodes[2])[1];
+
+                d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
+
+                d_type rm = (r1+r2+r3) / 3.;
+                d_type co2m = (o2_.concentration(elem_nodes[0])+o2_.concentration(elem_nodes[1])+o2_.concentration(elem_nodes[2]))/3.;
+                d_type cco2m = (co2_.concentration(elem_nodes[0])+co2_.concentration(elem_nodes[1])+co2_.concentration(elem_nodes[2]))/3.;
+
+
+
+                dH.coeffRef(elem_nodes[0]-1, elem_nodes[0]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1, elem_nodes[1]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1, elem_nodes[2]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+
+                dH.coeffRef(elem_nodes[0]-1, elem_nodes[0]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1, elem_nodes[1]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1, elem_nodes[2]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+
+                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[0]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[1]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[2]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+
+                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[0]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[1]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[2]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+
+
+
+            }
 
         };
 
