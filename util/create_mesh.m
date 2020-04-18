@@ -93,11 +93,11 @@ function create_mesh( type, name, radius, granularity )
     dl = decsg(gd,sf,ns);
 
     % ivsualize mesh
-    figure('position', [100, 100, 800, 300])
-    subplot(1, 3, 1)
-    pdegplot(dl,'EdgeLabels','on','SubdomainLabels','on');
-    axis equal;
-    title("Mesh")
+    %figure('position', [100, 100, 800, 300])
+    %subplot(1, 3, 1)
+    %pdegplot(dl,'EdgeLabels','on','SubdomainLabels','on');
+    %axis equal;
+    %title("Mesh")
 
     % Creation of the mesh
     model = createpde(1);
@@ -114,17 +114,17 @@ function create_mesh( type, name, radius, granularity )
     InnerBNodes = findNodes(mesh,'region','Edge', in_edge );
     OuterBNodes = findNodes(mesh,'region','Edge', out_edge);
 
-    subplot(1, 3, 2)
-    pdemesh(model,'NodeLabels','on')
-    hold on
-    plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
-    title("Inner boundary nodes")
+    %subplot(1, 3, 2)
+    %pdemesh(model,'NodeLabels','on')
+    %hold on
+    %plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
+    %title("Inner boundary nodes")
     
-    subplot(1, 3, 3)
-    pdemesh(model,'NodeLabels','on')
-    hold on
-    plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
-    title("Outer boundary nodes")
+    %subplot(1, 3, 3)
+    %pdemesh(model,'NodeLabels','on')
+    %hold on
+    %plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
+    %title("Outer boundary nodes")
     
     OuterBEdges = zeros(size(OuterBNodes, 2)-1, 3);
     for i = 1:size(OuterBNodes, 2)-1
@@ -139,7 +139,7 @@ function create_mesh( type, name, radius, granularity )
     
     %% Export the data
 
-    path = '../data/meshes/' ;
+    path = 'data/meshes/' ;
 
     save( strcat(path, name), 'Nodes', 'Elements', 'InnerBEdges', 'OuterBEdges' ); 
 

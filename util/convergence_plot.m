@@ -1,14 +1,14 @@
 
 %% Select data points 
-coarsest = 1
-finest = 30         % 
+coarsest = 271
+finest = 1571         % 
 collect_data = 0    % should we collect data
-residue_plot = finest-1    % which level is used for plotting the residue 
-coarse_grid = 3   % to which grid is everything interpolated (0 for a chosen set of points)
+residue_plot = finest-coarsest-1    % which level is used for plotting the residue 
+coarse_grid = 10   % to which grid is everything interpolated (0 for a chosen set of points)
 
 
-grid_finesses = linspace(coarsest, finest, finest-coarsest+1);
-condition = 'Refrigerator'; 
+grid_finesses = [linspace(3, 140, 140-3+1), 150, 160, 170, 180, 190, 201, 251, 271, 379, 488];
+condition = 'Precooling'; 
 
 %% Make the grid and collect the data
 
@@ -18,7 +18,8 @@ if collect_data == 1
 
         %%% create the grid 
     for i = 1:length(grid_finesses)
-        pear_grid(grid_finesses(i)); 
+        %pear_grid(grid_finesses(i)); 
+        create_mesh( 'cc', 'pear', 0.025, grid_finesses(i))
         run_software(condition);
         copyfile(strcat('data/solutions/solution_',condition,'_O_2.txt'), strcat('data/solutions/solution_',condition,'_O_2_', int2str(grid_finesses(i)), '.txt')) 
         copyfile(strcat('data/solutions/solution_',condition,'_CO_2.txt'), strcat('data/solutions/solution_',condition,'_CO_2_', int2str(grid_finesses(i)), '.txt')) 
@@ -32,8 +33,8 @@ end
 
 
 if coarse_grid == 0
-    coarse_sol_o2 = [0 0.01 0.04; 0 0.01 0.05]; 
-    coarse_sol_co2 = [0 0.01 0.04; 0 0.01 0.05]; 
+    coarse_sol_o2 = [0 0.00 0.03; 0 0.00 0.03]; 
+    coarse_sol_co2 = [0 0.00 0.03; 0 0.00 0.03]; 
 else 
     coarse_sol_o2  =readmatrix(strcat('data/solutions/solution_',condition,'_O_2_', int2str(coarse_grid),'.txt')); 
     coarse_sol_co2 = readmatrix(strcat('data/solutions/solution_',condition,'_CO_2_', int2str(coarse_grid),'.txt'));
@@ -73,13 +74,13 @@ end
 fine2coarse_errs_o2 = fine2coarse_sols_o2 - fine2coarse_sols_o2(:,end); 
 fine2coarse_errs_co2 = fine2coarse_sols_co2 - fine2coarse_sols_co2(:,end);
 
-o2_norms = vecnorm(fine2coarse_errs_o2); %./ vecnorm(fine2coarse_sols_o2); % be careful for division with small numbers her!!
-co2_norms = vecnorm(fine2coarse_errs_co2); %./ vecnorm(fine2coarse_sols_co2);
+o2_norms = vecnorm(fine2coarse_errs_o2)./ vecnorm(fine2coarse_sols_o2); % be careful for division with small numbers her!!
+co2_norms = vecnorm(fine2coarse_errs_co2)./ vecnorm(fine2coarse_sols_co2);
 
 
 %% 
 radius = 0.01; 
-max_elem_size = grid_finesses; 
+max_elem_size = grid_finesses .^(-1); 
 set(gca,'FontSize',24)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
@@ -101,7 +102,8 @@ ylabel('L2 norm of error')
 
 figure, 
 addpath('data/meshes')
-pear_grid(coarse_grid)
+create_mesh( 'cc', 'pear', 0.025, coarse_grid)
+%pear_grid(coarse_grid)
 load pear.mat
 coordinates = Nodes(:, 2:3) ;
 elements3   = Elements( : , 2:end ) ;

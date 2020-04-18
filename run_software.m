@@ -12,7 +12,8 @@
 
 function run_software( varargin )
     clc
-
+    
+    
     %% Read input
     addpath('util/')
     [T_cel, n_u, n_v, name] = read_input( varargin{:} ) ;
@@ -22,6 +23,9 @@ function run_software( varargin )
     if ~ isfile('pear_diffusion')
         ! ./util/compile.sh
     end
+    
+    %pear_grid(10); 
+    %create_mesh( 'cc', 'pear', 0.02, 10); 
     
 
     %% Solve using C++
@@ -39,7 +43,7 @@ function run_software( varargin )
         sim = 'OptimalCA' ;
     end
     
-    command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim, ' -res_pred 6e-15', ' -res_new 1e-17');
+    command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim, ' -res_pred 5e-15', ' -res_new 1e-17');
     system(command);
 
     %% Plot the solution
@@ -49,10 +53,12 @@ function run_software( varargin )
     sol_co2  = readmatrix( strcat( path, sim, "_CO_2.txt" ));
 
     % graphic representation
+    
+    %figure; 
     addpath('data/meshes')
     load pear.mat
     coordinates = Nodes(:, 2:3) ;
     elements3   = Elements( : , 2:end ) ;
 
-    show( [sol_o2(:, 4); sol_co2(:, 4)], name, elements3, coordinates, T_cel, n_u, n_v)
+    %show( [sol_o2(:, 4); sol_co2(:, 4)], name, elements3, coordinates, T_cel, n_u, n_v)
 end

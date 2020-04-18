@@ -14,11 +14,11 @@ function nothing = pear_grid(varargin)
     %% Creation of the domain
     radius = .01;  % 1 for example solutions, 0.1 for real tests. 
     %grid_precision = precision; %40; % 10 for fast, 18 for accurate
-    pear_height = 84.3; 
-    pear_n_points = 30;
+    pear_height = 34.3; 
+    pear_n_points = 50;
 
     y = linspace(0, pear_height, pear_n_points);
-    x = pearpoints(y);
+    x = pearpoints(y/pear_height*84.3);
     y = y./1000;
     x = x./1000;
 
@@ -51,15 +51,15 @@ function nothing = pear_grid(varargin)
     OuterBNodes = findNodes(mesh,'region','Edge',[2]);
 
 
-    %figure
-    %pdemesh(model,'NodeLabels','on')
-    %hold on
-    %plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
+    figure
+    pdemesh(model,'NodeLabels','on')
+    hold on
+    plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
 
-    %figure
-    %pdemesh(model,'NodeLabels','on')
-    %hold on
-    %plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
+    figure
+    pdemesh(model,'NodeLabels','on')
+    hold on
+    plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
 
     OuterBEdges = zeros(size(OuterBNodes, 2)-1, 3);
     for i = 1:size(OuterBNodes, 2)-1
