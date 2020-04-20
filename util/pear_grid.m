@@ -84,6 +84,8 @@ function nothing = pear_grid(varargin)
     writematrix( OuterBEdges, strcat(path, name, '_OuterEdges.txt'), 'delimiter', 'space');
     nothing = true; 
 end
+
+
     %% Function describing the points along the boundary of a Conference pear
 
     function [y] = pearpoints(x)

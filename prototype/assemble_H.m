@@ -8,7 +8,7 @@ function H = assemble_H( coordinates, elements3, C, R_u, R_v )
     % extract useful variables
     M = size(coordinates, 1) ;
         
-    H = zeros( 2*M, 1 ) ;
+    H = sparse( 2*M, 1 ) ;
     for t = elements3'
         % r-coordinates of triangle vertices
         r = coordinates(t, 1) ;

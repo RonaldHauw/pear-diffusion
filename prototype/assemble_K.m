@@ -11,7 +11,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
     r = coordinates(:, 1) ;
     z = coordinates(:, 2) ;
 
-    K = zeros( 2*M, 2*M );
+    K = sparse( 2*M, 2*M );
     for t = elements3'
                 
         % area of element (can be positive or negative)

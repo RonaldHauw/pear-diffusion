@@ -33,7 +33,7 @@ function run( varargin )
     
     %% Load domain
     addpath('../data/meshes/')
-    load pear.mat
+    load double_circle_fine.mat
     
     coordinates = Nodes(:, 2:3) ;
     elements3   = Elements( : , 2:end ) ;

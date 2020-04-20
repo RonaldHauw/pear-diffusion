@@ -9,7 +9,7 @@ function J = assemble_J( coordinates, elements3, C, dR_u_u, dR_u_v, dR_v_u, dR_v
     M = size(coordinates, 1) ;
     r = coordinates(:, 1) ;
 
-    J = zeros( 2*M, 2*M ) ;
+    J = sparse( 2*M, 2*M ) ;
 
      % quadrature points in each vertex
      for i = 1:M

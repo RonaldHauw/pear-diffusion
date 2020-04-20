@@ -60,5 +60,5 @@ function run_software( varargin )
     coordinates = Nodes(:, 2:3) ;
     elements3   = Elements( : , 2:end ) ;
 
-    %show( [sol_o2(:, 4); sol_co2(:, 4)], name, elements3, coordinates, T_cel, n_u, n_v)
+    show( [sol_o2(:, 4); sol_co2(:, 4)], name, elements3, coordinates, T_cel, n_u, n_v)
 end

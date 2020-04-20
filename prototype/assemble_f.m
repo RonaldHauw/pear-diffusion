@@ -9,7 +9,7 @@ function f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb )
     M = size(coordinates, 1) ;
     r = coordinates(:, 1) ;
     
-    f = zeros( 2*M, 1 ) ;
+    f = sparse( 2*M, 1 ) ;
     for e = G2_edges'
         % length of edge
         len = norm(diff(coordinates(e, :)), 2) ;

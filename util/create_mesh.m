@@ -20,27 +20,19 @@ function create_mesh( type, name, radius, granularity )
         
         case {'circle', 'c', 'hc'}
             
-            pear_shape = 0.85;
-            x_zero = radius-pear_shape*radius;
-            a      =  -x_zero * (radius^2 - x_zero^2)^(-0.5);
-            y_zero = sqrt(radius^2 - x_zero^2);
-            y_high = y_zero - a * x_zero;
-
             % Creation of the domain
             R1 = [ 3, 4, 0, 0, -1, -1, -1, 1, 1, -1 ]';
             C1 = [ 1, 0, 0, radius ]';
-            P1 = [ 2, 3, 0, 0, x_zero, y_zero, y_high, y_zero ]';
             C1 = [ C1; zeros(length(R1) - length(C1),1) ];
-            P1 = [ P1; zeros(length(R1) - length(P1),1) ];
             % geometry description matrix
-            gd = [ R1, C1, P1 ];
+            gd = [ R1, C1 ];
             % set formula
-            sf = 'C1-R1+P1';
+            sf = 'C1-R1';
             % name space matrix that relates the colums in gd and the names in sf
-            ns = char( 'R1', 'C1', 'P1' );
+            ns = char( 'R1', 'C1' );
             
-            in_edge  = [3 4 5] ;
-            out_edge = [1 6 7] ;
+            in_edge  = [1] ;
+            out_edge = [2 3] ;
             
         case {'circle triangle', 'ct', 'hct'}
             
@@ -92,12 +84,12 @@ function create_mesh( type, name, radius, granularity )
     % find minimal regions that evaluate to true for the set formula sf
     dl = decsg(gd,sf,ns);
 
-    % ivsualize mesh
-    %figure('position', [100, 100, 800, 300])
-    %subplot(1, 3, 1)
-    %pdegplot(dl,'EdgeLabels','on','SubdomainLabels','on');
-    %axis equal;
-    %title("Mesh")
+    % visualize mesh
+    figure('position', [100, 100, 800, 300])
+    subplot(1, 3, 1)
+    pdegplot(dl,'EdgeLabels','on','SubdomainLabels','on');
+    axis equal;
+    title("Mesh")
 
     % Creation of the mesh
     model = createpde(1);
@@ -114,17 +106,17 @@ function create_mesh( type, name, radius, granularity )
     InnerBNodes = findNodes(mesh,'region','Edge', in_edge );
     OuterBNodes = findNodes(mesh,'region','Edge', out_edge);
 
-    %subplot(1, 3, 2)
-    %pdemesh(model,'NodeLabels','on')
-    %hold on
-    %plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
-    %title("Inner boundary nodes")
+    subplot(1, 3, 2)
+    pdemesh(model,'NodeLabels','on')
+    hold on
+    plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
+    title("Inner boundary nodes")
     
-    %subplot(1, 3, 3)
-    %pdemesh(model,'NodeLabels','on')
-    %hold on
-    %plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
-    %title("Outer boundary nodes")
+    subplot(1, 3, 3)
+    pdemesh(model,'NodeLabels','on')
+    hold on
+    plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
+    title("Outer boundary nodes")
     
     OuterBEdges = zeros(size(OuterBNodes, 2)-1, 3);
     for i = 1:size(OuterBNodes, 2)-1
