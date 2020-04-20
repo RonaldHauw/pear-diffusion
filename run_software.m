@@ -3,12 +3,12 @@
 % Solve reaction-diffusion system with finite element method in C++.
 %
 % Either run simulation by name as
-%     >> run( name )
+%     >> run_software( name )
 % where 'name' is the string 'orchard', 'shelf life', 'refrigerator', 
 % 'precooling', 'disorder inducing' or 'optimal CA',
 %
 % or run default 'refrigerator' simulation ( T_cel = 7, n_u = 0.208, n_v = 0 )
-%    >> run
+%    >> run_software
 
 function run_software( varargin )
     clc
