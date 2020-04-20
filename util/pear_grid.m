@@ -14,7 +14,7 @@ function nothing = pear_grid(varargin)
     %% Creation of the domain
     radius = .01;  % 1 for example solutions, 0.1 for real tests. 
     %grid_precision = precision; %40; % 10 for fast, 18 for accurate
-    pear_height = 34.3; 
+    pear_height = 70 ; %34.3; 
     pear_n_points = 50;
 
     y = linspace(0, pear_height, pear_n_points);
@@ -38,7 +38,7 @@ function nothing = pear_grid(varargin)
     geometryFromMesh(model,t.Points', t.ConnectivityList');
     
     mesh = generateMesh(model, 'GeometricOrder', 'linear','Hmax',radius/grid_precision*1.5,'Hmin',radius/grid_precision);
-    pdeplot(model);
+    % pdeplot(model);
 
     clear radius grid_precision pear_height pear_n_points x y p t; 
 
@@ -49,18 +49,24 @@ function nothing = pear_grid(varargin)
 
     InnerBNodes = findNodes(mesh,'region','Edge',[1]);
     OuterBNodes = findNodes(mesh,'region','Edge',[2]);
-
-
+    
     figure
-    pdemesh(model,'NodeLabels','on')
+    subplot(1, 3, 1)
+    pdemesh(model,'NodeLabels','off')
+    title('Mesh')
+    
+    subplot(1, 3, 2)
+    pdemesh(model,'NodeLabels','off')
     hold on
     plot(mesh.Nodes(1,InnerBNodes),mesh.Nodes(2,InnerBNodes),'or','MarkerFaceColor','g')
-
-    figure
-    pdemesh(model,'NodeLabels','on')
+    title('Inner boundary')
+    
+    subplot(1, 3, 3)
+    pdemesh(model,'NodeLabels','off')
     hold on
     plot(mesh.Nodes(1,OuterBNodes),mesh.Nodes(2,OuterBNodes),'or','MarkerFaceColor','g')
-
+    title('Outer boundary')
+    
     OuterBEdges = zeros(size(OuterBNodes, 2)-1, 3);
     for i = 1:size(OuterBNodes, 2)-1
         OuterBEdges(i, :) = [i OuterBNodes(i) OuterBNodes(i+1)]; 
@@ -96,7 +102,7 @@ end
     % William Pear
     % https://www.tandfonline.com/doi/pdf/10.1080/10942912.2010.506020
 
-    y = 4.11348 * x - 0.253106 * power(x,2) + 0.00929318 * x.^3 - 0.00019599 * x.^4 +2.08296 * 10.^(-6) * x.^5 - 8.59684 * 10.^(-9) * x.^6;
+    y = 0.8*( 4.11348 * x - 0.253106 * power(x,2) + 0.00929318 * x.^3 - 0.00019599 * x.^4 +2.08296 * 10.^(-6) * x.^5 - 8.59684 * 10.^(-9) * x.^6 ) ;
 
     end
 
