@@ -4,7 +4,8 @@
 %
 % Call as
 %     >> create_mesh( type, file_name, radius, granularity )
-% with
+%
+% with input
 %     type        (string)   shape of mesh to generate
 %                            for a circle type = 'circle', 'c' or 'hc'
 %                            for a circle with triangle type = 'circle triangle', 'ct' or 'hct'

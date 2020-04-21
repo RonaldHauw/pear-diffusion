@@ -49,13 +49,13 @@ function run( varargin )
     
     %% Solve FEM model
     
-    % intialize concentrations
-    C = zeros(2*M, 1) ;
     % K = [ K_u , 0 ; 0 , K_v ]
     K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_vz, r_u, r_v ) ;
     % f = [ f_u ; f_v ]
     f = assemble_f( coordinates, G2_edges, r_u, r_v, C_u_amb, C_v_amb ) ;
-
+    % intialize concentrations
+    C = K \ f ;
+    
     % keep track of progress
     fprintf( '        %12s \n', 'converged at' ) ;
     fprintf( '%3s     %10s      %8s \n','t',  'iteration', 'residual' ) ;
@@ -63,7 +63,6 @@ function run( varargin )
     
     tic
     % perform hopotopy continuation
-%     for t = 0:dt:1
     t  = 0 ;
     dt = 1 ;
     maxit = 10 ;
@@ -144,9 +143,6 @@ function run( varargin )
     end
     toc
 
-    %% Compute residuals of nonlinear system
-    res = K*C - f + H ;
-
     
     %% Show oxygen and carbon dioxide solutions
     addpath( '../util' )
@@ -156,4 +152,19 @@ function run( varargin )
         
     % show residuals
     % show( res, 'residuals', elements3, coordinates )
+    
+    
+    %% Test correctness of solution
+    
+    % check residuals of nonlinear system
+    res = abs(K*C - f + H) ;
+    if max(res) <= 1e-10
+        disp("Test 1: OK, all the residuals are smaller than 1e-10")
+    else
+        disp("Test 1: Not OK, some residuals are larger than 1e-10")
+    end
+    
+    % check residuals on boundary condition
+    test_boundary_conditions(C, G1_edges, G2_edges, coordinates, elements3, ...
+                             s_ur, s_uz, s_vr, s_vz, r_u, r_v, C_u_amb, C_v_amb)
 end

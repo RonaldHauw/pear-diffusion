@@ -1,10 +1,25 @@
-%% Group 11 - March 12th 2020
+%% Group 11 - April 21st 2020
+%
 % Assemble diffusion matrix K = [ K_u , 0 ; 0 , K_v ]
+%
+% Call as
+%     >> K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_vz, r_u, r_v )
+%
+% with input
+%     coordinates (matrix)  r and z coordinates of each vertex
+%     elements3   (matrix)  index of vertices that form triangular elements
+%     G2_edges    (matrix)  index of vertices that form the edges of outer boundary
+%     s_ur        (float)   diffusion coefficient of oxygen in r direction
+%     s_vr        (float)   diffusion coefficient of carbon dioxide in r direction
+%     s_uz        (float)   diffusion coefficient of oxygen in z direction
+%     s_vz        (float)   diffusion coefficient of carbon dioxide in z direction
+%     r_u         (float)   convective mass transfer coefficient of oxygen
+%     r_v         (float)   convective mass transfer coefficient of carbon dioxide
+%
+% and output
+%     K           (matrix)  diffusion matrix of finite element model
 
 function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_vz, r_u, r_v )
-    % coordinates       coordinates of vertices of mesh
-    % elements3         index of vertices that form triangular elements
-    % G2_edges          index of vertices that form the edges of outer boundary
     
     % extract useful variables
     M = size(coordinates, 1) ;
@@ -14,7 +29,7 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
     K = sparse( 2*M, 2*M );
     for t = elements3'
                 
-        % area of element (can be positive or negative)
+        % area of element
         omega = det([ ones(1,3) ; coordinates(t, :)' ]) / 2 ;
         
         % sum of r-coordinates
@@ -63,7 +78,6 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
 
     end
     % add terms for vertices on outer boundary
-    % assume outer boundary goes from bottom to top
     for e = G2_edges'
         % length of edge
         len = norm(diff(coordinates(e, :)), 2) ;
@@ -80,5 +94,4 @@ function K = assemble_K( coordinates, elements3, G2_edges, s_ur, s_vr, s_uz, s_v
         K( e+M, e+M ) = K( e+M, e+M ) + r_v * [ parallel_term_1 , cross_term ; ...
                                                 cross_term      , parallel_term_2 ] ;
     end
-
 end
