@@ -18,13 +18,14 @@
 
 namespace pear {
 
+
     template <typename d_type, typename vec_type, typename mat_type>
     class rdc{
     public:
 
-        /* Constructor for the equation
+        /* Constructor for the reaction-diffusion-convection equation
          *
-         * ! Warning: extremely specific to the equation !
+         * ! Warning: specific to the equation, should be modified if new components are added !
          *
          * IN:  - Two #diffusion# describing the diffusion model of each of the components O2 and C02
          *      - A #reaction# describing the reaction model between the two components 02 and CO2
@@ -57,6 +58,7 @@ namespace pear {
 
             diff_o2_.f(x.segment(diff_o2_.cons_start(), diff_o2_.nb_nodes()));
             diff_co2_.f(x.segment(diff_co2_.cons_start(), diff_co2_.nb_nodes()));
+
             diff_o2_.J(workmat);
             diff_co2_.J(workmat);
 
@@ -100,6 +102,7 @@ namespace pear {
         };
 
         void suppress_nonlinearity(d_type alpha){   resp_.suppress_nonlinearity(alpha);}
+
         Eigen::Ref<vec_type> cons(){                return diff_o2_.cons_full();}
         int size(){                                 return diff_o2_.nb_nodes()+diff_co2_.nb_nodes();}
 

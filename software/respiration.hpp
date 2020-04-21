@@ -25,8 +25,7 @@ namespace pear {
 
         /* Constructor for respiration
          *
-         * IN :    -Two #component#'s describing the components to react
-         *         -A #grid# describing the mesh of the problem
+         * IN :
          *         -A #vector# (of length 6X1) describing the different physical parameters necessary in the reaction
          *                 model; v_mu, v_mfv, k_mu, k_mv, k_mfu, r_q
          * OUT :   the private variables  which correspond to the above mentioned quantities

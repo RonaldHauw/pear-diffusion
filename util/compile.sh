@@ -2,23 +2,11 @@
 # ./compile.sh
 
 echo "Starting command line compilation with flags -Wall and -O3"
-#echo " - component.hpp"
-#g++ -c ../component.hpp
-#echo " - grid.hpp"
-#g++ -c ../grid.hpp
-#echo " - diffusion.hpp"
-#g++ -c ../diffusion.hpp
-#echo " - reaction.hpp"
-#g++ -c ../reaction.hpp
-#echo " - rdc.hpp"
-#g++ -c ../rdc.hpp
-#echo " - nlsolver.hpp"
-#g++ -c ../nlsolver.hpp
-echo " --> making executable"
 g++ -Wall -std=c++17 -O3    software/component.hpp \
                             software/diffusion.hpp \
                             software/grid.hpp \
                             software/rdc.hpp \
+                            software/respiration.hpp \
                             software/reaction.hpp \
                             software/nlsolver.hpp \
                             software/main.cpp
@@ -30,5 +18,7 @@ rm a.out    software/component.hpp.gch \
             software/grid.hpp.gch \
             software/nlsolver.hpp.gch \
             software/rdc.hpp.gch \
+            software/respiration.hpp.gch \
             software/reaction.hpp.gch
 echo "Cleanup done"
+

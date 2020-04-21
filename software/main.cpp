@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     std::string grid_name = "data/meshes/pear";
     pear::grid<d_type, mat_type> grid(grid_name);
 
+    int nb_comp = 2; // three components
 
     // Diffusion parameters
     d_type sigma_u_r = 2.8e-10;
@@ -173,14 +174,16 @@ int main(int argc, char* argv[]) {
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
     std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
     std::vector<d_type> diffusion_co2_param = {sigma_v_r, sigma_v_z, r_v, c_v_amb};
+    std::vector<d_type> diffusion_ethylene_param = {sigma_v_r*2, sigma_v_z*2, r_v, c_v_amb*2};
+
 
     // Allocate memory for the solution
     vec_type conc;
-    conc.resize(grid.nb_nodes()*2, 1);
-    //conc.setZero();
+    conc.resize(grid.nb_nodes()*nb_comp, 1);
 
     pear::component<d_type, vec_type, mat_type> o2("O_2",   grid, conc, 1, 0);
     pear::component<d_type, vec_type, mat_type> co2("CO_2", grid, conc, 1, 1);
+
     o2.set_initial(c_u_amb);
     co2.set_initial(c_v_amb);
 
@@ -188,9 +191,9 @@ int main(int argc, char* argv[]) {
     pear::diffusion<d_type, vec_type, mat_type> diff_o2(o2, grid, diffusion_o2_param);
     pear::diffusion<d_type, vec_type, mat_type> diff_co2(co2, grid, diffusion_co2_param);
 
-    pear::respiration<d_type> resp_co2_o2(respiration_param);
-    pear::reaction<d_type , vec_type, mat_type> react_co2_o2(co2, o2, grid, resp_co2_o2);
-    //pear::respiration<d_type, vec_type, mat_type> resp_co2_o2(co2, o2, grid, respiration_param);
+
+    pear::respiration<d_type> kinetics_co2_o2(respiration_param);
+    pear::reaction<d_type , vec_type, mat_type> react_co2_o2(co2, o2, grid, kinetics_co2_o2);
 
     pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, react_co2_o2);
 
