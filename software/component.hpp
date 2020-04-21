@@ -52,21 +52,17 @@ namespace pear {
         {
         }
 
-        std::string name(){                 return name_; }
-        Eigen::Ref<vec_type> cons()  {      return concentration_.segment(start_, grid_.nb_nodes());}
-        Eigen::Ref<vec_type> cons_full()  { return concentration_;}
-        d_type & concentration(int i){      return concentration_(start_ + (i-1)*stride_);}
-        void set_initial(d_type c_amb){     this->cons().setOnes();
-                                            this->cons() *= c_amb;}
+        const std::string name()                 { return name_;}
+        Eigen::Ref<vec_type> cons()        { return concentration_.segment(start_, grid_.nb_nodes());}
+        Eigen::Ref<vec_type> cons_full()   { return concentration_;}
+        d_type & concentration(int i)      { return concentration_(start_ + (i-1)*stride_);}
+        void set_initial(d_type c_amb)     { this->cons().setOnes(); this->cons() *= c_amb;}
 
-        int cons_start(){   return start_; };
-        int cons_stop(){    return stop_; };
-        int cons_stride(){  return stride_; };
-        int nb_nodes(){     return grid_.nb_nodes();};
+        inline const int cons_start(){   return start_; };
+        inline const int cons_stop(){    return stop_; };
+        inline const int cons_stride(){  return stride_; };
+        inline const int nb_nodes(){     return grid_.nb_nodes();};
 
-        int start(){
-            return start_;
-        };
 
     private:
         std::string name_;

@@ -40,6 +40,8 @@ int main(int argc, char* argv[]) {
     std::string grid_name = "data/meshes/pear";
     pear::grid<d_type, mat_type> grid(grid_name);
 
+    int nb_comp = 2; // three components
+
     // Diffusion parameters
     d_type sigma_u_r = 2.8e-10;
     d_type sigma_u_z = 1.10e-9;
@@ -71,8 +73,8 @@ int main(int argc, char* argv[]) {
     d_type eta_v = 0.04e-2;
 
 
-    int nl_maxit = 10;
-    int set_environment = 0;
+    int nl_maxit = 10; // maximum iterations for newton iterations in non linear solver
+    int set_environment = 0; // flag
     d_type steplength = 1.;
     d_type res_pred = 5e-15;
     d_type res_new = 1e-16;
@@ -133,19 +135,19 @@ int main(int argc, char* argv[]) {
         if (argc - i > 1) { // at least two arguments remain
             if (std::string(argv[i]) == "-maxit") {
                 nl_maxit = std::stoi(argv[i + 1]);
-                std::cout<<"        Setting maximum nonlinear iterations to: "<<nl_maxit<<std::endl;
+                std::cout<<"        Setting maximum Newton iterations to: "<<nl_maxit<<std::endl;
             }
             if (std::string(argv[i]) == "-vmuref") {
                 v_mu_ref = std::stod(argv[i + 1]);
-                std::cout<<"        Settig v_mu_ref to: "<<v_mu_ref<<std::endl;
+                std::cout<<"        Setting v_mu_ref to: "<<v_mu_ref<<std::endl;
             }
             if (std::string(argv[i]) == "-vmfvref") {
                 v_mfv_ref = std::stod(argv[i + 1]);
-                std::cout<<"        Settig v_mfv_ref to: "<<v_mfv_ref<<std::endl;
+                std::cout<<"        Setting v_mfv_ref to: "<<v_mfv_ref<<std::endl;
             }
             if (std::string(argv[i]) == "-steplength") {
                 steplength = std::stod(argv[i + 1]);
-                std::cout<<"        Settig steplength to: "<<steplength<<std::endl;
+                std::cout<<"        (WARNING: this setting doesn't have any influence due to an adaptive steplength) Setting steplength to: "<<steplength<<std::endl;
             }
             if (std::string(argv[i]) == "-res_pred") {
                 res_pred = std::stod(argv[i + 1]);
@@ -172,14 +174,16 @@ int main(int argc, char* argv[]) {
     d_type c_v_amb = p_atm * eta_v / (R_g * T);
     std::vector<d_type> diffusion_o2_param = {sigma_u_r, sigma_u_z, r_u, c_u_amb};
     std::vector<d_type> diffusion_co2_param = {sigma_v_r, sigma_v_z, r_v, c_v_amb};
+    std::vector<d_type> diffusion_ethylene_param = {sigma_v_r*2, sigma_v_z*2, r_v, c_v_amb*2};
+
 
     // Allocate memory for the solution
     vec_type conc;
-    conc.resize(grid.nb_nodes()*2, 1);
-    //conc.setZero();
+    conc.resize(grid.nb_nodes()*nb_comp, 1);
 
     pear::component<d_type, vec_type, mat_type> o2("O_2",   grid, conc, 1, 0);
     pear::component<d_type, vec_type, mat_type> co2("CO_2", grid, conc, 1, 1);
+
     o2.set_initial(c_u_amb);
     co2.set_initial(c_v_amb);
 
@@ -188,9 +192,10 @@ int main(int argc, char* argv[]) {
     pear::diffusion<d_type, vec_type, mat_type> diff_co2(co2, grid, diffusion_co2_param);
 
 
-    pear::respiration<d_type, vec_type, mat_type> resp_co2_o2(co2, o2, grid, respiration_param);
+    pear::respiration<d_type> kinetics_co2_o2(respiration_param);
+    pear::reaction<d_type , vec_type, mat_type> react_co2_o2(co2, o2, grid, kinetics_co2_o2);
 
-    pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, resp_co2_o2);
+    pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, react_co2_o2);
 
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation, grid);
 

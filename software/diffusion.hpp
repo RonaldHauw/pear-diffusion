@@ -74,7 +74,7 @@ namespace pear {
          */
          void J(mat_type & K) const {
 
-             int i = comp_.start();
+             int i = comp_.cons_start();
 
              for (int t = 1; t<grid_.nb_elements()+1; t++){
 
@@ -148,11 +148,11 @@ namespace pear {
          void set_cons(vec_type & x){           comp_.concentrations() = x;}
          Eigen::Ref<vec_type> cons(){           return comp_.cons();}
          Eigen::Ref<vec_type> cons_full(){      return comp_.cons_full();}
-         int cons_start(){                      return comp_.cons_start(); };
-         int cons_stop(){                       return comp_.cons_stop(); };
-         int cons_stride(){                     return comp_.cons_stride(); };
+         inline const int cons_start(){                      return comp_.cons_start(); };
+         inline const int cons_stop(){                       return comp_.cons_stop(); };
+         inline const int cons_stride(){                     return comp_.cons_stride(); };
 
-         int nb_nodes(){
+         const int nb_nodes(){
              return comp_.nb_nodes();
          }
 
