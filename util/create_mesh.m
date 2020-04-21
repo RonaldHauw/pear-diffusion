@@ -16,13 +16,16 @@
 
 function create_mesh( type, name, radius, granularity )
     
+    % Creation of the pde model
+    model = createpde(1);
+
     switch lower(type)
         
         case {'circle', 'c', 'hc'}
             
             % Creation of the domain
             R1 = [ 3, 4, 0, 0, -1, -1, -1, 1, 1, -1 ]';
-            C1 = [ 1, 0, 0, radius ]';
+            C1 = [ 1, 0, radius, radius ]';
             C1 = [ C1; zeros(length(R1) - length(C1),1) ];
             % geometry description matrix
             gd = [ R1, C1 ];
@@ -30,6 +33,12 @@ function create_mesh( type, name, radius, granularity )
             sf = 'C1-R1';
             % name space matrix that relates the colums in gd and the names in sf
             ns = char( 'R1', 'C1' );
+            
+            ns = ns';
+            % find minimal regions that evaluate to true for the set formula sf
+            dl = decsg(gd,sf,ns);
+            
+            geometryFromEdges(model,dl);
             
             in_edge  = [1] ;
             out_edge = [2 3] ;
@@ -55,6 +64,12 @@ function create_mesh( type, name, radius, granularity )
             % name space matrix that relates the colums in gd and the names in sf
             ns = char( 'R1', 'C1', 'P1' );
             
+            ns = ns';
+            % find minimal regions that evaluate to true for the set formula sf
+            dl = decsg(gd,sf,ns);
+            
+            geometryFromEdges(model,dl);
+            
             in_edge  = [3 4 5] ;
             out_edge = [1 6 7] ;
         
@@ -62,8 +77,8 @@ function create_mesh( type, name, radius, granularity )
             
             % Creation of the domain
             R1 = [ 3, 4, 0, 0, -1, -1, -1, 1, 1, -1 ]';
-            C1 = [ 1, 0, 0, radius ]';
-            C2 = [ 1, 0, 1.2*radius, radius/1.5 ]';
+            C1 = [ 1, 0, radius, radius ]';
+            C2 = [ 1, 0, radius+1.2*radius, radius/1.5 ]';
             C1 = [ C1; zeros(length(R1) - length(C1),1) ];
             C2 = [ C2; zeros(length(R1) - length(C2),1) ];
             % geometry description matrix
@@ -73,29 +88,50 @@ function create_mesh( type, name, radius, granularity )
             % name space matrix that relates the colums in gd and the names in sf
             ns = char( 'C2', 'C1', 'R1' );
             
+            ns = ns';
+            % find minimal regions that evaluate to true for the set formula sf
+            dl = decsg(gd,sf,ns);
+            
+            geometryFromEdges(model,dl);
+    
             in_edge  = [1 2 3] ;
             out_edge = [5 6 7 8] ;
+           
+        case {'pear', 'p'}
+            
+            % Creation of the domain
+            radius = .01 ;  % 1 for example solutions, 0.1 for real tests. 
+            pear_height = 70 ;
+            pear_n_points = 50 ;
+
+            y = linspace(0, pear_height, pear_n_points);
+            x = pearpoints(y/pear_height*84.3);
+            y = y./1000;
+            x = x./1000;
+
+            p = polyshape(x,y);
+            t = triangulation(p);
         
+            geometryFromMesh(model,t.Points', t.ConnectivityList');
+            
+            in_edge  = [1] ;
+            out_edge = [2] ;
+            
         otherwise
             error("Did not understand which mesh to generate. Run help help create_mesh for more information")
     end
     
-    ns = ns';
-    % find minimal regions that evaluate to true for the set formula sf
-    dl = decsg(gd,sf,ns);
-
     % visualize mesh
     figure('position', [100, 100, 800, 300])
     subplot(1, 3, 1)
-    pdegplot(dl,'EdgeLabels','on','SubdomainLabels','on');
+    box on
+    pdegplot(model,'EdgeLabels','on','SubdomainLabels','on');
     axis equal;
     title("Mesh")
 
-    % Creation of the mesh
-    model = createpde(1);
-    geometryFromEdges(model,dl);
+    % generate mesh
     mesh = generateMesh(model, 'GeometricOrder', 'linear', 'Hmax',radius/granularity*1.5,'Hmin',radius/granularity);
-    pdeplot(model);
+    % pdeplot(model);
 
 
     %% Convert the mesh
@@ -139,5 +175,20 @@ function create_mesh( type, name, radius, granularity )
     writematrix( Elements,    strcat(path, name, '_Elements.txt'),   'delimiter', 'space');
     writematrix( InnerBEdges, strcat(path, name, '_InnerEdges.txt'), 'delimiter', 'space');
     writematrix( OuterBEdges, strcat(path, name, '_OuterEdges.txt'), 'delimiter', 'space');
+
+end
+
+
+%% Function describing the points along the boundary of a Conference pear
+
+function [y] = pearpoints(x)
+    %PEARPOINTS provides the demanded amount of points to represent the outline
+    % of the border of a half-pear
+    %   x   :   Vector of size 1xN containing the chosen x-coordinates
+    %   y   :   Vector of size 1xN containing the sampled y-coordinates
+    % William Pear
+    % https://www.tandfonline.com/doi/pdf/10.1080/10942912.2010.506020
+
+    y = 0.8*( 4.11348 * x - 0.253106 * power(x,2) + 0.00929318 * x.^3 - 0.00019599 * x.^4 +2.08296 * 10.^(-6) * x.^5 - 8.59684 * 10.^(-9) * x.^6 ) ;
 
 end

@@ -28,9 +28,9 @@ function show( sol, name, elements3, coordinates, varargin )
     % create figure box
     figure('position', [300 100 450 400])
     
-    % visualize oxygen concentration
+    
+    %% Visualize oxygen concentration
     clim = [0, 10] ;
-    %clim = [0, 0.01] ;
     subplot(1, 2, 1)
     box on
     hold on
@@ -48,8 +48,9 @@ function show( sol, name, elements3, coordinates, varargin )
     xlabel('Radius [m]', 'FontSize', 10)
     ylabel('Height [m]', 'FontSize', 10)
     
-    % visualize carbon dioxide concentration
-    clim = [0, 15] ;
+    
+    %% Visualize carbon dioxide concentration
+    clim = [0, 10] ;
     
     subplot(1, 2, 2)
     box on
@@ -68,6 +69,8 @@ function show( sol, name, elements3, coordinates, varargin )
     xlabel('Radius [m]', 'FontSize', 10)
     ylabel('Height [m]', 'FontSize', 10)
     
+    
+    %% Set title of plot
     if (nargin==4)
         sgtitle( name, 'FontSize', 12 )
     else

@@ -16,17 +16,15 @@ function run_software( varargin )
     
     %% Read input
     addpath('util/')
-    [T_cel, n_u, n_v, name] = read_input( varargin{:} ) ;
+    [T_cel, n_u, n_v, name] = 
+    ( varargin{:} ) ;
 
     
     %% Compile the C++ code if executable does not exist
     if ~ isfile('pear_diffusion')
         ! ./util/compile.sh
     end
-    
-    %pear_grid(10); 
-    %create_mesh( 'cc', 'pear', 0.02, 10); 
-    
+        
 
     %% Solve using C++
     if contains(lower(name), 'orchard')
@@ -43,9 +41,11 @@ function run_software( varargin )
         sim = 'OptimalCA' ;
     end
     
+    % call executable
     command = strcat('./pear_diffusion', ' -maxit 100', ' -', sim, ' -res_pred 5e-15', ' -res_new 1e-17');
     system(command);
 
+    
     %% Plot the solution
     path = 'data/solutions/solution_' ;
     
@@ -57,7 +57,7 @@ function run_software( varargin )
     %figure; 
     addpath('data/meshes')
     load pear.mat
-    coordinates = Nodes(:, 2:3) ;
+    coordinates = Nodes( :, 2:3 ) ;
     elements3   = Elements( : , 2:end ) ;
 
     show( [sol_o2(:, 4); sol_co2(:, 4)], name, elements3, coordinates, T_cel, n_u, n_v)
