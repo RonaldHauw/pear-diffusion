@@ -105,7 +105,7 @@ Fill in the parameters with which etylene will diffuse and declare the 'diffusio
 Write a (small) class similar to 'respiration' which provides the reaction kinetics and their partial derivatives. 
 Declare the 'reaction' equations: 
 
-    pear::reaction<d_type , vec_type, mat_type> react_o2_ethylene(co2, o2, grid, kinetics_o2_ethylene);
+    pear::reaction<d_type , vec_type, mat_type> react_o2_ethylene(o2, ethylene, grid, kinetics_o2_ethylene);
 
 Currently the 'reaction' class only supports a reaction between components but this could be easily extended. Modify the 
 'reaction-diffucion-convection' class which makes abstraction of the underlying diffusion and reaction and behaves as a function. 
