@@ -41,14 +41,6 @@ Open a command line window in the root directory and use the following command.
                                    software/reaction.hpp \
                                    software/nlsolver.hpp \
                                    software/main.cpp
-Or via seperate commands:
-
-    pear_group11$ g++ -c software/component.hpp
-    pear_group11$ g++ -c software/grid.hpp
-    pear_group11$ g++ -c software/diffusion.hpp
-    pear_group11$ g++ -c software/reaction.hpp
-    pear_group11$ g++ -c software/rdc.hpp
-    pear_group11$ g++ -c software/nlsolver.hpp
         
 ### Running the software
 #### A first example
