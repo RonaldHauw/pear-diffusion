@@ -1,4 +1,4 @@
-# The Pear Project
+# The Pear Project (2019-2020)
 ## Solving a macroscale respiration–diffusion model
 
 ### Authors
