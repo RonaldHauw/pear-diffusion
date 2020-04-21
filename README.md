@@ -2,9 +2,9 @@
 ## Solving a macroscale respiration–diffusion model
 
 ### Authors
-- Agathe, van Lamsweerde (rxxxxxx);
-- Octave, Oliviers (rxxxxxx);
-- Ronald, Hauwaerts (r0625223).
+- Agathe, van Lamsweerde;
+- Octave, Oliviers;
+- Ronald, Hauwaerts.
 
 Our code is free to use and modify. 
 
@@ -15,10 +15,10 @@ Our code is free to use and modify.
 #### Needed libraries:
 - The C++ *standard library* which is usually preïnstalled;
 - A copy of *Eigen* (http://eigen.tuxfamily.org) at the location "software/eigen/". 
-        
-        
-    pear_group11$ cd software 
-    software$ git clone https://gitlab.com/libeigen/eigen.git 
+    
+    
+        pear_group11$ cd software 
+        software$ git clone https://gitlab.com/libeigen/eigen.git 
           
 #### Compilation: 
 ##### 1. Shell script 
@@ -49,9 +49,6 @@ Or via seperate commands:
     pear_group11$ g++ -c software/reaction.hpp
     pear_group11$ g++ -c software/rdc.hpp
     pear_group11$ g++ -c software/nlsolver.hpp
-
-#### Running tests
-# TODO 
         
 ### Running the software
 #### A first example
@@ -129,19 +126,4 @@ This short example shows that none of the classes change significantly. For exam
 2. Modifying the 'reaction-diffusion-convection' to include the new diffusion and reaction. 
 
 
-        
 
-
- 
-
-
-
-
-
-* library name, url, C++ or Fortran, if C++: header-only?, where to put it (don't include big libraries in your zip/tgz file)
-* ...
-Instructions:
-* how to run main code
-* how to run some of the tests
-* other interesting things which can be done
-Can we use and modify your code for demonstrations concerning the course? Yes or No
