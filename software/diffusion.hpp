@@ -74,7 +74,7 @@ namespace pear {
          */
          void J(mat_type & K) const {
 
-             int i = comp_.start();
+             int i = comp_.cons_start();
 
              for (int t = 1; t<grid_.nb_elements()+1; t++){
 

@@ -188,10 +188,11 @@ int main(int argc, char* argv[]) {
     pear::diffusion<d_type, vec_type, mat_type> diff_o2(o2, grid, diffusion_o2_param);
     pear::diffusion<d_type, vec_type, mat_type> diff_co2(co2, grid, diffusion_co2_param);
 
+    pear::respiration<d_type> resp_co2_o2(respiration_param);
+    pear::reaction<d_type , vec_type, mat_type> react_co2_o2(co2, o2, grid, resp_co2_o2);
+    //pear::respiration<d_type, vec_type, mat_type> resp_co2_o2(co2, o2, grid, respiration_param);
 
-    pear::respiration<d_type, vec_type, mat_type> resp_co2_o2(co2, o2, grid, respiration_param);
-
-    pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, resp_co2_o2);
+    pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, react_co2_o2);
 
     pear::nlsolver<d_type, pear::rdc<d_type, vec_type, mat_type>, vec_type, mat_type> nlsolve(equation, grid);
 

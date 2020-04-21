@@ -19,7 +19,7 @@
 namespace pear {
 
 
-    template <typename d_type, typename vec_type, typename mat_type>
+    template <typename d_type>
     class respiration{
     public:
 
@@ -33,10 +33,7 @@ namespace pear {
          *          - a start value alpha of 1, to suppress non-linearity
          */
         respiration(std::vector<d_type> & param)
-                : o2_(o2)
-                , co2_(co2)
-                , grid_(grid)
-                , v_mu_(param[0])
+                : v_mu_(param[0])
                 , v_mfv_(param[1])
                 , k_mu_(param[2])
                 , k_mv_(param[3])
