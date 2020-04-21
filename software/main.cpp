@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     std::string grid_name = "data/meshes/pear";
     pear::grid<d_type, mat_type> grid(grid_name);
 
+
     // Diffusion parameters
     d_type sigma_u_r = 2.8e-10;
     d_type sigma_u_z = 1.10e-9;
@@ -71,8 +72,8 @@ int main(int argc, char* argv[]) {
     d_type eta_v = 0.04e-2;
 
 
-    int nl_maxit = 10;
-    int set_environment = 0;
+    int nl_maxit = 10; // maximum iterations for newton iterations in non linear solver
+    int set_environment = 0; // flag
     d_type steplength = 1.;
     d_type res_pred = 5e-15;
     d_type res_new = 1e-16;
@@ -133,19 +134,19 @@ int main(int argc, char* argv[]) {
         if (argc - i > 1) { // at least two arguments remain
             if (std::string(argv[i]) == "-maxit") {
                 nl_maxit = std::stoi(argv[i + 1]);
-                std::cout<<"        Setting maximum nonlinear iterations to: "<<nl_maxit<<std::endl;
+                std::cout<<"        Setting maximum Newton iterations to: "<<nl_maxit<<std::endl;
             }
             if (std::string(argv[i]) == "-vmuref") {
                 v_mu_ref = std::stod(argv[i + 1]);
-                std::cout<<"        Settig v_mu_ref to: "<<v_mu_ref<<std::endl;
+                std::cout<<"        Setting v_mu_ref to: "<<v_mu_ref<<std::endl;
             }
             if (std::string(argv[i]) == "-vmfvref") {
                 v_mfv_ref = std::stod(argv[i + 1]);
-                std::cout<<"        Settig v_mfv_ref to: "<<v_mfv_ref<<std::endl;
+                std::cout<<"        Setting v_mfv_ref to: "<<v_mfv_ref<<std::endl;
             }
             if (std::string(argv[i]) == "-steplength") {
                 steplength = std::stod(argv[i + 1]);
-                std::cout<<"        Settig steplength to: "<<steplength<<std::endl;
+                std::cout<<"        (WARNING: this setting doesn't have any influence due to an adaptive steplength) Setting steplength to: "<<steplength<<std::endl;
             }
             if (std::string(argv[i]) == "-res_pred") {
                 res_pred = std::stod(argv[i + 1]);

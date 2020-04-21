@@ -88,7 +88,7 @@ namespace pear {
 
                 d_type area = (r2*z3 - r3*z2) - (r1*z3-r3*z1) + (r1*z2-z1*r2) ;
 
-                /*
+                /* uncomment for quadrature formula on edges
                 H_o2(elem_nodes[0]-1) += r1 * R_u(o2_.concentration(elem_nodes[0]), co2_.concentration(elem_nodes[0])) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += r2 * R_u(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_o2(elem_nodes[2]-1) += r3 * R_u(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
@@ -98,6 +98,8 @@ namespace pear {
                 H_co2(elem_nodes[1]-1) -= r2 * R_v(o2_.concentration(elem_nodes[1]), co2_.concentration(elem_nodes[1])) * area / 6. ;
                 H_co2(elem_nodes[2]-1) -= r3 * R_v(o2_.concentration(elem_nodes[2]), co2_.concentration(elem_nodes[2])) * area / 6. ;
                 */
+
+                // quadrature formula in center
                 H_o2(elem_nodes[0]-1) += rm * R_u(co2m, cco2m) * area / 6. ;
                 H_o2(elem_nodes[1]-1) += rm * R_u(co2m, cco2m) * area / 6. ;
                 H_o2(elem_nodes[2]-1) += rm * R_u(co2m, cco2m) * area / 6. ;
@@ -119,22 +121,7 @@ namespace pear {
         */
         void J(mat_type & dH) {
 
-            /*    % one quadrature point in the center of element t
-                    %    for t = elements3'
-
-                    %        area = abs(det([ ones(1,3) ; coordinates(t, :)' ])) / 2 ;
-
-                    %        J(t, t)     = J(t, t)     + area/9 * mean(r(t)) * dR_u_u( mean(C(t)), mean(C(M+t)) ) ;
-                    %        J(t, M+t)   = J(t, M+t)   + area/9 * mean(r(t)) * dR_u_v( mean(C(t)), mean(C(M+t)) ) ;
-
-                    %        J(M+t, t)   = J(M+t, t)   - area/9 * mean(r(t)) * dR_v_u( mean(C(t)), mean(C(M+t)) ) ;
-                    %        J(M+t, M+t) = J(M+t, M+t) - area/9 * mean(r(t)) * dR_v_v( mean(C(t)), mean(C(M+t)) ) ;
-
-                     %   end
-             *
-             *
-             *
-             *
+            /*  uncomment for quadrature formula in edges
 
             for (int t = 1; t < grid_.nb_nodes()+1; t++) {
                 std::vector<int> elements = grid_.elements_for_node(t);
@@ -156,6 +143,8 @@ namespace pear {
                 dH.coeffRef(t + grid_.nb_nodes() -1, t + grid_.nb_nodes() -1)    += -area * grid_.node(t)[0] * dR_v_v(o2_.concentration(t), co2_.concentration(t) ) / 6. ;
             };
              */
+
+            // quadrature formula in center
             for (int t = 1; t<grid_.nb_elements()+1; t++) {
 
                 std::vector<int> elem_nodes = grid_.element(t);
@@ -175,54 +164,53 @@ namespace pear {
 
 
 
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[0]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[1]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[2]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[0]-1+ o2_.cons_start())   += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[1]-1+ o2_.cons_start())   += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[2]-1+ o2_.cons_start())   += area/9. * rm * dR_u_u( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[1]-1, elem_nodes[0]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[1]-1, elem_nodes[1]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[1]-1, elem_nodes[2]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ o2_.cons_start(), elem_nodes[0]-1+ o2_.cons_start())   += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ o2_.cons_start(), elem_nodes[1]-1+ o2_.cons_start())   += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ o2_.cons_start(), elem_nodes[2]-1+ o2_.cons_start())   += area/9. * rm * dR_u_u( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[2]-1, elem_nodes[0]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[2]-1, elem_nodes[1]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[2]-1, elem_nodes[2]-1)                                       += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ o2_.cons_start(), elem_nodes[0]-1+ o2_.cons_start())     += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ o2_.cons_start(), elem_nodes[1]-1+ o2_.cons_start())     += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ o2_.cons_start(), elem_nodes[2]-1+ o2_.cons_start())     += area/9. * rm * dR_u_u( co2m, cco2m ) ;
+                
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[0]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[1]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[2]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
 
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[0]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[1]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[2]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[0]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[1]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[2]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[0]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[1]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ o2_.cons_start(), elem_nodes[2]-1 + co2_.cons_start())   += area/9. * rm * dR_u_v( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[0]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[1]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[2]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ co2_.cons_start(), elem_nodes[0]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ co2_.cons_start(), elem_nodes[1]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ co2_.cons_start(), elem_nodes[2]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[0]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[1]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1, elem_nodes[2]-1 + grid_.nb_nodes())                    += area/9. * rm * dR_u_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ co2_.cons_start(), elem_nodes[0]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ co2_.cons_start(), elem_nodes[1]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ co2_.cons_start(), elem_nodes[2]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[0]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[1]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[2]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ co2_.cons_start(), elem_nodes[0]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ co2_.cons_start(), elem_nodes[1]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ co2_.cons_start(), elem_nodes[2]-1+ o2_.cons_start())    += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[0]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[1]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[2]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ co2_.cons_start(), elem_nodes[0]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ co2_.cons_start(), elem_nodes[1]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[0]-1+ co2_.cons_start(), elem_nodes[2]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[0]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[1]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[2]-1)                     += -area/9. * rm * dR_v_u( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ co2_.cons_start(), elem_nodes[0]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ co2_.cons_start(), elem_nodes[1]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[1]-1+ co2_.cons_start(), elem_nodes[2]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
 
-                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[0]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[1]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[0]-1+ grid_.nb_nodes(), elem_nodes[2]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-
-                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[0]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[1]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[1]-1+ grid_.nb_nodes(), elem_nodes[2]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-
-                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[0]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[1]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
-                dH.coeffRef(elem_nodes[2]-1+ grid_.nb_nodes(), elem_nodes[2]-1 + grid_.nb_nodes())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ co2_.cons_start(), elem_nodes[0]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ co2_.cons_start(), elem_nodes[1]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
+                dH.coeffRef(elem_nodes[2]-1+ co2_.cons_start(), elem_nodes[2]-1 + co2_.cons_start())  += -area/9. * rm * dR_v_v( co2m, cco2m ) ;
 
 
 

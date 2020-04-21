@@ -16,8 +16,7 @@ function run_software( varargin )
     
     %% Read input
     addpath('util/')
-    [T_cel, n_u, n_v, name] = 
-    ( varargin{:} ) ;
+    [T_cel, n_u, n_v, name] = read_input( varargin{:} ) ;
 
     
     %% Compile the C++ code if executable does not exist
