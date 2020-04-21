@@ -107,8 +107,8 @@ Declare the 'reaction' equations:
 
     pear::reaction<d_type , vec_type, mat_type> react_o2_ethylene(o2, ethylene, grid, kinetics_o2_ethylene);
 
-Currently the 'reaction' class only supports a reaction between components but this could be easily extended. Modify the 
-'reaction-diffucion-convection' class which makes abstraction of the underlying diffusion and reaction and behaves as a function. 
+Currently the 'reaction' class only supports a reaction between *two* components but this could be easily extended. Modify the 
+'reaction-diffucion-convection' functor class which makes abstraction of the underlying diffusion and reaction and behaves as a function. 
 
     pear::rdc<d_type, vec_type, mat_type> equation(diff_o2, diff_co2, diff_ethylene, react_co2_o2, react_o2_ethylene);
 
