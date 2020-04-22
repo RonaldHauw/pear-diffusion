@@ -41,17 +41,24 @@ function show( sol, name, elements3, coordinates, varargin )
     xlim( [min(coordinates(:, 1)), max(coordinates(:, 1))] )
     ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
     colormap(c_map);
+    set(gca,'xtick',[]);
+    set(gca,'xticklabel',[]);
+    %set(gca,'ytick',[]);
+    %set(gca,'yticklabel',[]);
+    set(gca,'XColor', 'none')
+    set(gca, 'FontSize', 20); 
 
     caxis(clim);
-    colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
-    title({'Oxygen', '[mol/m設'}, 'FontSize', 11)
-    xlabel('Radius [m]', 'FontSize', 10)
-    ylabel('Height [m]', 'FontSize', 10)
+    %colorbar('YTick', [0:2:max(clim)], 'FontSize', 20)
+    title({'O2 [mol/m設'}, 'FontSize', 20)
+    %xlabel('Radius [m]', 'FontSize', 15)
+    ylabel('Height [m]', 'FontSize', 20)
     
     
     %% Visualize carbon dioxide concentration
     clim = [0, 10] ;
-    
+
+
     subplot(1, 2, 2)
     box on
     hold on
@@ -62,18 +69,23 @@ function show( sol, name, elements3, coordinates, varargin )
     xlim( [min(coordinates(:, 1)), max(coordinates(:, 1))] )
     ylim( [min(coordinates(:, 2)), max(coordinates(:, 2))] )
     colormap(c_map);
+    set(gca,'xtick',[]);
+    set(gca,'xticklabel',[]);
+    set(gca,'ytick',[]);
+    set(gca,'yticklabel',[]);
+    set(gca,'XColor', 'none','YColor','none')
 
     caxis(clim);
-    colorbar('YTick', [0:2:max(clim)], 'FontSize', 10)
-    title({'Carbon dioxide', '[mol/m設'}, 'FontSize', 11)
-    xlabel('Radius [m]', 'FontSize', 10)
-    ylabel('Height [m]', 'FontSize', 10)
+    %colorbar('YTick', [0:2:max(clim)], 'FontSize', 20)
+    title({'CO2 [mol/m設'}, 'FontSize', 20)
+    %xlabel('Radius [m]', 'FontSize', 10)
+    %ylabel('Height [m]', 'FontSize', 10)
     
     
     %% Set title of plot
     if (nargin==4)
-        sgtitle( name, 'FontSize', 12 )
+        sgtitle( name, 'FontSize', 20 )
     else
-        sgtitle( {name, join([num2str(100*varargin{2}), "% O_{2}, ", num2str(100*varargin{3}), "% CO_{2}" " at ", num2str(varargin{1}), "蚓"])}, 'FontSize', 12 )
+        sgtitle( {name, join([num2str(100*varargin{2}), "% O_{2}, ", num2str(100*varargin{3}), "% CO_{2}" " at ", num2str(varargin{1}), "蚓"])}, 'FontSize', 20 )
     end
 end

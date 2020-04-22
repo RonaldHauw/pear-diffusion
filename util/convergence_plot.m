@@ -1,7 +1,7 @@
 
 %% Select data points 
-coarsest = 271
-finest = 1571         % 
+coarsest = 500
+finest = 1499         % 
 collect_data = 0    % should we collect data
 residue_plot = finest-coarsest-1    % which level is used for plotting the residue 
 coarse_grid = 10   % to which grid is everything interpolated (0 for a chosen set of points)
@@ -87,14 +87,14 @@ set(gca,'yscale','log')
 figure('DefaultAxesFontSize',22)
 loglog(max_elem_size, o2_norms)
 hold on 
-scatter(max_elem_size, o2_norms)
+%scatter(max_elem_size, o2_norms)
 title('Convergence of O2')
 xlabel('Maximum element size')
 ylabel('L2 norm of error')
 figure('DefaultAxesFontSize',22)
 loglog(max_elem_size, co2_norms)
 hold on 
-scatter(max_elem_size, co2_norms)
+%scatter(max_elem_size, co2_norms)
 title('Convergence of CO2')
 xlabel('Maximum element size')
 ylabel('L2 norm of error')
