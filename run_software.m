@@ -17,11 +17,16 @@ function run_software( varargin )
     %% Read input
     addpath('util/')
     [T_cel, n_u, n_v, name] = read_input( varargin{:} ) ;
-
+    
     
     %% Compile the C++ code if executable does not exist
     if ~ isfile('pear_diffusion')
         ! ./util/compile.sh
+    end
+    
+    %% Create a grid if it's not there
+    if ~ isfile('data/meshes/pear.mat')
+        create_mesh('pear', 'pear', 0.025, 20); 
     end
         
 

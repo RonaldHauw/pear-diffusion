@@ -102,7 +102,7 @@ function create_mesh( type, name, radius, granularity )
             
             % Creation of the domain
             radius = .01 ;  % 1 for example solutions, 0.1 for real tests. 
-            pear_height = 70 ;
+            pear_height = 50 ;
             pear_n_points = 50 ;
 
             y = linspace(0, pear_height, pear_n_points);
