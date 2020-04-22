@@ -52,6 +52,7 @@ Open the Matlab command line window in in the root directory:
 This will run a simulation for the "Orchard" configuration such as described in the assignment. The other configurations can be 
 tested by replacing "Orchard" with the appropriate name. 
 
+
 #### Creating a custom mesh 
 The matlab function "creat_mesh.m" creates a mesh and stores it in the right location for it to be read by the software executable.
 The mesh which is used by the C++ code is stored in data/meshes and always has the name 'pear'. 
@@ -77,6 +78,12 @@ Some useful hyperparameters are for example:
    
 This sets the shelf life parameters and sets the residual tubes for the non-linear solver, effictively bounding the residual between 
 5e-15 in the prediction step and stopping the Newton iterations if the residual is smaller than 1e-17. 
+
+### Running the prototype 
+The prototype is located in the folder 'prototype' and can be run with the following commands from Matlab. 
+
+    >> addpath('prototype')
+    >> run('Refrigerator')
 
 ### Expanding the code 
 
